@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+<meta property="og:type" content="website">
+<meta property="og:title" content="涂伟富的博客">
+<meta property="og:url" content="https://tianshiyan521.github.io/page/2/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="游戏测试,自动化测试,Python,事业单位,学习笔记">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/page/2/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"page/2/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">涂伟富的博客</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、事业单位备考的学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/law-chapter2-daily-legal/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/law-chapter2-daily-legal/" class="post-title-link" itemprop="url">法律知识 第2章 - 日常法律常识</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:55:31" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/other/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/other/law/" itemprop="url" rel="index"><span itemprop="name">法律知识</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-民间借贷-—-借钱给朋友要注意什么"><a href="#1-民间借贷-—-借钱给朋友要注意什么" class="headerlink" title="1. 民间借贷 — 借钱给朋友要注意什么"></a>1. 民间借贷 — 借钱给朋友要注意什么</h2><h3 id="核心规则（《民法典》第188条）"><a href="#核心规则（《民法典》第188条）" class="headerlink" title="核心规则（《民法典》第188条）"></a>核心规则（《民法典》第188条）</h3><p>民间借贷的普通诉讼时效为 <strong>3年</strong>，从你知道对方”不还钱”那天起算。</p>
+<p>微信聊天记录 + 转账凭证可以作为有效证据。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/law-chapter2-daily-legal/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/linux-chapter1-essential-commands/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/linux-chapter1-essential-commands/" class="post-title-link" itemprop="url">Linux 第1章 - 测试工程师常用命令速查</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:55:31" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/other/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/other/linux/" itemprop="url" rel="index"><span itemprop="name">Linux命令</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-为什么测试要学-Linux"><a href="#1-为什么测试要学-Linux" class="headerlink" title="1. 为什么测试要学 Linux"></a>1. 为什么测试要学 Linux</h2><ul>
+<li>部署测试环境离不开Linux服务器</li>
+<li>查日志定位BUG需要 <code>grep</code> &#x2F; <code>tail</code> &#x2F; <code>less</code></li>
+<li>看服务器状态（CPU&#x2F;内存&#x2F;磁盘）用 <code>top</code> &#x2F; <code>free</code> &#x2F; <code>df</code></li>
+<li>接口测试跑脚本用 Shell 比手工快100倍</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/linux-chapter1-essential-commands/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/mysql-chapter1-basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/mysql-chapter1-basics/" class="post-title-link" itemprop="url">MySQL 第1章 - 基础篇 (安装·建表·CRUD·条件排序)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:54:20" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库学习</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-MySQL-是什么"><a href="#1-MySQL-是什么" class="headerlink" title="1. MySQL 是什么"></a>1. MySQL 是什么</h2><p>MySQL 是全球最流行的开源关系型数据库。游戏玩家数据、装备数据、战斗记录，大概率就存在 MySQL 里。</p>
+<p><strong>作为测试人员，学会 MySQL 意味着</strong>：</p>
+<ul>
+<li>能直接查数据库验证接口返回的数据是否正确</li>
+<li>能自己构造测试数据，不依赖开发给账号</li>
+<li>能看懂慢查询日志，发现性能问题</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/mysql-chapter1-basics/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/mysql-chapter2-advanced/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/mysql-chapter2-advanced/" class="post-title-link" itemprop="url">MySQL 第2章 - 进阶篇 (聚合·JOIN·子查询·UNION)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:54:20" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库学习</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-五大聚合函数"><a href="#1-五大聚合函数" class="headerlink" title="1. 五大聚合函数"></a>1. 五大聚合函数</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> players;              <span class="comment">-- 统计行数（含NULL）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(gold) <span class="keyword">FROM</span> players;             <span class="comment">-- 所有金币总和</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">AVG</span>(level) <span class="keyword">FROM</span> players;            <span class="comment">-- 平均等级</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">MAX</span>(level), <span class="built_in">MIN</span>(level) <span class="keyword">FROM</span> players; <span class="comment">-- 最高/最低等级</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> server_id) <span class="keyword">FROM</span> players; <span class="comment">-- 去重统计</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/mysql-chapter2-advanced/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/mysql-chapter3-functions-index/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/mysql-chapter3-functions-index/" class="post-title-link" itemprop="url">MySQL 第3章 - 高级篇 (函数·视图·索引)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:54:20" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库学习</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-字符串函数"><a href="#1-字符串函数" class="headerlink" title="1. 字符串函数"></a>1. 字符串函数</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 拼接</span></span><br><span class="line"><span class="keyword">SELECT</span> CONCAT(<span class="string">&#x27;玩家&#x27;</span>, username, <span class="string">&#x27; 等级:&#x27;</span>, level);      <span class="comment">-- 任一NULL则结果NULL</span></span><br><span class="line"><span class="keyword">SELECT</span> CONCAT_WS(<span class="string">&#x27;-&#x27;</span>, <span class="string">&#x27;2026&#x27;</span>, <span class="string">&#x27;06&#x27;</span>, <span class="string">&#x27;12&#x27;</span>);            <span class="comment">-- 带分隔符，跳过NULL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 截取（从1开始！不是0！）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUBSTRING</span>(<span class="string">&#x27;Hello World&#x27;</span>, <span class="number">1</span>, <span class="number">5</span>);                 <span class="comment">-- Hello</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">LEFT</span>(<span class="string">&#x27;13800138000&#x27;</span>, <span class="number">3</span>);                         <span class="comment">-- 138</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">RIGHT</span>(<span class="string">&#x27;13800138000&#x27;</span>, <span class="number">4</span>);                        <span class="comment">-- 8000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 替换</span></span><br><span class="line"><span class="keyword">SELECT</span> REPLACE(<span class="string">&#x27;138-0013-8000&#x27;</span>, <span class="string">&#x27;-&#x27;</span>, <span class="string">&#x27;&#x27;</span>);              <span class="comment">-- 去短横线</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 去空格</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">TRIM</span>(<span class="string">&#x27;   张三   &#x27;</span>);                              <span class="comment">-- 张三</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 长度：CHAR_LENGTH（字符数，推荐）vs LENGTH（字节数）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CHAR_LENGTH</span>(<span class="string">&#x27;Hello世界&#x27;</span>);                        <span class="comment">-- 7</span></span><br><span class="line"><span class="keyword">SELECT</span> LENGTH(<span class="string">&#x27;Hello世界&#x27;</span>);                             <span class="comment">-- 11（5 + 3×2）</span></span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/mysql-chapter3-functions-index/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/selenium-chapter1-locating-elements/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/selenium-chapter1-locating-elements/" class="post-title-link" itemprop="url">Selenium 第1章 - 8种元素定位方式详解</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:52:40" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/Selenium/" itemprop="url" rel="index"><span itemprop="name">Selenium</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-Selenium-8种元素定位方式"><a href="#1-Selenium-8种元素定位方式" class="headerlink" title="1. Selenium 8种元素定位方式"></a>1. Selenium 8种元素定位方式</h2><p>在网页上操作任何东西之前，先要”找到”它：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/selenium-chapter1-locating-elements/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/selenium-chapter2-pom-allure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/selenium-chapter2-pom-allure/" class="post-title-link" itemprop="url">Selenium 第2章 - Page Object Model 与 Allure 报告</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:52:40" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/Selenium/" itemprop="url" rel="index"><span itemprop="name">Selenium</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-什么是-Page-Object-Model（POM）"><a href="#1-什么是-Page-Object-Model（POM）" class="headerlink" title="1. 什么是 Page Object Model（POM）"></a>1. 什么是 Page Object Model（POM）</h2><p>POM 的核心思想：<strong>每个页面封装成一个类，页面上的元素和操作都定义在类里</strong>。好处是：</p>
+<ul>
+<li>代码复用：一处修改，所有用到的地方自动更新</li>
+<li>可读性强：测试代码读起来像自然语言</li>
+<li>维护成本低：页面改版只改对应的 Page 类</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/selenium-chapter2-pom-allure/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/testing-basics-chapter1-game-testing-core/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/testing-basics-chapter1-game-testing-core/" class="post-title-link" itemprop="url">测试基础 第1章 - 游戏测试核心概念</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:53:20" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础知识</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-游戏测试-vs-软件测试"><a href="#1-游戏测试-vs-软件测试" class="headerlink" title="1. 游戏测试 vs 软件测试"></a>1. 游戏测试 vs 软件测试</h2><p><strong>核心区别：软件测试验证”对不对”，游戏测试还要验证”好不好玩”。</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/testing-basics-chapter1-game-testing-core/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/testing-basics-chapter2-bug-management/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/testing-basics-chapter2-bug-management/" class="post-title-link" itemprop="url">测试基础 第2章 - BUG管理与测试用例实战</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:53:20" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础知识</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="1-BUG-严重等级划分"><a href="#1-BUG-严重等级划分" class="headerlink" title="1. BUG 严重等级划分"></a>1. BUG 严重等级划分</h2><table>
+<thead>
+<tr>
+<th>等级</th>
+<th>说明</th>
+<th>恐龙岛举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>致命（Blocker）</td>
+<td>游戏崩溃&#x2F;核心流程阻断</td>
+<td>点击”领地争夺”直接闪退</td>
+</tr>
+<tr>
+<td>严重（Major）</td>
+<td>核心功能不可用</td>
+<td>商城购买扣了钻石但道具未到账</td>
+</tr>
+<tr>
+<td>一般（Normal）</td>
+<td>功能异常但不阻塞</td>
+<td>后台挂机5分钟后停止攻击，UI仍显示”挂机中”</td>
+</tr>
+<tr>
+<td>轻微（Minor）</td>
+<td>不影响功能的瑕疵</td>
+<td>NPC名字”迅猛龙”写成”讯猛龙”</td>
+</tr>
+<tr>
+<td>建议（Suggestion）</td>
+<td>体验优化</td>
+<td>背包满提示只停0.5秒，看不清</td>
+</tr>
+</tbody></table>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/testing-basics-chapter2-bug-management/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/testing-basics-chapter3-interview-qa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/12/testing-basics-chapter3-interview-qa/" class="post-title-link" itemprop="url">测试基础 第3章 - 游戏测试面试题实战</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:53:20" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础知识</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="题目1：TCP-和-UDP-在网络游戏中的应用"><a href="#题目1：TCP-和-UDP-在网络游戏中的应用" class="headerlink" title="题目1：TCP 和 UDP 在网络游戏中的应用"></a>题目1：TCP 和 UDP 在网络游戏中的应用</h2><p><strong>问</strong>：以恐龙岛这类MMO游戏为例，哪些场景用TCP、哪些用UDP？</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/12/testing-basics-chapter3-interview-qa/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

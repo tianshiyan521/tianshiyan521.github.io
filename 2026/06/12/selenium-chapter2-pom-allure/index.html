@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="1. 什么是 Page Object Model（POM）POM 的核心思想：每个页面封装成一个类，页面上的元素和操作都定义在类里。好处是：  代码复用：一处修改，所有用到的地方自动更新 可读性强：测试代码读起来像自然语言 维护成本低：页面改版只改对应的 Page 类">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Selenium 第2章 - Page Object Model 与 Allure 报告">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/06/12/selenium-chapter2-pom-allure/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="1. 什么是 Page Object Model（POM）POM 的核心思想：每个页面封装成一个类，页面上的元素和操作都定义在类里。好处是：  代码复用：一处修改，所有用到的地方自动更新 可读性强：测试代码读起来像自然语言 维护成本低：页面改版只改对应的 Page 类">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-12T06:52:40.931Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="Selenium">
+<meta property="article:tag" content="POM">
+<meta property="article:tag" content="自动化测试">
+<meta property="article:tag" content="Allure">
+<meta property="article:tag" content="pytest">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/06/12/selenium-chapter2-pom-allure/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/06/12/selenium-chapter2-pom-allure/","path":"2026/06/12/selenium-chapter2-pom-allure/","title":"Selenium 第2章 - Page Object Model 与 Allure 报告"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Selenium 第2章 - Page Object Model 与 Allure 报告 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Page-Object-Model%EF%BC%88POM%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">1. 什么是 Page Object Model（POM）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-POM-%E5%AE%9E%E6%88%98-%E2%80%94-Bing-%E6%90%9C%E7%B4%A2%E9%A1%B5"><span class="nav-number">2.</span> <span class="nav-text">2. POM 实战 — Bing 搜索页</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-conftest-py-%E2%80%94-driver-fixture"><span class="nav-number">3.</span> <span class="nav-text">3. conftest.py — driver fixture</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Allure-%E6%8A%A5%E5%91%8A%E9%9B%86%E6%88%90"><span class="nav-number">4.</span> <span class="nav-text">4. Allure 报告集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Allure-%E4%BD%BF%E7%94%A8%E8%A6%81%E7%82%B9"><span class="nav-number">5.</span> <span class="nav-text">5. Allure 使用要点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">5.1.</span> <span class="nav-text">常用装饰器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%B1%E8%B4%A5%E8%87%AA%E5%8A%A8%E6%88%AA%E5%9B%BE-hook"><span class="nav-number">5.2.</span> <span class="nav-text">失败自动截图 hook</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E4%B8%80%E9%94%AE%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="nav-number">6.</span> <span class="nav-text">6. 一键运行脚本</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、事业单位备考的学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/selenium-chapter2-pom-allure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Selenium 第2章 - Page Object Model 与 Allure 报告 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Selenium 第2章 - Page Object Model 与 Allure 报告
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:52:40" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/Selenium/" itemprop="url" rel="index"><span itemprop="name">Selenium</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="1-什么是-Page-Object-Model（POM）"><a href="#1-什么是-Page-Object-Model（POM）" class="headerlink" title="1. 什么是 Page Object Model（POM）"></a>1. 什么是 Page Object Model（POM）</h2><p>POM 的核心思想：<strong>每个页面封装成一个类，页面上的元素和操作都定义在类里</strong>。好处是：</p>
+<ul>
+<li>代码复用：一处修改，所有用到的地方自动更新</li>
+<li>可读性强：测试代码读起来像自然语言</li>
+<li>维护成本低：页面改版只改对应的 Page 类</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="2-POM-实战-—-Bing-搜索页"><a href="#2-POM-实战-—-Bing-搜索页" class="headerlink" title="2. POM 实战 — Bing 搜索页"></a>2. POM 实战 — Bing 搜索页</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pages/bing_page.py</span></span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.support.ui <span class="keyword">import</span> WebDriverWait</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.support <span class="keyword">import</span> expected_conditions <span class="keyword">as</span> EC</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.common.keys <span class="keyword">import</span> Keys</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BingPage</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, driver</span>):</span><br><span class="line">        <span class="variable language_">self</span>.driver = driver</span><br><span class="line">        <span class="variable language_">self</span>.wait = WebDriverWait(driver, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 元素定位（统一管理，改一个地方就行）</span></span><br><span class="line">    SEARCH_BOX = (By.ID, <span class="string">&quot;sb_form_q&quot;</span>)</span><br><span class="line">    SEARCH_BUTTON = (By.ID, <span class="string">&quot;sb_form_go&quot;</span>)</span><br><span class="line">    RESULT_TITLES = (By.CSS_SELECTOR, <span class="string">&quot;h2 a&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">open</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.driver.get(<span class="string">&quot;https://www.bing.com&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">self, keyword</span>):</span><br><span class="line">        search_box = <span class="variable language_">self</span>.wait.until(EC.presence_of_element_located(<span class="variable language_">self</span>.SEARCH_BOX))</span><br><span class="line">        search_box.clear()</span><br><span class="line">        search_box.send_keys(keyword + Keys.RETURN)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_search_count</span>(<span class="params">self</span>):</span><br><span class="line">        results = <span class="variable language_">self</span>.driver.find_elements(*<span class="variable language_">self</span>.RESULT_TITLES)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>([r <span class="keyword">for</span> r <span class="keyword">in</span> results <span class="keyword">if</span> r.text.strip()])</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-conftest-py-—-driver-fixture"><a href="#3-conftest-py-—-driver-fixture" class="headerlink" title="3. conftest.py — driver fixture"></a>3. conftest.py — driver fixture</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># conftest.py</span></span><br><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line"><span class="meta">@pytest.fixture(<span class="params">scope=<span class="string">&quot;function&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">driver</span>():</span><br><span class="line">    options = webdriver.EdgeOptions()</span><br><span class="line">    options.add_experimental_option(<span class="string">&quot;excludeSwitches&quot;</span>, [<span class="string">&quot;enable-automation&quot;</span>])</span><br><span class="line">    drv = webdriver.Edge(options=options)</span><br><span class="line">    drv.maximize_window()</span><br><span class="line">    <span class="keyword">yield</span> drv</span><br><span class="line">    drv.quit()</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-Allure-报告集成"><a href="#4-Allure-报告集成" class="headerlink" title="4. Allure 报告集成"></a>4. Allure 报告集成</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> allure</span><br><span class="line"></span><br><span class="line"><span class="meta">@allure.feature(<span class="params"><span class="string">&quot;Bing搜索&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestBingSearch</span>:</span><br><span class="line"><span class="meta">    @allure.story(<span class="params"><span class="string">&quot;基础搜索&quot;</span></span>)</span></span><br><span class="line"><span class="meta">    @allure.severity(<span class="params">allure.severity_level.CRITICAL</span>)</span></span><br><span class="line"><span class="meta">    @allure.title(<span class="params"><span class="string">&quot;搜索Python能返回结果&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_search_python</span>(<span class="params">self, driver</span>):</span><br><span class="line">        page = BingPage(driver)</span><br><span class="line">        <span class="keyword">with</span> allure.step(<span class="string">&quot;打开Bing首页&quot;</span>):</span><br><span class="line">            page.<span class="built_in">open</span>()</span><br><span class="line">        <span class="keyword">with</span> allure.step(<span class="string">&quot;搜索Python&quot;</span>):</span><br><span class="line">            page.search(<span class="string">&quot;Python&quot;</span>)</span><br><span class="line">        <span class="keyword">with</span> allure.step(<span class="string">&quot;验证搜索结果&quot;</span>):</span><br><span class="line">            count = page.get_search_count()</span><br><span class="line">            <span class="keyword">assert</span> count &gt; <span class="number">0</span>, <span class="string">&quot;搜索结果为空!&quot;</span></span><br><span class="line">            allure.attach(driver.get_screenshot_as_png(), <span class="string">&quot;截图&quot;</span>, allure.attachment_type.PNG)</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-Allure-使用要点"><a href="#5-Allure-使用要点" class="headerlink" title="5. Allure 使用要点"></a>5. Allure 使用要点</h2><p>⚠️ **不能直接打开 <code>index.html</code>**，必须用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">allure serve ./allure-results   <span class="comment"># 一键启动本地服务器</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常用装饰器"><a href="#常用装饰器" class="headerlink" title="常用装饰器"></a>常用装饰器</h3><table>
+<thead>
+<tr>
+<th>装饰器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>@allure.feature</code></td>
+<td>大功能分类</td>
+</tr>
+<tr>
+<td><code>@allure.story</code></td>
+<td>子功能</td>
+</tr>
+<tr>
+<td><code>@allure.severity</code></td>
+<td>严重等级（blocker&#x2F;critical&#x2F;normal&#x2F;minor&#x2F;trivial）</td>
+</tr>
+<tr>
+<td><code>@allure.step</code></td>
+<td>测试步骤</td>
+</tr>
+<tr>
+<td><code>@allure.title</code></td>
+<td>用例标题</td>
+</tr>
+<tr>
+<td><code>allure.attach()</code></td>
+<td>附加截图&#x2F;日志</td>
+</tr>
+</tbody></table>
+<h3 id="失败自动截图-hook"><a href="#失败自动截图-hook" class="headerlink" title="失败自动截图 hook"></a>失败自动截图 hook</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># conftest.py</span></span><br><span class="line"><span class="meta">@pytest.hookimpl(<span class="params">tryfirst=<span class="literal">True</span>, hookwrapper=<span class="literal">True</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pytest_runtest_makereport</span>(<span class="params">item, call</span>):</span><br><span class="line">    outcome = <span class="keyword">yield</span></span><br><span class="line">    report = outcome.get_result()</span><br><span class="line">    <span class="keyword">if</span> report.when == <span class="string">&quot;call&quot;</span> <span class="keyword">and</span> report.failed:</span><br><span class="line">        driver = item.funcargs.get(<span class="string">&quot;driver&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> driver:</span><br><span class="line">            allure.attach(driver.get_screenshot_as_png(), <span class="string">&quot;失败截图&quot;</span>, allure.attachment_type.PNG)</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-一键运行脚本"><a href="#6-一键运行脚本" class="headerlink" title="6. 一键运行脚本"></a>6. 一键运行脚本</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">echo 清理旧报告...</span><br><span class="line">rmdir /s /q allure-results</span><br><span class="line">echo 运行测试...</span><br><span class="line">pytest --alluredir=allure-results</span><br><span class="line">echo 生成并打开报告...</span><br><span class="line">allure serve allure-results</span><br></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p>Selenium 工具链总结：pytest 组织用例 → POM 管理页面 → Allure 生成报告 → Jenkins&#x2F;GitHub Actions 跑 CI</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Selenium/" rel="tag"># Selenium</a>
+              <a href="/tags/POM/" rel="tag"># POM</a>
+              <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag"># 自动化测试</a>
+              <a href="/tags/Allure/" rel="tag"># Allure</a>
+              <a href="/tags/pytest/" rel="tag"># pytest</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/12/testing-basics-chapter1-game-testing-core/" rel="prev" title="测试基础 第1章 - 游戏测试核心概念">
+                  <i class="fa fa-angle-left"></i> 测试基础 第1章 - 游戏测试核心概念
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/12/selenium-chapter1-locating-elements/" rel="next" title="Selenium 第1章 - 8种元素定位方式详解">
+                  Selenium 第1章 - 8种元素定位方式详解 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

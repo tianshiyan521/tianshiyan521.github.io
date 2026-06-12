@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="1. 为什么测试要学 Linux 部署测试环境离不开Linux服务器 查日志定位BUG需要 grep &#x2F; tail &#x2F; less 看服务器状态（CPU&#x2F;内存&#x2F;磁盘）用 top &#x2F; free &#x2F; df 接口测试跑脚本用 Shell 比手工快100倍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 第1章 - 测试工程师常用命令速查">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/06/12/linux-chapter1-essential-commands/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="1. 为什么测试要学 Linux 部署测试环境离不开Linux服务器 查日志定位BUG需要 grep &#x2F; tail &#x2F; less 看服务器状态（CPU&#x2F;内存&#x2F;磁盘）用 top &#x2F; free &#x2F; df 接口测试跑脚本用 Shell 比手工快100倍">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-12T06:55:31.388Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="命令">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="Shell">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/06/12/linux-chapter1-essential-commands/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/06/12/linux-chapter1-essential-commands/","path":"2026/06/12/linux-chapter1-essential-commands/","title":"Linux 第1章 - 测试工程师常用命令速查"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux 第1章 - 测试工程师常用命令速查 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B5%8B%E8%AF%95%E8%A6%81%E5%AD%A6-Linux"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么测试要学 Linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">2. 文件与目录操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9F%A5%E7%9C%8B%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%EF%BC%88%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%BF%85%E5%A4%87%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">3. 查看文件内容（日志分析必备）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%96%87%E6%9C%AC%E6%90%9C%E7%B4%A2%EF%BC%88grep-%E2%80%94-%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E5%91%BD%E4%BB%A4%E4%B9%8B%E4%B8%80%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">4. 文本搜索（grep — 最重要的命令之一）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%8A%B6%E6%80%81"><span class="nav-number">5.</span> <span class="nav-text">5. 进程与系统状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="nav-number">6.</span> <span class="nav-text">6. 权限管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%E4%B8%89%E5%89%91%E5%AE%A2%EF%BC%88%E5%85%A5%E9%97%A8%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">7. 文本处理三剑客（入门）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#grep-%E2%80%94-%E6%90%9C%E7%B4%A2"><span class="nav-number">7.1.</span> <span class="nav-text">grep — 搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed-%E2%80%94-%E6%9B%BF%E6%8D%A2"><span class="nav-number">7.2.</span> <span class="nav-text">sed — 替换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#awk-%E2%80%94-%E5%88%97%E5%A4%84%E7%90%86"><span class="nav-number">7.3.</span> <span class="nav-text">awk — 列处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-%E6%B5%8B%E8%AF%95%E5%B7%A5%E4%BD%9C%E5%B8%B8%E7%94%A8%E7%BB%84%E5%90%88"><span class="nav-number">8.</span> <span class="nav-text">8. 测试工作常用组合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-Shell-%E8%84%9A%E6%9C%AC%E5%9F%BA%E7%A1%80"><span class="nav-number">9.</span> <span class="nav-text">9. Shell 脚本基础</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、事业单位备考的学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">59</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/linux-chapter1-essential-commands/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、事业单位备考的学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux 第1章 - 测试工程师常用命令速查 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux 第1章 - 测试工程师常用命令速查
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-12 00:00:00 / 修改时间：14:55:31" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/other/" itemprop="url" rel="index"><span itemprop="name">其他</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/other/linux/" itemprop="url" rel="index"><span itemprop="name">Linux命令</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="1-为什么测试要学-Linux"><a href="#1-为什么测试要学-Linux" class="headerlink" title="1. 为什么测试要学 Linux"></a>1. 为什么测试要学 Linux</h2><ul>
+<li>部署测试环境离不开Linux服务器</li>
+<li>查日志定位BUG需要 <code>grep</code> &#x2F; <code>tail</code> &#x2F; <code>less</code></li>
+<li>看服务器状态（CPU&#x2F;内存&#x2F;磁盘）用 <code>top</code> &#x2F; <code>free</code> &#x2F; <code>df</code></li>
+<li>接口测试跑脚本用 Shell 比手工快100倍</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="2-文件与目录操作"><a href="#2-文件与目录操作" class="headerlink" title="2. 文件与目录操作"></a>2. 文件与目录操作</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ls -la</code></td>
+<td>列出所有文件（含隐藏）</td>
+<td><code>ls -la /var/log/</code></td>
+</tr>
+<tr>
+<td><code>cd</code></td>
+<td>切换目录</td>
+<td><code>cd /opt/game_server/logs</code></td>
+</tr>
+<tr>
+<td><code>pwd</code></td>
+<td>显示当前路径</td>
+<td><code>pwd</code></td>
+</tr>
+<tr>
+<td><code>mkdir -p</code></td>
+<td>递归创建目录</td>
+<td><code>mkdir -p test/reports/2026</code></td>
+</tr>
+<tr>
+<td><code>cp -r</code></td>
+<td>递归复制</td>
+<td><code>cp -r config/ config_backup/</code></td>
+</tr>
+<tr>
+<td><code>mv</code></td>
+<td>移动&#x2F;重命名</td>
+<td><code>mv old_name.txt new_name.txt</code></td>
+</tr>
+<tr>
+<td><code>rm -rf</code></td>
+<td>递归强制删除 ⚠️</td>
+<td><code>rm -rf /tmp/test_cache/</code></td>
+</tr>
+<tr>
+<td><code>find</code></td>
+<td>查找文件</td>
+<td><code>find . -name &quot;*.log&quot; -mtime -1</code></td>
+</tr>
+<tr>
+<td><code>touch</code></td>
+<td>创建空文件</td>
+<td><code>touch test.log</code></td>
+</tr>
+</tbody></table>
+<h2 id="3-查看文件内容（日志分析必备）"><a href="#3-查看文件内容（日志分析必备）" class="headerlink" title="3. 查看文件内容（日志分析必备）"></a>3. 查看文件内容（日志分析必备）</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>cat file.log</code></td>
+<td>输出全部内容（小文件）</td>
+</tr>
+<tr>
+<td><code>less file.log</code></td>
+<td>分页查看，可上下滚动</td>
+</tr>
+<tr>
+<td><code>head -n 20 file.log</code></td>
+<td>查看前20行</td>
+</tr>
+<tr>
+<td><code>tail -f file.log</code></td>
+<td>实时追踪日志（游戏服务器最常用！）</td>
+</tr>
+<tr>
+<td><code>tail -n 100 file.log</code></td>
+<td>查看最后100行</td>
+</tr>
+</tbody></table>
+<h2 id="4-文本搜索（grep-—-最重要的命令之一）"><a href="#4-文本搜索（grep-—-最重要的命令之一）" class="headerlink" title="4. 文本搜索（grep — 最重要的命令之一）"></a>4. 文本搜索（grep — 最重要的命令之一）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在日志中搜索错误</span></span><br><span class="line">grep <span class="string">&quot;ERROR&quot;</span> server.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 忽略大小写搜索</span></span><br><span class="line">grep -i <span class="string">&quot;error&quot;</span> server.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示匹配行的前后3行上下文</span></span><br><span class="line">grep -C 3 <span class="string">&quot;NullPointerException&quot;</span> game.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归搜索目录下所有文件</span></span><br><span class="line">grep -r <span class="string">&quot;player_id=10086&quot;</span> /var/log/game/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 反向搜索（排除某些行）</span></span><br><span class="line">grep -v <span class="string">&quot;DEBUG&quot;</span> server.log | grep <span class="string">&quot;ERROR&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计匹配行数</span></span><br><span class="line">grep -c <span class="string">&quot;timeout&quot;</span> server.log</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-进程与系统状态"><a href="#5-进程与系统状态" class="headerlink" title="5. 进程与系统状态"></a>5. 进程与系统状态</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">top                    <span class="comment"># 实时查看CPU/内存/进程（按q退出）</span></span><br><span class="line">free -h                <span class="comment"># 查看内存使用（人类可读）</span></span><br><span class="line"><span class="built_in">df</span> -h                  <span class="comment"># 查看磁盘空间</span></span><br><span class="line"><span class="built_in">du</span> -sh /var/log/       <span class="comment"># 统计目录大小</span></span><br><span class="line">ps aux | grep nginx    <span class="comment"># 查找特定进程</span></span><br><span class="line"><span class="built_in">kill</span> -9 &lt;PID&gt;          <span class="comment"># 强制结束进程 ⚠️</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="6-权限管理"><a href="#6-权限管理" class="headerlink" title="6. 权限管理"></a>6. 权限管理</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x script.sh     <span class="comment"># 给脚本添加可执行权限</span></span><br><span class="line"><span class="built_in">chmod</span> 755 file         <span class="comment"># rwxr-xr-x</span></span><br><span class="line"><span class="built_in">chown</span> user:group file  <span class="comment"># 修改文件所属</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">command</span>           <span class="comment"># 以管理员身份执行</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="7-文本处理三剑客（入门）"><a href="#7-文本处理三剑客（入门）" class="headerlink" title="7. 文本处理三剑客（入门）"></a>7. 文本处理三剑客（入门）</h2><h3 id="grep-—-搜索"><a href="#grep-—-搜索" class="headerlink" title="grep — 搜索"></a>grep — 搜索</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">&quot;ERROR&quot;</span> server.log | <span class="built_in">wc</span> -l   <span class="comment"># 统计错误行数</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="sed-—-替换"><a href="#sed-—-替换" class="headerlink" title="sed — 替换"></a>sed — 替换</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sed <span class="string">&#x27;s/old_text/new_text/g&#x27;</span> file.txt   <span class="comment"># 全文替换</span></span><br><span class="line">sed -i <span class="string">&#x27;s/DEBUG/INFO/g&#x27;</span> config.ini     <span class="comment"># 原地修改文件</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="awk-—-列处理"><a href="#awk-—-列处理" class="headerlink" title="awk — 列处理"></a>awk — 列处理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print $1, $3&#125;&#x27;</span> data.txt          <span class="comment"># 打印第1列和第3列</span></span><br><span class="line">awk -F<span class="string">&#x27;,&#x27;</span> <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> users.csv       <span class="comment"># 以逗号为分隔符，打印第2列</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="8-测试工作常用组合"><a href="#8-测试工作常用组合" class="headerlink" title="8. 测试工作常用组合"></a>8. 测试工作常用组合</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 查看最近1小时的游戏错误日志</span></span><br><span class="line">find /var/log/game/ -name <span class="string">&quot;*.log&quot;</span> -mmin -60 | xargs grep <span class="string">&quot;ERROR&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 统计各玩家ID的报错次数</span></span><br><span class="line">grep <span class="string">&quot;player_id&quot;</span> game.log | awk <span class="string">&#x27;&#123;print $5&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -rn | <span class="built_in">head</span> -10</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 监控日志新内容，过滤关键信息</span></span><br><span class="line"><span class="built_in">tail</span> -f game.log | grep --line-buffered -E <span class="string">&quot;ERROR|CRASH|timeout&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 批量重命名（把 .txt 改为 .log）</span></span><br><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> *.txt; <span class="keyword">do</span> <span class="built_in">mv</span> <span class="string">&quot;<span class="variable">$f</span>&quot;</span> <span class="string">&quot;<span class="variable">$&#123;f%.txt&#125;</span>.log&quot;</span>; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="9-Shell-脚本基础"><a href="#9-Shell-脚本基础" class="headerlink" title="9. Shell 脚本基础"></a>9. Shell 脚本基础</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment"># 一个简单的测试环境启动脚本</span></span><br><span class="line"></span><br><span class="line">SERVER_DIR=<span class="string">&quot;/opt/game_server&quot;</span></span><br><span class="line">LOG_FILE=<span class="string">&quot;/var/log/game/startup.log&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;===== <span class="subst">$(date)</span> =====&quot;</span> &gt;&gt; <span class="variable">$LOG_FILE</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查进程是否已运行</span></span><br><span class="line"><span class="keyword">if</span> ps aux | grep -v grep | grep game_server &gt; /dev/null; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;服务已在运行中&quot;</span> &gt;&gt; <span class="variable">$LOG_FILE</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">cd</span> <span class="variable">$SERVER_DIR</span> &amp;&amp; ./game_server &amp;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;服务已启动，PID: $!&quot;</span> &gt;&gt; <span class="variable">$LOG_FILE</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<blockquote>
+<p>Linux 不是选修课，是测试工程师的必备技能。每天记一条命令，30天后就能熟练操作。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"># 命令</a>
+              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/Shell/" rel="tag"># Shell</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/12/mysql-chapter1-basics/" rel="prev" title="MySQL 第1章 - 基础篇 (安装·建表·CRUD·条件排序)">
+                  <i class="fa fa-angle-left"></i> MySQL 第1章 - 基础篇 (安装·建表·CRUD·条件排序)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/12/law-chapter2-daily-legal/" rel="next" title="法律知识 第2章 - 日常法律常识">
+                  法律知识 第2章 - 日常法律常识 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>
