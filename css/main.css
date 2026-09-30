@@ -675,6 +675,35 @@ code.hljs {
   
 }
 }
+.highlight:hover .copy-btn,
+.code-container:hover .copy-btn {
+  opacity: 1;
+}
+.code-container {
+  position: relative;
+}
+.code-lang {
+  font-size: 40px;
+  line-height: 1;
+  opacity: 0.1;
+  pointer-events: none;
+  position: absolute;
+  right: 5px;
+}
+.copy-btn {
+  color: #333;
+  cursor: pointer;
+  line-height: 1.6;
+  opacity: 0;
+  padding: 2px 6px;
+  position: absolute;
+  transition: opacity 0.2s ease-in-out;
+  background: #fff;
+  border: 0;
+  font-size: 0.8125em;
+  right: 0;
+  top: 0;
+}
 code,
 kbd,
 figure.highlight,
@@ -1420,7 +1449,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #a2ffff;
+    background: #4bff13;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2667,9 +2696,6 @@ ul.breadcrumb li:last-child {
     color: light-dark(#111, #eee);
   }
 }
-.utterances {
-  max-width: unset;
-}
 .search-active {
   overflow: hidden;
   margin-right: var(--dialog-scrollgutter, 0);
@@ -3187,4 +3213,46 @@ blockquote {
 }
 .highlight {
   border-left-color: var(--theme-color) !important;
+}
+.highlight .copy-btn,
+figure.highlight .copy-btn {
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+.giscus-wrapper {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+.giscus-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+.giscus-loading {
+  padding: 1.5rem 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+@media (prefers-color-scheme: dark) {
+  .giscus-wrapper {
+    border-top-color: #374151;
+  }
+  .giscus-title {
+    color: #e5e7eb;
+  }
+  .giscus-loading {
+    color: #6b7280;
+  }
+}
+.post-body h2 {
+  margin-top: 2.2rem;
+}
+.post-body table {
+  font-size: 0.92em;
+}
+.post-body code {
+  word-break: break-word;
 }
