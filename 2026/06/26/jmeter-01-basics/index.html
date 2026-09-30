@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="性能测试是测试工程师的能力分水岭之一。功能测试能靠细心补，但性能测试必须靠工具 + 方法。 JMeter 是 Apache 开源的纯 Java 性能测试工具，也是目前上手成本最低的一个。 这个系列按 7 天的学习过程整理成文。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JMeter 性能测试 · 入门：架构与第一个测试计划">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/06/26/jmeter-01-basics/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="性能测试是测试工程师的能力分水岭之一。功能测试能靠细心补，但性能测试必须靠工具 + 方法。 JMeter 是 Apache 开源的纯 Java 性能测试工具，也是目前上手成本最低的一个。 这个系列按 7 天的学习过程整理成文。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-26T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:07:50.174Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="性能测试">
+<meta property="article:tag" content="JMeter">
+<meta property="article:tag" content="压测">
+<meta property="article:tag" content="测试工具">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/06/26/jmeter-01-basics/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/06/26/jmeter-01-basics/","path":"2026/06/26/jmeter-01-basics/","title":"JMeter 性能测试 · 入门：架构与第一个测试计划"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JMeter 性能测试 · 入门：架构与第一个测试计划 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81JMeter-%E8%83%BD%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">一、JMeter 能做什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84%EF%BC%885-%E5%B1%82%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">二、核心架构（5 层）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E2%98%85-%E6%9C%80%E9%87%8D%E8%A6%81%E7%9A%84%E4%B8%80%E6%9D%A1%E8%A7%84%E5%88%99%EF%BC%9AGUI-%E5%86%99%E8%84%9A%E6%9C%AC%EF%BC%8CCLI-%E8%B7%91%E5%8E%8B%E6%B5%8B"><span class="nav-number">3.</span> <span class="nav-text">三、★ 最重要的一条规则：GUI 写脚本，CLI 跑压测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CLI-%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="nav-number">3.1.</span> <span class="nav-text">CLI 参数说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%AC%AC%E4%B8%80%E4%B8%AA%E6%B5%8B%E8%AF%95%E8%AE%A1%E5%88%92"><span class="nav-number">4.</span> <span class="nav-text">四、第一个测试计划</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%8F%82%E6%95%B0"><span class="nav-number">4.1.</span> <span class="nav-text">关键参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ramp-Up-%E6%98%AF%E5%BE%88%E5%A4%9A%E4%BA%BA%E6%90%9E%E6%B7%B7%E7%9A%84%E5%8F%82%E6%95%B0"><span class="nav-number">4.2.</span> <span class="nav-text">Ramp-Up 是很多人搞混的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E5%BC%95%E7%94%A8"><span class="nav-number">4.3.</span> <span class="nav-text">变量引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E8%81%9A%E5%90%88%E6%8A%A5%E5%91%8A%EF%BC%9A%E6%80%8E%E4%B9%88%E7%9C%8B%E6%80%A7%E8%83%BD%E6%95%B0%E6%8D%AE"><span class="nav-number">5.</span> <span class="nav-text">五、聚合报告：怎么看性能数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%9C%8B-90-Line-%E8%80%8C%E4%B8%8D%E6%98%AF-Average"><span class="nav-number">5.1.</span> <span class="nav-text">为什么看 90% Line 而不是 Average</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Day-1-%E7%BB%93%E8%AE%BA"><span class="nav-number">6.</span> <span class="nav-text">六、Day 1 结论</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/26/jmeter-01-basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JMeter 性能测试 · 入门：架构与第一个测试计划 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JMeter 性能测试 · 入门：架构与第一个测试计划
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-26 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T09:00:00+08:00">2026-06-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:07:50" itemprop="dateModified" datetime="2026-09-30T10:07:50+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>性能测试是测试工程师的能力分水岭之一。功能测试能靠细心补，但性能测试<strong>必须靠工具 + 方法</strong>。</p>
+<p>JMeter 是 Apache 开源的纯 Java 性能测试工具，也是目前上手成本最低的一个。</p>
+<p>这个系列按 7 天的学习过程整理成文。</p>
+<span id="more"></span>
+
+<h2 id="一、JMeter-能做什么"><a href="#一、JMeter-能做什么" class="headerlink" title="一、JMeter 能做什么"></a>一、JMeter 能做什么</h2><table>
+<thead>
+<tr>
+<th>能力</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>接口性能测试</strong></td>
+<td>模拟多用户并发，测吞吐量（QPS&#x2F;TPS）、响应时间</td>
+</tr>
+<tr>
+<td><strong>负载测试</strong></td>
+<td>逐步加压，找到系统瓶颈</td>
+</tr>
+<tr>
+<td><strong>压力测试</strong></td>
+<td>极限并发，测系统崩溃点</td>
+</tr>
+<tr>
+<td><strong>功能测试</strong></td>
+<td>也能做接口自动化（但不如 Postman&#x2F;requests 方便）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>给测试的一句话</strong>：JMeter 的价值不在”能发请求”，而在于<strong>能同时发 1000 个请求，并把结果统计出来</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="二、核心架构（5-层）"><a href="#二、核心架构（5-层）" class="headerlink" title="二、核心架构（5 层）"></a>二、核心架构（5 层）</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Test Plan（测试计划）</span><br><span class="line">  └── Thread Group（线程组 = 虚拟用户）</span><br><span class="line">        ├── Config Element（配置元件：HTTP默认值、CSV、Header Manager）</span><br><span class="line">        ├── Sampler（采样器：HTTP Request、JDBC、TCP...）</span><br><span class="line">        ├── Timer（定时器：固定定时、随机定时、吞吐量定时器）</span><br><span class="line">        ├── Assertion（断言：响应断言、JSON断言、持续时间断言）</span><br><span class="line">        ├── Post Processor（后置处理器：正则提取器、JSON提取器）</span><br><span class="line">        └── Listener（监听器：查看结果树、聚合报告、汇总报告）</span><br></pre></td></tr></table></figure>
+
+<p><strong>三个关键理解：</strong></p>
+<ol>
+<li><strong>Thread Group &#x3D; 并发用户数</strong>。JMeter 里每个线程就是一个独立用户</li>
+<li><strong>Sampler &#x3D; 真正发请求的东西</strong>。其他元件都是围绕它服务的</li>
+<li><strong>Listener &#x3D; 收集结果的地方</strong>。⚠️ <strong>不要在 GUI 模式下开太多监听器</strong>，它们很吃内存，会拖慢测试本身</li>
+</ol>
+<hr>
+<h2 id="三、★-最重要的一条规则：GUI-写脚本，CLI-跑压测"><a href="#三、★-最重要的一条规则：GUI-写脚本，CLI-跑压测" class="headerlink" title="三、★ 最重要的一条规则：GUI 写脚本，CLI 跑压测"></a>三、★ 最重要的一条规则：GUI 写脚本，CLI 跑压测</h2><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>用途</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GUI</strong></td>
+<td>编写 &#x2F; 调试脚本</td>
+<td><code>jmeter.bat</code></td>
+</tr>
+<tr>
+<td><strong>CLI</strong></td>
+<td>执行性能测试</td>
+<td><code>jmeter -n -t xxx.jmx -l result.jtl -e -o report/</code></td>
+</tr>
+</tbody></table>
+<p><strong>为什么不能用 GUI 跑压测？</strong></p>
+<p>GUI 本身要渲染界面、绘制图表，这些开销和被测系统抢 CPU、抢内存。<strong>在 GUI 里跑出来的数据是不准的</strong>——你测的可能不是服务端的极限，而是你自己电脑的极限。</p>
+<blockquote>
+<p>这条规则我一开始不以为然，直到有一次在 GUI 里跑 50 并发，本机 CPU 直接拉满、界面卡住。换成 CLI 跑，同样的脚本轻松跑到 200 并发。</p>
+<p><strong>工具自己成了瓶颈</strong>，这是性能测试里最讽刺的失误。</p>
+</blockquote>
+<h3 id="CLI-参数说明"><a href="#CLI-参数说明" class="headerlink" title="CLI 参数说明"></a>CLI 参数说明</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">jmeter -n \                          <span class="comment"># 非 GUI 模式</span></span><br><span class="line">       -t jmeter_day1.jmx \          <span class="comment"># 测试计划文件</span></span><br><span class="line">       -l day1_result.jtl \          <span class="comment"># 结果文件（JTL）</span></span><br><span class="line">       -e -o day1_report/            <span class="comment"># 生成 HTML 报告到目录</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、第一个测试计划"><a href="#四、第一个测试计划" class="headerlink" title="四、第一个测试计划"></a>四、第一个测试计划</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Test Plan: HTTP 基础请求入门</span><br><span class="line">├── 用户定义变量: BASE_URL=httpbin.org, TEST_USER=jmeter_learner</span><br><span class="line">├── Thread Group: 基础并发线程组</span><br><span class="line">│   ├── 线程数: 5</span><br><span class="line">│   ├── Ramp-Up: 2 秒</span><br><span class="line">│   ├── 循环次数: 2</span><br><span class="line">│   └── 总请求: 5 × 2 × 3 = 30 次</span><br><span class="line">├── HTTP Request Defaults (base URL = httpbin.org)</span><br><span class="line">├── HTTP Header Manager (Accept / User-Agent)</span><br><span class="line">├── 【采样器1】GET /get — 基础 GET</span><br><span class="line">├── 【采样器2】GET /get?name=xxx — 带参数 GET</span><br><span class="line">├── 【采样器3】POST /post — JSON 提交</span><br><span class="line">├── 查看结果树 / 聚合报告 / 汇总报告</span><br></pre></td></tr></table></figure>
+
+<h3 id="关键参数"><a href="#关键参数" class="headerlink" title="关键参数"></a>关键参数</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th>本次值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>线程数</strong></td>
+<td>并发用户数</td>
+<td>5</td>
+</tr>
+<tr>
+<td><strong>Ramp-Up</strong></td>
+<td>启动间隔（秒）</td>
+<td>2s（每 0.4s 启动一个用户）</td>
+</tr>
+<tr>
+<td><strong>循环次数</strong></td>
+<td>每个用户执行几遍</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>总采样数</strong></td>
+<td>线程数 × 循环 × 采样器数</td>
+<td>5 × 2 × 3 &#x3D; <strong>30</strong></td>
+</tr>
+</tbody></table>
+<h3 id="Ramp-Up-是很多人搞混的参数"><a href="#Ramp-Up-是很多人搞混的参数" class="headerlink" title="Ramp-Up 是很多人搞混的参数"></a>Ramp-Up 是很多人搞混的参数</h3><p><strong>它不是一个”等待时间”，而是”爬坡时间”。</strong></p>
+<ul>
+<li>线程数 5，Ramp-Up 2s → <strong>每 0.4 秒启动 1 个用户</strong>，2 秒内启动完</li>
+<li>线程数 100，Ramp-Up 1s → <strong>每 0.01 秒启动 1 个用户</strong></li>
+</ul>
+<p>⚠️ **Ramp-Up 设太小会出现”瞬时冲击”**：100 个线程 1 秒内全起来，和真实用户逐渐进入的场景不符。</p>
+<p><strong>经验值</strong>：Ramp-Up ≈ 线程数 × 0.1<del>0.5 秒。比如 100 线程，Ramp-Up 设 10</del>50 秒更接近真实。</p>
+<h3 id="变量引用"><a href="#变量引用" class="headerlink" title="变量引用"></a>变量引用</h3><p>JMeter 用 <code>$&#123;&#125;</code> 引用变量，和 Shell 一样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$&#123;BASE_URL&#125;   →  httpbin.org</span><br><span class="line">$&#123;TEST_USER&#125;  →  jmeter_learner</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="五、聚合报告：怎么看性能数据"><a href="#五、聚合报告：怎么看性能数据" class="headerlink" title="五、聚合报告：怎么看性能数据"></a>五、聚合报告：怎么看性能数据</h2><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+<th>判断标准</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Samples</strong></td>
+<td>请求次数</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Average</strong></td>
+<td>平均响应时间（ms）</td>
+<td>越小越好，&lt; 500ms 算好</td>
+</tr>
+<tr>
+<td><strong>Median</strong></td>
+<td>中位数响应时间</td>
+<td><strong>比 Average 更能反映真实体验</strong></td>
+</tr>
+<tr>
+<td><strong>90% Line</strong></td>
+<td>90% 请求的响应时间</td>
+<td><strong>性能 SLA 通常看这个</strong></td>
+</tr>
+<tr>
+<td><strong>95% Line</strong></td>
+<td>95% 请求的响应时间</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>99% Line</strong></td>
+<td>99% 请求的响应时间</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Min &#x2F; Max</strong></td>
+<td>最小 &#x2F; 最大响应时间</td>
+<td><strong>Max 很大说明有抖动</strong></td>
+</tr>
+<tr>
+<td><strong>Error%</strong></td>
+<td>错误率</td>
+<td><strong>必须 0%</strong></td>
+</tr>
+<tr>
+<td><strong>Throughput</strong></td>
+<td>吞吐量（请求&#x2F;秒）</td>
+<td>越大越好</td>
+</tr>
+<tr>
+<td><strong>Received &#x2F; Sent KB&#x2F;sec</strong></td>
+<td>收发速率</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3 id="为什么看-90-Line-而不是-Average"><a href="#为什么看-90-Line-而不是-Average" class="headerlink" title="为什么看 90% Line 而不是 Average"></a>为什么看 90% Line 而不是 Average</h3><p>举例：100 个请求里</p>
+<ul>
+<li>95 个请求响应 100ms</li>
+<li>5 个请求响应 <strong>8000ms</strong></li>
+</ul>
+<p><strong>Average &#x3D; (95×100 + 5×8000) &#x2F; 100 &#x3D; 495ms</strong> —— 看起来还行</p>
+<p>但其实<strong>有 5% 的用户等了 8 秒</strong>。他们的体验是灾难，而平均值把这个灾难”平均掉”了。</p>
+<p><strong>这就是为什么性能 SLA 通常写”90% 请求响应时间 &lt; 500ms”而不是”平均响应时间 &lt; 500ms”。</strong></p>
+<blockquote>
+<p><strong>记住这条</strong>：<strong>平均值会骗人，分位数不会。</strong></p>
+</blockquote>
+<hr>
+<h2 id="六、Day-1-结论"><a href="#六、Day-1-结论" class="headerlink" title="六、Day 1 结论"></a>六、Day 1 结论</h2><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>架构</td>
+<td>Test Plan &gt; Thread Group &gt; Sampler &gt; Listener</td>
+</tr>
+<tr>
+<td>线程组</td>
+<td>&#x3D; 虚拟用户，控制并发</td>
+</tr>
+<tr>
+<td>元件复用</td>
+<td>HTTP Request Defaults 统一配置，避免重复</td>
+</tr>
+<tr>
+<td>变量</td>
+<td><code>$&#123;&#125;</code> 引用</td>
+</tr>
+<tr>
+<td><strong>模式</strong></td>
+<td><strong>GUI 写脚本，CLI 跑压测</strong></td>
+</tr>
+<tr>
+<td>看报告</td>
+<td>Average、<strong>90% Line</strong>、Error%、Throughput</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p><strong>本课要点</strong>：GUI 写 CLI 跑｜Ramp-Up 是爬坡不是等待｜<strong>平均值会骗人，看分位数</strong></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag"># 性能测试</a>
+              <a href="/tags/JMeter/" rel="tag"># JMeter</a>
+              <a href="/tags/%E5%8E%8B%E6%B5%8B/" rel="tag"># 压测</a>
+              <a href="/tags/%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/" rel="tag"># 测试工具</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/26/jmeter-intro/" rel="prev" title="JMeter 性能测试">
+                  <i class="fa fa-angle-left"></i> JMeter 性能测试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/27/jmeter-02-listeners/" rel="next" title="JMeter 性能测试 · 监听器与结果分析">
+                  JMeter 性能测试 · 监听器与结果分析 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

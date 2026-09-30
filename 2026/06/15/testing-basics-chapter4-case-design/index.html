@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="“你会设计用例吗？”——面试官问这句时，想听的不是”我会等价类边界值”，而是你能不能在具体功能上把它用出来。 这篇把六大方法论拆开讲，每个都配游戏场景的实例。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="测试用例设计方法论 · 从等价类到场景法">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/06/15/testing-basics-chapter4-case-design/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="“你会设计用例吗？”——面试官问这句时，想听的不是”我会等价类边界值”，而是你能不能在具体功能上把它用出来。 这篇把六大方法论拆开讲，每个都配游戏场景的实例。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-15T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:04:30.805Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="测试方法">
+<meta property="article:tag" content="用例设计">
+<meta property="article:tag" content="等价类">
+<meta property="article:tag" content="边界值">
+<meta property="article:tag" content="因果图">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/06/15/testing-basics-chapter4-case-design/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/06/15/testing-basics-chapter4-case-design/","path":"2026/06/15/testing-basics-chapter4-case-design/","title":"测试用例设计方法论 · 从等价类到场景法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>测试用例设计方法论 · 从等价类到场景法 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="nav-number">1.</span> <span class="nav-text">为什么需要方法论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AD%89%E4%BB%B7%E7%B1%BB%E5%88%92%E5%88%86"><span class="nav-number">2.</span> <span class="nav-text">一、等价类划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%BE%B9%E7%95%8C%E5%80%BC%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">二、边界值分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-%E4%B8%80%E4%B8%AA%E7%9C%9F%E5%AE%9E%E7%9A%84%E8%BE%B9%E7%95%8C-bug"><span class="nav-number">3.1.</span> <span class="nav-text">⚠️ 一个真实的边界 bug</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%9B%A0%E6%9E%9C%E5%9B%BE%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">三、因果图法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%94%99%E8%AF%AF%E6%8E%A8%E6%B5%8B%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">四、错误推测法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%99%BD%E7%9B%92%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95%EF%BC%88%E4%BA%86%E8%A7%A3%E5%8D%B3%E5%8F%AF%EF%BC%89"><span class="nav-number">6.</span> <span class="nav-text">五、白盒测试方法（了解即可）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%9C%BA%E6%99%AF%E6%B3%95"><span class="nav-number">7.</span> <span class="nav-text">六、场景法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8%EF%BC%9A%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%8F%A3%E6%80%8E%E4%B9%88%E6%B5%8B"><span class="nav-number">8.</span> <span class="nav-text">七、组合使用：一个接口怎么测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">9.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/15/testing-basics-chapter4-case-design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="测试用例设计方法论 · 从等价类到场景法 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          测试用例设计方法论 · 从等价类到场景法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-15 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-15T09:00:00+08:00">2026-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:04:30" itemprop="dateModified" datetime="2026-09-30T10:04:30+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>“你会设计用例吗？”——面试官问这句时，想听的不是”我会等价类边界值”，而是<strong>你能不能在具体功能上把它用出来</strong>。</p>
+<p>这篇把六大方法论拆开讲，每个都配游戏场景的实例。</p>
+<span id="more"></span>
+
+<h2 id="为什么需要方法论"><a href="#为什么需要方法论" class="headerlink" title="为什么需要方法论"></a>为什么需要方法论</h2><p>不用方法的后果很具体：<strong>想到哪测到哪，测完心里没底。</strong></p>
+<p>用过方法之后，你能回答两个关键问题：</p>
+<ul>
+<li>这个功能<strong>我测完了吗</strong>？（覆盖度可控）</li>
+<li>这个版本<strong>我该优先测什么</strong>？（优先级有依据）</li>
+</ul>
+<p>这就是”能评审”和”不能评审”的区别。</p>
+<hr>
+<h2 id="一、等价类划分"><a href="#一、等价类划分" class="headerlink" title="一、等价类划分"></a>一、等价类划分</h2><p><strong>核心思路</strong>：把输入数据分成若干等价类，每类中任取一个代表值即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">示例：注册时填写年龄（1-120 岁）</span><br><span class="line"></span><br><span class="line">有效等价类： 1 ≤ age ≤ 120</span><br><span class="line">无效等价类： age &lt; 1（0、负数）</span><br><span class="line">            age &gt; 120（121、9999）</span><br><span class="line">            非数字（&quot;abc&quot;、空值、null）</span><br></pre></td></tr></table></figure>
+
+<p><strong>三条实战要点：</strong></p>
+<ol>
+<li><strong>不只分有效&#x2F;无效，还要考虑数据类型</strong>：数字、字符串、特殊字符、布尔值，每一类都要有代表</li>
+<li><strong>一条用例可以覆盖多个有效等价类</strong>（压缩用例数量）</li>
+<li><strong>一条用例只覆盖一个无效等价类</strong> —— 否则程序在第一个错误处就返回了，后面的错误被掩盖，你以为测了其实没测</li>
+</ol>
+<blockquote>
+<p>第 3 条是新人最常犯的错。<strong>无效等价类必须一个一个来。</strong></p>
+</blockquote>
+<p><strong>游戏场景</strong>：领奖接口的 <code>rewardId</code> 参数 —— 有效类（1&#x2F;2&#x2F;3 三个存在的礼包）、无效类（不存在的 id、0、负数、超长数字、字符串）。</p>
+<hr>
+<h2 id="二、边界值分析"><a href="#二、边界值分析" class="headerlink" title="二、边界值分析"></a>二、边界值分析</h2><p><strong>核心思路</strong>：错误往往聚集在边界，别只测”典型值”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">经典边界口诀：</span><br><span class="line">  上点 → 边界值本身（120）</span><br><span class="line">  离点 → 边界 ±1（119、121）</span><br><span class="line">  内点 → 边界内的典型值（60）</span><br><span class="line"></span><br><span class="line">年龄 1-120，测：0, 1, 2, 60, 119, 120, 121   ← 7 个值覆盖所有边界</span><br></pre></td></tr></table></figure>
+
+<p>⚠️ <strong>空值、空字符串、null 也是边界！</strong> 很多人会漏掉。</p>
+<p><strong>游戏里的日常场景：</strong></p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>边界测什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>背包容量上限</td>
+<td>满、满+1、满-1</td>
+</tr>
+<tr>
+<td>充值金额</td>
+<td>0.01、0、负数、超大值</td>
+</tr>
+<tr>
+<td>排行榜名次</td>
+<td>第 1 名、第 100 名（上限）、第 0 名（不存在）</td>
+</tr>
+<tr>
+<td>等级门槛</td>
+<td>门槛-1、门槛、门槛+1</td>
+</tr>
+</tbody></table>
+<h3 id="⚠️-一个真实的边界-bug"><a href="#⚠️-一个真实的边界-bug" class="headerlink" title="⚠️ 一个真实的边界 bug"></a>⚠️ 一个真实的边界 bug</h3><p>我实测过一个假服务端，规则是”<strong>10 级可以领王者礼包</strong>“，代码却是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> u_[<span class="string">&quot;level&quot;</span>] &lt;= cfg[<span class="string">&quot;need_level&quot;</span>]:   <span class="comment"># ← 问题在这</span></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">self</span>._err(<span class="number">50002</span>, <span class="string">f&quot;王者礼包需要 10 级，你当前 <span class="subst">&#123;u_[<span class="string">&#x27;level&#x27;</span>]&#125;</span> 级&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>少了一个等号。</strong> 于是 10 级玩家收到的报错是：</p>
+<blockquote>
+<p>“王者礼包需要 10 级，你当前 10 级”</p>
+</blockquote>
+<p>需要 10 级，我是 10 级，凭什么不让我领？<strong>这句报错本身就自相矛盾。</strong></p>
+<p>这就是最经典的边界值缺陷。手动测试时的自然路径是：</p>
+<ul>
+<li>试 5 级 → 领不了 ✅ 符合预期</li>
+<li>试 20 级 → 能领 ✅ 符合预期</li>
+<li>然后觉得”没问题”了</li>
+</ul>
+<p>但”<strong>正好 10 级</strong>“这个点，<strong>得特意去构造才会碰到</strong>。而开发写错的，往往恰好就是这一个点。</p>
+<blockquote>
+<p><strong>边界上的人最少，出的事最多。</strong></p>
+</blockquote>
+<hr>
+<h2 id="三、因果图法"><a href="#三、因果图法" class="headerlink" title="三、因果图法"></a>三、因果图法</h2><p><strong>适用场景</strong>：多个输入条件之间有逻辑组合关系。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">示例：VIP 特权判定</span><br><span class="line"></span><br><span class="line">条件（因）：</span><br><span class="line">  C1: 是 VIP    C2: 等级 ≥ 50    C3: 充值 ≥ 1000</span><br><span class="line"></span><br><span class="line">动作（果）：</span><br><span class="line">  A1: 可进入特权副本    A2: 可领取每日宝箱    A3: 出战位 +1</span><br><span class="line"></span><br><span class="line">用 AND / OR / NOT 画出逻辑关系后，逐组合验证：</span><br><span class="line">  (C1=Y, C2=Y, C3=Y) → A1 + A2 + A3 全触发</span><br><span class="line">  (C1=Y, C2=N, C3=N) → 仅 A2（VIP 基础权利）</span><br><span class="line">  (C1=N, C2=Y, C3=Y) → 0 触发（非 VIP 一律不行）</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么需要它</strong>：3 个条件就是 8 种组合，靠”想到哪测哪”必然漏。画出来之后，漏没漏一眼可见。</p>
+<p><strong>游戏里的典型场景</strong>：活动参与条件、特权判定、多条件筛选项、折扣叠加规则。</p>
+<hr>
+<h2 id="四、错误推测法"><a href="#四、错误推测法" class="headerlink" title="四、错误推测法"></a>四、错误推测法</h2><p><strong>不是系统方法，是经验直觉。</strong> 老测试的第六感来自踩过的坑。</p>
+<p>常见清单：</p>
+<ul>
+<li>空输入、超长输入</li>
+<li>并发操作（同时点两个按钮）</li>
+<li>异常中断（支付中断网、战斗中断电、切后台）</li>
+<li>边界 ±1</li>
+<li>特殊字符（emoji、SQL 注入字符、零宽字符）</li>
+<li>重复提交、快速连点</li>
+</ul>
+<p>⚠️ <strong>但要注意分寸</strong>：如果一份用例里错误推测占比过高（比如超过 30%），说明<strong>用例主要靠个人经验，不可评审也不可传承</strong>。这时候需要把那些”凭直觉”的点<strong>转化成有方法支撑的用例</strong>。</p>
+<blockquote>
+<p><strong>判断标准</strong>：你能向别人解释”为什么测这一条”吗？能，就是方法；不能，就是直觉。</p>
+</blockquote>
+<hr>
+<h2 id="五、白盒测试方法（了解即可）"><a href="#五、白盒测试方法（了解即可）" class="headerlink" title="五、白盒测试方法（了解即可）"></a>五、白盒测试方法（了解即可）</h2><p>游戏测试以黑盒为主，但白盒的覆盖度分级值得知道：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>强度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>语句覆盖</td>
+<td>最弱</td>
+<td>每个语句至少执行一次</td>
+</tr>
+<tr>
+<td>判定覆盖</td>
+<td>较强</td>
+<td>每个判断的 True&#x2F;False 分支都走到</td>
+</tr>
+<tr>
+<td>条件覆盖</td>
+<td>更强</td>
+<td>每个条件的取值组合都覆盖</td>
+</tr>
+<tr>
+<td>路径覆盖</td>
+<td>最强</td>
+<td>每条执行路径都走一遍（通常不现实）</td>
+</tr>
+</tbody></table>
+<p><strong>语句覆盖的陷阱</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (a &gt; <span class="number">0</span> <span class="keyword">and</span> b &gt; <span class="number">0</span>):</span><br><span class="line">    x = <span class="number">1</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    x = <span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>只测 <code>(a=1, b=1)</code> 和 <code>(a=-1, b=-1)</code>，语句覆盖率看起来 100%。但 <code>a&gt;0 且 b≤0</code> 的<strong>短路情况完全没测到</strong>——这就是假覆盖。</p>
+<p><strong>实践建议</strong>：</p>
+<ul>
+<li>小函数 &#x2F; 核心模块 → 追求条件覆盖</li>
+<li>常规业务 → 判定覆盖 + 关键边界</li>
+<li>不必强求 100% 路径覆盖（成本不成比例）</li>
+</ul>
+<hr>
+<h2 id="六、场景法"><a href="#六、场景法" class="headerlink" title="六、场景法"></a>六、场景法</h2><p><strong>核心思路</strong>：按用户的真实使用路径串联功能，验证端到端的业务流程。</p>
+<p>场景法经常被低估，但它能抓住<strong>单接口测试抓不到的问题</strong>——接口之间的数据传递、状态依赖。</p>
+<p><strong>游戏场景</strong>：一整套”新手 7 日”流程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">注册 → 创建角色 → 过新手引导 → 领新手礼包 → 打第一场战斗 </span><br><span class="line">→ 升级 → 解锁功能 → 领七日奖励 → 次日登录看是否接续</span><br></pre></td></tr></table></figure>
+
+<p>这类串联测试最容易暴露：状态未持久化、跨天逻辑错乱、前后置条件依赖问题。</p>
+<hr>
+<h2 id="七、组合使用：一个接口怎么测"><a href="#七、组合使用：一个接口怎么测" class="headerlink" title="七、组合使用：一个接口怎么测"></a>七、组合使用：一个接口怎么测</h2><p>以”领取礼包”接口为例，把方法组合起来：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>产出用例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>正常流程</strong></td>
+<td>rewardId&#x3D;1，等级足够 → 领取成功，金币增加</td>
+</tr>
+<tr>
+<td><strong>等价类</strong></td>
+<td>rewardId 不存在的值、类型错误的值</td>
+</tr>
+<tr>
+<td><strong>边界值</strong></td>
+<td>等级 &#x3D; 门槛-1、门槛、门槛+1</td>
+</tr>
+<tr>
+<td><strong>业务逻辑</strong></td>
+<td>重复领取（幂等）、并发领取、前置任务未完成</td>
+</tr>
+<tr>
+<td><strong>异常容错</strong></td>
+<td>token 失效、超时重试、参数缺失</td>
+</tr>
+<tr>
+<td><strong>场景法</strong></td>
+<td>从”打开活动页 → 点击领取 → 查看背包”完整走一遍</td>
+</tr>
+</tbody></table>
+<p><strong>六类合起来，才叫”测完了”。</strong></p>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>什么时候用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>等价类划分</td>
+<td>输入取值范围大，需要压缩用例数</td>
+</tr>
+<tr>
+<td>边界值分析</td>
+<td>有数值门槛、容量上限、时间边界</td>
+</tr>
+<tr>
+<td>因果图法</td>
+<td>多个条件有逻辑组合（权限、活动规则）</td>
+</tr>
+<tr>
+<td>错误推测法</td>
+<td>补充经验盲区（但占比别太高）</td>
+</tr>
+<tr>
+<td>场景法</td>
+<td>验证端到端流程与状态依赖</td>
+</tr>
+<tr>
+<td>白盒覆盖</td>
+<td>评估代码覆盖质量（了解即可）</td>
+</tr>
+</tbody></table>
+<p><strong>最后一句：方法不是用来背的，是用来在评审会上说服别人的。</strong></p>
+<p>当你说”这条用例覆盖了等级门槛的上点、离点、内点”时，没人能反驳你漏测；当你说”我觉得这里可能有问题”时，别人只能回你”再看看”。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95/" rel="tag"># 测试方法</a>
+              <a href="/tags/%E7%94%A8%E4%BE%8B%E8%AE%BE%E8%AE%A1/" rel="tag"># 用例设计</a>
+              <a href="/tags/%E7%AD%89%E4%BB%B7%E7%B1%BB/" rel="tag"># 等价类</a>
+              <a href="/tags/%E8%BE%B9%E7%95%8C%E5%80%BC/" rel="tag"># 边界值</a>
+              <a href="/tags/%E5%9B%A0%E6%9E%9C%E5%9B%BE/" rel="tag"># 因果图</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/13/interview-qa-02-specialized/" rel="prev" title="游戏测试面试题实战 · 专项测试与场景分析">
+                  <i class="fa fa-angle-left"></i> 游戏测试面试题实战 · 专项测试与场景分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/16/mysql-chapter4-crud/" rel="next" title="MySQL 实战 · 第1章：CRUD 基础与查询入门">
+                  MySQL 实战 · 第1章：CRUD 基础与查询入门 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

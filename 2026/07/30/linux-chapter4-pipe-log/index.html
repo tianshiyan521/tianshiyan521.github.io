@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="管道是 Linux 最强大的设计，也是测试人员最该掌握的一项技能。 因为它把”看日志”这件事，从”一屏一屏翻”变成了”一条命令给出答案”。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 实战 · 管道、重定向与日志分析">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/07/30/linux-chapter4-pipe-log/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="管道是 Linux 最强大的设计，也是测试人员最该掌握的一项技能。 因为它把”看日志”这件事，从”一屏一屏翻”变成了”一条命令给出答案”。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-30T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:09:49.241Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="日志分析">
+<meta property="article:tag" content="awk">
+<meta property="article:tag" content="sed">
+<meta property="article:tag" content="grep">
+<meta property="article:tag" content="管道">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/07/30/linux-chapter4-pipe-log/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/07/30/linux-chapter4-pipe-log/","path":"2026/07/30/linux-chapter4-pipe-log/","title":"Linux 实战 · 管道、重定向与日志分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux 实战 · 管道、重定向与日志分析 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AE%A1%E9%81%93%E4%B8%8E%E9%87%8D%E5%AE%9A%E5%90%91%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">一、管道与重定向基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%98%85-2-1-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">★ 2&gt;&amp;1 是什么</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E7%9A%84%E7%BB%8F%E5%85%B8%E7%AE%A1%E9%81%93%E7%BB%84%E5%90%88"><span class="nav-number">2.</span> <span class="nav-text">二、日志分析的经典管道组合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%A5%97%E8%B7%AF"><span class="nav-number">2.1.</span> <span class="nav-text">核心套路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98-1%EF%BC%9A%E7%BB%9F%E8%AE%A1%E5%87%BA%E7%8E%B0%E6%9C%80%E5%A4%9A%E7%9A%84%E9%94%99%E8%AF%AF%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">实战 1：统计出现最多的错误类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98-2%EF%BC%9A%E7%BB%9F%E8%AE%A1%E8%AE%BF%E9%97%AE%E9%87%8F-Top-10-%E7%9A%84-IP"><span class="nav-number">2.3.</span> <span class="nav-text">实战 2：统计访问量 Top 10 的 IP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98-3%EF%BC%9A%E6%9F%A5%E6%9F%90%E4%B8%AA%E7%8E%A9%E5%AE%B6-%E7%94%A8%E6%88%B7%E7%9A%84%E6%89%80%E6%9C%89%E6%93%8D%E4%BD%9C"><span class="nav-number">2.4.</span> <span class="nav-text">实战 3：查某个玩家&#x2F;用户的所有操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98-4%EF%BC%9A%E6%8C%89%E6%97%B6%E9%97%B4%E6%AE%B5%E7%AD%9B%E6%97%A5%E5%BF%97"><span class="nav-number">2.5.</span> <span class="nav-text">实战 4：按时间段筛日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98-5%EF%BC%9A%E5%8F%AA%E8%BE%93%E5%87%BA%E5%8C%B9%E9%85%8D%E8%A1%8C%E7%9A%84%E5%89%8D%E5%90%8E%E6%96%87"><span class="nav-number">2.6.</span> <span class="nav-text">实战 5：只输出匹配行的前后文</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81awk-%E4%B8%8E-sed-%E8%BF%9B%E9%98%B6"><span class="nav-number">3.</span> <span class="nav-text">三、awk 与 sed 进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#awk%EF%BC%9A%E6%8C%89%E5%88%97%E5%A4%84%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">awk：按列处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed%EF%BC%9A%E6%8C%89%E8%A1%8C%E5%A4%84%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text">sed：按行处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-sed-i-%E6%98%AF%E5%8D%B1%E9%99%A9%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">⚠️ sed -i 是危险操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81vim-%E9%80%9F%E6%9F%A5%EF%BC%88%E5%A4%9F%E7%94%A8%E7%89%88%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">四、vim 速查（够用版）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%80%E4%BB%BD%E5%AE%9E%E7%94%A8%E7%9A%84%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="nav-number">5.</span> <span class="nav-text">五、一份实用的日志分析速查表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%B0%8F%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">六、小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/07/30/linux-chapter4-pipe-log/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux 实战 · 管道、重定向与日志分析 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux 实战 · 管道、重定向与日志分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-07-30 09:00:00" itemprop="dateCreated datePublished" datetime="2026-07-30T09:00:00+08:00">2026-07-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:09:49" itemprop="dateModified" datetime="2026-09-30T10:09:49+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/devops/" itemprop="url" rel="index"><span itemprop="name">工具与运维</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>管道是 Linux 最强大的设计，也是测试人员最该掌握的一项技能。</strong></p>
+<p>因为它把”看日志”这件事，从”一屏一屏翻”变成了”一条命令给出答案”。</p>
+<span id="more"></span>
+
+<h2 id="一、管道与重定向基础"><a href="#一、管道与重定向基础" class="headerlink" title="一、管道与重定向基础"></a>一、管道与重定向基础</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">命令1 | 命令2            <span class="comment"># 管道：命令1的输出 → 命令2的输入</span></span><br><span class="line">命令 &gt; 文件              <span class="comment"># 覆盖写入</span></span><br><span class="line">命令 &gt;&gt; 文件             <span class="comment"># 追加写入</span></span><br><span class="line">命令 &lt; 文件              <span class="comment"># 从文件读取输入</span></span><br><span class="line">命令 2&gt; 文件             <span class="comment"># 错误重定向</span></span><br><span class="line">命令 &amp;&gt; 文件             <span class="comment"># 标准输出 + 错误一起重定向</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>|</code></td>
+<td>管道符，前一个命令的输出传给下一个</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>覆盖写（原内容清空）</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>追加写</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>输入重定向</td>
+</tr>
+<tr>
+<td><code>2&gt;</code></td>
+<td>只重定向错误输出</td>
+</tr>
+<tr>
+<td><code>&amp;&gt;</code></td>
+<td>标准输出 + 错误一起重定向</td>
+</tr>
+</tbody></table>
+<h3 id="★-2-1-是什么"><a href="#★-2-1-是什么" class="headerlink" title="★ 2&gt;&amp;1 是什么"></a>★ <code>2&gt;&amp;1</code> 是什么</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python test_script.py &gt; output.log 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>拆开看：</p>
+<ul>
+<li><code>&gt; output.log</code> — 把<strong>标准输出</strong>（fd 1）写到文件</li>
+<li><code>2&gt;&amp;1</code> — 把<strong>标准错误</strong>（fd 2）重定向到<strong>标准输出指向的地方</strong>（也就是同一个文件）</li>
+</ul>
+<p><strong>为什么要这样写？</strong></p>
+<p>因为程序有两种输出：</p>
+<table>
+<thead>
+<tr>
+<th>流</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>stdout</td>
+<td>正常结果</td>
+</tr>
+<tr>
+<td>stderr</td>
+<td>报错信息</td>
+</tr>
+</tbody></table>
+<p>只写 <code>&gt; output.log</code> 的话，<strong>报错信息会直接打在屏幕上，不进日志文件</strong>。</p>
+<p><strong>加上 <code>2&gt;&amp;1</code>，两个流都进文件</strong>，日志才完整。</p>
+<blockquote>
+<p>⚠️ <strong>顺序不能反</strong>：<code>2&gt;&amp;1 &gt; file</code> 是错的。<br>它的含义是”把 stderr 指到当前 stdout（屏幕），然后把 stdout 改到文件”——<strong>结果错误信息还是打在屏幕上。</strong></p>
+<p><strong>记住写法：<code>&gt; file 2&gt;&amp;1</code>，先指文件，再合并错误。</strong></p>
+</blockquote>
+<hr>
+<h2 id="二、日志分析的经典管道组合"><a href="#二、日志分析的经典管道组合" class="headerlink" title="二、日志分析的经典管道组合"></a>二、日志分析的经典管道组合</h2><h3 id="核心套路"><a href="#核心套路" class="headerlink" title="核心套路"></a>核心套路</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep（筛行） → awk（切列） → sort（排序） → uniq -c（计数） → sort -rn（按数量倒序） → head（取前 N）</span><br></pre></td></tr></table></figure>
+
+<p><strong>这一条链路能解决大部分日志统计需求。</strong></p>
+<h3 id="实战-1：统计出现最多的错误类型"><a href="#实战-1：统计出现最多的错误类型" class="headerlink" title="实战 1：统计出现最多的错误类型"></a>实战 1：统计出现最多的错误类型</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">&quot;ERROR&quot;</span> app.log | awk <span class="string">&#x27;&#123;print $5&#125;&#x27;</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -rn | <span class="built_in">head</span> -10</span><br></pre></td></tr></table></figure>
+
+<p>拆解：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>grep &quot;ERROR&quot;</code></td>
+<td>只留含 ERROR 的行</td>
+</tr>
+<tr>
+<td><code>awk &#39;&#123;print $5&#125;&#39;</code></td>
+<td>取第 5 列（假设是错误码）</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>排序（**<code>uniq</code> 只能处理相邻重复，必须先 sort**）</td>
+</tr>
+<tr>
+<td><code>uniq -c</code></td>
+<td>去重并计数</td>
+</tr>
+<tr>
+<td><code>sort -rn</code></td>
+<td>按数量倒序</td>
+</tr>
+<tr>
+<td><code>head -10</code></td>
+<td>取前 10</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ <strong><code>sort</code> 不能省</strong>。<code>uniq</code> 只对<strong>相邻</strong>的重复行生效。<br>跳过 sort 直接 uniq，同一个值可能被统计成好几行 —— 这是新手最常见的错误。</p>
+</blockquote>
+<h3 id="实战-2：统计访问量-Top-10-的-IP"><a href="#实战-2：统计访问量-Top-10-的-IP" class="headerlink" title="实战 2：统计访问量 Top 10 的 IP"></a>实战 2：统计访问量 Top 10 的 IP</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span> access.log | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c | <span class="built_in">sort</span> -rn | <span class="built_in">head</span> -10</span><br></pre></td></tr></table></figure>
+
+<p><strong>这条命令是运维和测试的必备技能</strong> —— 压测时验证流量是否均匀、排查是否有异常来源，都靠它。</p>
+<h3 id="实战-3：查某个玩家-用户的所有操作"><a href="#实战-3：查某个玩家-用户的所有操作" class="headerlink" title="实战 3：查某个玩家&#x2F;用户的所有操作"></a>实战 3：查某个玩家&#x2F;用户的所有操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">&quot;player_id=12345&quot;</span> server.log | grep -v <span class="string">&quot;heartbeat&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>grep -v</code> 是<strong>反向筛选</strong>，排除干扰项。</p>
+<p><strong>为什么要排除心跳？</strong> 因为心跳日志量大且无信息量，会淹没真正有价值的记录。</p>
+<h3 id="实战-4：按时间段筛日志"><a href="#实战-4：按时间段筛日志" class="headerlink" title="实战 4：按时间段筛日志"></a>实战 4：按时间段筛日志</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -n <span class="string">&#x27;/2026-09-29 14:00/,/2026-09-29 15:00/p&#x27;</span> server.log</span><br></pre></td></tr></table></figure>
+
+<p><code>sed -n</code> 配合 <code>/开始/,/结束/p</code> 是<strong>按范围打印</strong>的标准写法。</p>
+<h3 id="实战-5：只输出匹配行的前后文"><a href="#实战-5：只输出匹配行的前后文" class="headerlink" title="实战 5：只输出匹配行的前后文"></a>实战 5：只输出匹配行的前后文</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -A 5 -B 5 <span class="string">&quot;NullPointerException&quot;</span> server.log</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-A N</code></td>
+<td>显示匹配行<strong>后</strong> N 行</td>
+</tr>
+<tr>
+<td><code>-B N</code></td>
+<td>显示匹配行<strong>前</strong> N 行</td>
+</tr>
+<tr>
+<td><code>-C N</code></td>
+<td>前后各 N 行</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>报错日志的关键信息往往不在报错那一行，而在前后几行。</strong><br>只 grep 报错行，你只知道”这里错了”；带上前后文，往往能看到”是什么请求触发的”。</p>
+</blockquote>
+<hr>
+<h2 id="三、awk-与-sed-进阶"><a href="#三、awk-与-sed-进阶" class="headerlink" title="三、awk 与 sed 进阶"></a>三、awk 与 sed 进阶</h2><h3 id="awk：按列处理"><a href="#awk：按列处理" class="headerlink" title="awk：按列处理"></a>awk：按列处理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">&#x27;&#123;print $1, $3&#125;&#x27;</span> access.log              <span class="comment"># 打印第 1、3 列</span></span><br><span class="line">awk -F<span class="string">&#x27;,&#x27;</span> <span class="string">&#x27;&#123;print $2&#125;&#x27;</span> data.csv              <span class="comment"># 指定逗号分隔</span></span><br><span class="line">awk <span class="string">&#x27;$3 &gt; 100 &#123;sum += $3; count++&#125; END &#123;print &quot;avg:&quot;, sum/count&#125;&#x27;</span> data.txt</span><br></pre></td></tr></table></figure>
+
+<p><strong>awk 的核心价值是”按列”</strong> —— 日志每一列含义不同，awk 让你能只取出需要的那一列。</p>
+<p><strong>条件过滤 + 计算</strong>是 awk 的杀手锏：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 统计响应时间 &gt; 100ms 的请求的平均耗时</span></span><br><span class="line">awk <span class="string">&#x27;$3 &gt; 100 &#123;sum += $3; count++&#125; END &#123;print &quot;avg:&quot;, sum/count&#125;&#x27;</span> data.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>这类需求以前要写 Python 脚本，用 awk 一行就完了。</strong></p>
+</blockquote>
+<h3 id="sed：按行处理"><a href="#sed：按行处理" class="headerlink" title="sed：按行处理"></a>sed：按行处理</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sed <span class="string">&#x27;s/error/ERROR/g&#x27;</span> app.log        <span class="comment"># 只输出替换结果，不改原文件</span></span><br><span class="line">sed -i <span class="string">&#x27;s/old/new/g&#x27;</span> file.txt        <span class="comment"># -i 直接改原文件</span></span><br><span class="line">sed -i <span class="string">&#x27;/^$/d&#x27;</span> config.txt            <span class="comment"># 删除空行</span></span><br><span class="line">sed -n <span class="string">&#x27;2,5p&#x27;</span> file.txt               <span class="comment"># 只打印第 2-5 行</span></span><br><span class="line">sed -i <span class="string">&#x27;s/8080/9090/g&#x27;</span> *.conf        <span class="comment"># 批量改端口</span></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>-i</code></td>
+<td>⚠️ <strong>直接修改原文件</strong></td>
+</tr>
+<tr>
+<td><code>-n</code></td>
+<td>只打印处理过的行（配合 <code>p</code>）</td>
+</tr>
+<tr>
+<td><code>s/旧/新/g</code></td>
+<td>全局替换（<code>g</code> 不能忘）</td>
+</tr>
+</tbody></table>
+<h3 id="⚠️-sed-i-是危险操作"><a href="#⚠️-sed-i-是危险操作" class="headerlink" title="⚠️ sed -i 是危险操作"></a>⚠️ <code>sed -i</code> 是危险操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sed -i <span class="string">&#x27;s/8080/9090/g&#x27;</span> *.conf</span><br></pre></td></tr></table></figure>
+
+<p><strong>这条命令会直接修改所有匹配的文件，且没有撤销机会。</strong></p>
+<p><strong>安全习惯：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ① 先不写 -i，看输出结果对不对</span></span><br><span class="line">sed <span class="string">&#x27;s/8080/9090/g&#x27;</span> app.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># ② 确认没问题再加 -i</span></span><br><span class="line">sed -i <span class="string">&#x27;s/8080/9090/g&#x27;</span> app.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># ③ 或者先备份</span></span><br><span class="line"><span class="built_in">cp</span> app.conf app.conf.bak &amp;&amp; sed -i <span class="string">&#x27;s/8080/9090/g&#x27;</span> app.conf</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>和数据库的 <code>DELETE</code> 一样，<code>sed -i</code> 的破坏力被严重低估。</strong><br>一条命令改错，配置文件全废。</p>
+</blockquote>
+<hr>
+<h2 id="四、vim-速查（够用版）"><a href="#四、vim-速查（够用版）" class="headerlink" title="四、vim 速查（够用版）"></a>四、vim 速查（够用版）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim app.log          <span class="comment"># 打开</span></span><br><span class="line">vim +500 app.log     <span class="comment"># 打开并跳到第 500 行</span></span><br><span class="line">vim +/ERROR app.log  <span class="comment"># 打开并跳到第一个 ERROR 处</span></span><br><span class="line">vim -R config.txt    <span class="comment"># 只读模式（防误改）</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>只需记住这几组：</strong></p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>进入编辑</td>
+<td><code>i</code></td>
+</tr>
+<tr>
+<td>退出编辑</td>
+<td><code>Esc</code></td>
+</tr>
+<tr>
+<td>保存退出</td>
+<td><code>:wq</code></td>
+</tr>
+<tr>
+<td>不保存退出</td>
+<td><code>:q!</code></td>
+</tr>
+<tr>
+<td>搜索</td>
+<td><code>/关键词</code>，<code>n</code> 下一个</td>
+</tr>
+<tr>
+<td>跳行</td>
+<td><code>:N</code></td>
+</tr>
+<tr>
+<td>撤销</td>
+<td><code>u</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong><code>vim +/ERROR app.log</code> 这招在排查日志时很好用</strong> —— 直接跳到出错位置，不用手动翻。</p>
+<p>顺序是：<code>vim +/关键词 文件</code>，先定位再查看。</p>
+</blockquote>
+<hr>
+<h2 id="五、一份实用的日志分析速查表"><a href="#五、一份实用的日志分析速查表" class="headerlink" title="五、一份实用的日志分析速查表"></a>五、一份实用的日志分析速查表</h2><table>
+<thead>
+<tr>
+<th>需求</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>实时看日志</td>
+<td><code>tail -f app.log</code></td>
+</tr>
+<tr>
+<td>实时看含 ERROR 的行</td>
+<td><code>tail -f app.log | grep --line-buffered ERROR</code></td>
+</tr>
+<tr>
+<td>看最后 100 行</td>
+<td><code>tail -100 app.log</code></td>
+</tr>
+<tr>
+<td>统计错误总数</td>
+<td><code>grep -c ERROR app.log</code></td>
+</tr>
+<tr>
+<td>统计错误类型分布</td>
+<td><code>grep ERROR app.log | awk &#39;&#123;print $5&#125;&#39; | sort | uniq -c | sort -rn</code></td>
+</tr>
+<tr>
+<td>查某用户操作（排除噪音）</td>
+<td><code>grep &quot;uid=123&quot; app.log | grep -v heartbeat</code></td>
+</tr>
+<tr>
+<td>查时间段</td>
+<td><code>sed -n &#39;/14:00/,/15:00/p&#39; app.log</code></td>
+</tr>
+<tr>
+<td>带上下文看报错</td>
+<td><code>grep -A 5 -B 5 ERROR app.log</code></td>
+</tr>
+<tr>
+<td>统计 IP Top 10</td>
+<td><code>awk &#39;&#123;print $1&#125;&#39; access.log | sort | uniq -c | sort -rn | head -10</code></td>
+</tr>
+<tr>
+<td>结果存文件（含错误）</td>
+<td><code>cmd &gt; out.log 2&gt;&amp;1</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、小结"><a href="#六、小结" class="headerlink" title="六、小结"></a>六、小结</h2><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>管道范式</strong></td>
+<td>grep → awk → sort → uniq -c → sort -rn → head</td>
+</tr>
+<tr>
+<td><strong><code>2&gt;&amp;1</code></strong></td>
+<td>先指文件再合并错误；写反了错误信息不进文件</td>
+</tr>
+<tr>
+<td><strong><code>sort</code> 不能省</strong></td>
+<td><code>uniq</code> 只处理相邻重复行</td>
+</tr>
+<tr>
+<td><strong>awk 强在按列</strong></td>
+<td>条件过滤 + 计算，一行搞定</td>
+</tr>
+<tr>
+<td><strong>sed -i 危险</strong></td>
+<td>先不加 <code>-i</code> 看结果，或先备份</td>
+</tr>
+<tr>
+<td><strong>grep -A&#x2F;-B</strong></td>
+<td>报错的关键信息常在上下文里</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>本课要点</strong>：管道是日志分析的核心｜uniq 前必须 sort｜2&gt;&amp;1 顺序不能反｜sed -i 会直接改文件</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/" rel="tag"># 日志分析</a>
+              <a href="/tags/awk/" rel="tag"># awk</a>
+              <a href="/tags/sed/" rel="tag"># sed</a>
+              <a href="/tags/grep/" rel="tag"># grep</a>
+              <a href="/tags/%E7%AE%A1%E9%81%93/" rel="tag"># 管道</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/24/linux-chapter3-network-cron/" rel="prev" title="Linux 实战 · 网络排查与定时任务">
+                  <i class="fa fa-angle-left"></i> Linux 实战 · 网络排查与定时任务
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/09/22/api-testing-intro/" rel="next" title="接口测试入门 - Python requests 实战">
+                  接口测试入门 - Python requests 实战 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="测试环境”服务起不来””跑着跑着卡了”，第一个要排查的不是代码，是资源。 CPU 满了？内存泄漏了？磁盘写满了？这三条命令能覆盖 80% 的现场问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 实战 · 系统监控三件套：top &#x2F; df &#x2F; free">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/07/20/linux-chapter2-monitoring/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="测试环境”服务起不来””跑着跑着卡了”，第一个要排查的不是代码，是资源。 CPU 满了？内存泄漏了？磁盘写满了？这三条命令能覆盖 80% 的现场问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-20T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:09:12.222Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="性能监控">
+<meta property="article:tag" content="排查问题">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/07/20/linux-chapter2-monitoring/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/07/20/linux-chapter2-monitoring/","path":"2026/07/20/linux-chapter2-monitoring/","title":"Linux 实战 · 系统监控三件套：top / df / free"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux 实战 · 系统监控三件套：top / df / free | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81top-htop%EF%BC%9ACPU-%E5%92%8C%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">一、top &#x2F; htop：CPU 和进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E7%94%A8%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">基础用法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E5%9C%BA%E6%99%AF"><span class="nav-number">1.2.</span> <span class="nav-text">实战场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E6%8C%87%E6%A0%87%E6%80%8E%E4%B9%88%E8%AF%BB"><span class="nav-number">1.3.</span> <span class="nav-text">关键指标怎么读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#load-average-%E7%9A%84%E6%AD%A3%E7%A1%AE%E7%90%86%E8%A7%A3"><span class="nav-number">1.4.</span> <span class="nav-text">load average 的正确理解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81df-du%EF%BC%9A%E7%A3%81%E7%9B%98%E7%A9%BA%E9%97%B4"><span class="nav-number">2.</span> <span class="nav-text">二、df &#x2F; du：磁盘空间</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#df%EF%BC%9A%E5%85%88%E7%9C%8B%E6%95%B4%E4%BD%93"><span class="nav-number">2.1.</span> <span class="nav-text">df：先看整体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#du%EF%BC%9A%E5%AE%9A%E4%BD%8D%E7%BD%AA%E9%AD%81%E7%A5%B8%E9%A6%96"><span class="nav-number">2.2.</span> <span class="nav-text">du：定位罪魁祸首</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%98%85-%E6%8E%92%E6%9F%A5%E7%A3%81%E7%9B%98%E6%BB%A1%E7%9A%84%E6%A0%87%E5%87%86%E6%B5%81%E7%A8%8B"><span class="nav-number">2.3.</span> <span class="nav-text">★ 排查磁盘满的标准流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E6%BB%A1%E7%9A%84%E5%B8%B8%E8%A7%81%E5%8E%9F%E5%9B%A0"><span class="nav-number">2.4.</span> <span class="nav-text">磁盘满的常见原因</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81free%EF%BC%9A%E5%86%85%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">三、free：内存</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E6%80%8E%E4%B9%88%E8%AF%BB%EF%BC%88%E9%87%8D%E7%82%B9%EF%BC%9A%E5%88%AB%E8%A2%AB-available-%E9%AA%97%E4%BA%86%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">输出怎么读（重点：别被 available 骗了）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#swap-%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">3.2.</span> <span class="nav-text">swap 使用情况的判断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E4%B8%89%E4%BB%B6%E5%A5%97%E7%9A%84%E4%BD%BF%E7%94%A8%E9%A1%BA%E5%BA%8F"><span class="nav-number">4.</span> <span class="nav-text">四、三件套的使用顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">五、小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/07/20/linux-chapter2-monitoring/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux 实战 · 系统监控三件套：top &#x2F; df &#x2F; free | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux 实战 · 系统监控三件套：top / df / free
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-07-20 09:00:00" itemprop="dateCreated datePublished" datetime="2026-07-20T09:00:00+08:00">2026-07-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:09:12" itemprop="dateModified" datetime="2026-09-30T10:09:12+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/devops/" itemprop="url" rel="index"><span itemprop="name">工具与运维</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>测试环境”服务起不来””跑着跑着卡了”，第一个要排查的不是代码，是<strong>资源</strong>。</p>
+<p>CPU 满了？内存泄漏了？磁盘写满了？<strong>这三条命令能覆盖 80% 的现场问题。</strong></p>
+<span id="more"></span>
+
+<h2 id="一、top-htop：CPU-和进程"><a href="#一、top-htop：CPU-和进程" class="headerlink" title="一、top &#x2F; htop：CPU 和进程"></a>一、top &#x2F; htop：CPU 和进程</h2><h3 id="基础用法"><a href="#基础用法" class="headerlink" title="基础用法"></a>基础用法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">top        <span class="comment"># 按 q 退出，默认每 3 秒刷新</span></span><br><span class="line">htop       <span class="comment"># 增强版，彩色界面 + 鼠标支持</span></span><br></pre></td></tr></table></figure>
+
+<p><code>top</code> 是 Linux 自带的任务管理器。<code>htop</code> 是它的增强版，<strong>更直观，强烈推荐</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install htop    <span class="comment"># Ubuntu/Debian 先装</span></span><br><span class="line">htop</span><br></pre></td></tr></table></figure>
+
+<h3 id="实战场景"><a href="#实战场景" class="headerlink" title="实战场景"></a>实战场景</h3><p><strong>① 只看某个用户的进程</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -u nginx</span><br></pre></td></tr></table></figure>
+
+<p><strong>② 只看某个进程</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top -p 12345</span><br></pre></td></tr></table></figure>
+
+<p><strong>③ 按内存排序</strong></p>
+<p>跑起来后按 <code>Shift + M</code>，立刻看出哪个进程吃内存。</p>
+<h3 id="关键指标怎么读"><a href="#关键指标怎么读" class="headerlink" title="关键指标怎么读"></a>关键指标怎么读</h3><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>含义</th>
+<th>关注点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>load average</strong></td>
+<td>1&#x2F;5&#x2F;15 分钟平均负载</td>
+<td><strong>超过 CPU 核数就是过载</strong></td>
+</tr>
+<tr>
+<td><strong>%us</strong></td>
+<td>用户态 CPU 占用</td>
+<td>应用本身在算</td>
+</tr>
+<tr>
+<td><strong>%sy</strong></td>
+<td>内核态 CPU 占用</td>
+<td>系统调用、IO</td>
+</tr>
+<tr>
+<td><strong>%wa</strong></td>
+<td><strong>IO 等待</strong></td>
+<td><strong>高说明磁盘是瓶颈，不是 CPU</strong></td>
+</tr>
+<tr>
+<td><strong>%id</strong></td>
+<td>空闲</td>
+<td>太低说明 CPU 紧张</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ <strong><code>%wa</code> 高是个特别容易误判的现象</strong>：<br>CPU 使用率看起来不高（因为进程都在等磁盘），但系统响应很慢。</p>
+<p><strong>看到 CPU 不高但系统卡，先看 <code>%wa</code>。</strong></p>
+</blockquote>
+<h3 id="load-average-的正确理解"><a href="#load-average-的正确理解" class="headerlink" title="load average 的正确理解"></a>load average 的正确理解</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">load average: 2.50, 3.10, 1.80</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键：要和 CPU 核数对比。</strong></p>
+<ul>
+<li>4 核机器，load 3.0 → <strong>75% 负载，正常</strong></li>
+<li>2 核机器，load 3.0 → <strong>150% 负载，过载</strong></li>
+<li>单核机器，load 8.0 → <strong>严重过载</strong></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">nproc</span>    <span class="comment"># 查 CPU 核数</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>load 不等于 CPU 使用率</strong>。它统计的是”正在运行 + 等待运行”的进程数，<strong>IO 等待也会推高 load</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="二、df-du：磁盘空间"><a href="#二、df-du：磁盘空间" class="headerlink" title="二、df &#x2F; du：磁盘空间"></a>二、df &#x2F; du：磁盘空间</h2><p>这对命令是排查”<strong>磁盘满了</strong>“”<strong>日志爆了</strong>“的黄金搭档：</p>
+<ul>
+<li><code>df</code>（disk free）— 看<strong>文件系统整体</strong>占用</li>
+<li><code>du</code>（disk usage）— 看<strong>指定目录</strong>占用</li>
+</ul>
+<h3 id="df：先看整体"><a href="#df：先看整体" class="headerlink" title="df：先看整体"></a>df：先看整体</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Filesystem      Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/sda1        50G   42G  5.3G  89% /</span><br><span class="line">/dev/sdb1       200G  180G   20G  90% /data</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>-h</code> 必须加</strong>，否则显示的是 KB 数，要自己数零。</p>
+<h3 id="du：定位罪魁祸首"><a href="#du：定位罪魁祸首" class="headerlink" title="du：定位罪魁祸首"></a>du：定位罪魁祸首</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 看 /var/log 下各子目录的占用</span></span><br><span class="line"><span class="built_in">du</span> -h --max-depth=1 /var/log</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">12K     /var/log/apt</span><br><span class="line">1.2G    /var/log/mysql</span><br><span class="line">8.5G    /var/log/old_archive    ← 罪魁祸首</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>--max-depth=1</code> 是关键参数</strong> —— 只看一层，避免输出爆炸。</p>
+<h3 id="★-排查磁盘满的标准流程"><a href="#★-排查磁盘满的标准流程" class="headerlink" title="★ 排查磁盘满的标准流程"></a>★ 排查磁盘满的标准流程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ① 确认哪个分区满了</span></span><br><span class="line"><span class="built_in">df</span> -h</span><br><span class="line"></span><br><span class="line"><span class="comment"># ② 从根目录开始，逐层找大目录</span></span><br><span class="line"><span class="built_in">du</span> -h --max-depth=1 / | <span class="built_in">sort</span> -rh | <span class="built_in">head</span> -10</span><br><span class="line"></span><br><span class="line"><span class="comment"># ③ 进入最大的目录，继续往下找</span></span><br><span class="line"><span class="built_in">cd</span> /var &amp;&amp; <span class="built_in">du</span> -h --max-depth=1 | <span class="built_in">sort</span> -rh | <span class="built_in">head</span> -10</span><br><span class="line"></span><br><span class="line"><span class="comment"># ④ 找到具体的大文件</span></span><br><span class="line">find /var/log -<span class="built_in">type</span> f -size +100M -<span class="built_in">exec</span> <span class="built_in">ls</span> -lh &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong><code>sort -rh</code> 这招很好用</strong> —— <code>-r</code> 倒序，<code>-h</code> 按人类可读单位排序（否则 1G 会排在 900M 前面）。</p>
+<p>配合 <code>head -10</code> 只看前 10 个最大项，<strong>一眼锁定目标</strong>。</p>
+</blockquote>
+<h3 id="磁盘满的常见原因"><a href="#磁盘满的常见原因" class="headerlink" title="磁盘满的常见原因"></a>磁盘满的常见原因</h3><table>
+<thead>
+<tr>
+<th>原因</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>日志没有轮转</strong></td>
+<td>配置 logrotate，或清理旧日志</td>
+</tr>
+<tr>
+<td>临时文件堆积</td>
+<td>清理 <code>/tmp</code>、<code>/var/tmp</code></td>
+</tr>
+<tr>
+<td>core dump 文件</td>
+<td>检查进程崩溃、清理 core 文件</td>
+</tr>
+<tr>
+<td>数据库 binlog</td>
+<td>配置过期策略</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>⚠️ 在 Windows 上开发的人容易忽略这条</strong>：Windows 一般不会因为日志写满盘，但 Linux 服务器<strong>日志写满盘是最高频的事故之一</strong>。</p>
+<p>表现通常是：<strong>服务莫名起不来、写文件报错、甚至 SSH 都连不上</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="三、free：内存"><a href="#三、free：内存" class="headerlink" title="三、free：内存"></a>三、free：内存</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">free -h              <span class="comment"># 人类可读</span></span><br><span class="line">free -h -s 5         <span class="comment"># 每 5 秒刷新</span></span><br><span class="line">watch -n 1 free -h   <span class="comment"># 配合 watch 实时刷新</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="输出怎么读（重点：别被-available-骗了）"><a href="#输出怎么读（重点：别被-available-骗了）" class="headerlink" title="输出怎么读（重点：别被 available 骗了）"></a>输出怎么读（重点：别被 available 骗了）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:           15Gi        8.2Gi       1.1Gi       0.3Gi       6.2Gi       6.5Gi</span><br><span class="line">Swap:         2.0Gi       512Mi       1.5Gi</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>列</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>total</strong></td>
+<td>总内存</td>
+</tr>
+<tr>
+<td><strong>used</strong></td>
+<td>已使用</td>
+</tr>
+<tr>
+<td><strong>free</strong></td>
+<td><strong>完全空闲</strong>（这个数字通常很小，是正常的）</td>
+</tr>
+<tr>
+<td><strong>buff&#x2F;cache</strong></td>
+<td>内核缓存（可回收）</td>
+</tr>
+<tr>
+<td><strong>available</strong></td>
+<td><strong>★ 真正可用的内存</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>⚠️ 最大的误解：看到 <code>free</code> 很小就以为内存不够。</strong></p>
+<p>Linux 的设计哲学是”<strong>空闲的内存是浪费的内存</strong>“——它会把内存用作磁盘缓存来加速 IO。<br>所以 <code>free</code> 很小、<code>buff/cache</code> 很大，<strong>这是健康的表现，不是问题</strong>。</p>
+<p><strong>真正该看的是 <code>available</code></strong> —— 这个数字已经扣除了不可回收的缓存，代表<strong>新程序真正能拿到的内存</strong>。</p>
+</blockquote>
+<h3 id="swap-使用情况的判断"><a href="#swap-使用情况的判断" class="headerlink" title="swap 使用情况的判断"></a>swap 使用情况的判断</h3><ul>
+<li><strong>swap used 很小</strong> → 正常，说明内存够用</li>
+<li><strong>swap used 持续增长</strong> → ⚠️ <strong>内存压力的信号</strong>，系统在往磁盘上”挤”数据，性能会明显下降</li>
+<li><strong>大量使用 swap</strong> → 内存严重不足，需要优化或扩容</li>
+</ul>
+<hr>
+<h2 id="四、三件套的使用顺序"><a href="#四、三件套的使用顺序" class="headerlink" title="四、三件套的使用顺序"></a>四、三件套的使用顺序</h2><p>遇到”测试环境有问题”，按这个顺序排查：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">① df -h        先看磁盘（最容易忽略，也最容易满）</span><br><span class="line">② free -h      看内存和 swap</span><br><span class="line">③ top          看 CPU、负载、具体进程</span><br><span class="line">④ 针对性深入    找到可疑进程后进一步分析</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>为什么把 df 放第一？</strong></p>
+<p>因为磁盘满的<strong>表现极其多样</strong>：服务起不来、接口报错、日志写不进、数据库拒绝写入……<br>这些现象看起来像各种不同的 bug，但根因都是同一个。</p>
+<p><strong>先花 3 秒看 df，能省下后面半小时的排查。</strong></p>
+</blockquote>
+<hr>
+<h2 id="五、小结"><a href="#五、小结" class="headerlink" title="五、小结"></a>五、小结</h2><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>用途</th>
+<th>关键参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>top</code> &#x2F; <code>htop</code></td>
+<td>CPU、进程、负载</td>
+<td><code>-u 用户</code>、<code>-p PID</code>、<code>Shift+M</code> 按内存排序</td>
+</tr>
+<tr>
+<td><code>df -h</code></td>
+<td>文件系统整体占用</td>
+<td>查磁盘满的<strong>第一步</strong></td>
+</tr>
+<tr>
+<td><code>du -h --max-depth=1</code></td>
+<td>目录占用</td>
+<td>配合 <code>sort -rh | head</code> 定位大目录</td>
+</tr>
+<tr>
+<td><code>free -h</code></td>
+<td>内存和 swap</td>
+<td><strong>看 available，不看 free</strong></td>
+</tr>
+</tbody></table>
+<p><strong>三个容易误判的点：</strong></p>
+<ol>
+<li><strong>load 高 ≠ CPU 使用率高</strong>（IO 等待也推高 load）</li>
+<li><strong>CPU 不高但系统卡</strong> → 看 <code>%wa</code></li>
+<li><strong>free 很小不是问题</strong> → 看 available</li>
+</ol>
+<blockquote>
+<p><strong>本课要点</strong>：先看磁盘｜load 要跟核数比｜%wa 高是磁盘瓶颈｜available 才是可用内存</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/" rel="tag"># 性能监控</a>
+              <a href="/tags/%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98/" rel="tag"># 排查问题</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/20/mysql-chapter9-design-security/" rel="prev" title="MySQL 实战 · 第6章：库表设计与安全测试">
+                  <i class="fa fa-angle-left"></i> MySQL 实战 · 第6章：库表设计与安全测试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/24/linux-chapter3-network-cron/" rel="next" title="Linux 实战 · 网络排查与定时任务">
+                  Linux 实战 · 网络排查与定时任务 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

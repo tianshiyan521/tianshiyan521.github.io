@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="记录游戏测试、Python自动化、学习成长之路">
 <meta property="og:type" content="website">
@@ -52,7 +52,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
 <script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
 
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
 
 
 
@@ -97,6 +99,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -105,11 +108,37 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </header>
         
@@ -143,7 +172,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -154,7 +183,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">116</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -188,7 +217,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/mysql-chapter2-advanced/">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/07/13/mysql-chapter8-python-automation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -206,7 +235,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/mysql-chapter2-advanced/" class="post-title-link" itemprop="url">MySQL 第2章 - 进阶篇 (聚合·JOIN·子查询·UNION)</a>
+          <a href="/2026/07/13/mysql-chapter8-python-automation/" class="post-title-link" itemprop="url">MySQL 实战 · 第5章：Python + MySQL 测试数据自动化</a>
         </h2>
 
         <div class="post-meta-container">
@@ -217,14 +246,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-07-13 09:00:00" itemprop="dateCreated datePublished" datetime="2026-07-13T09:00:00+08:00">2026-07-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:12:03" itemprop="dateModified" datetime="2026-09-30T10:12:03+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -246,385 +275,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="1-五大聚合函数"><a href="#1-五大聚合函数" class="headerlink" title="1. 五大聚合函数"></a>1. 五大聚合函数</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> players;              <span class="comment">-- 统计行数（含NULL）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(gold) <span class="keyword">FROM</span> players;             <span class="comment">-- 所有金币总和</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">AVG</span>(level) <span class="keyword">FROM</span> players;            <span class="comment">-- 平均等级</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">MAX</span>(level), <span class="built_in">MIN</span>(level) <span class="keyword">FROM</span> players; <span class="comment">-- 最高/最低等级</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> server_id) <span class="keyword">FROM</span> players; <span class="comment">-- 去重统计</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/06/12/mysql-chapter2-advanced/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/mysql-intro/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="涂伟富">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="涂伟富的博客">
-      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 涂伟富的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/mysql-intro/" class="post-title-link" itemprop="url">MySQL 数据库学习</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="MySQL-专栏介绍"><a href="#MySQL-专栏介绍" class="headerlink" title="MySQL 专栏介绍"></a>MySQL 专栏介绍</h2><p>MySQL 是测试工程师进阶的必备技能——查数据、造数据、验证数据一致性，都离不开 SQL。</p>
-<p>本专栏按 30 天计划循序渐进，从零语法到实战应用。</p>
-<h3 id="你将学到"><a href="#你将学到" class="headerlink" title="你将学到"></a>你将学到</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/06/12/mysql-intro/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/mysql-chapter3-functions-index/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="涂伟富">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="涂伟富的博客">
-      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 涂伟富的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/mysql-chapter3-functions-index/" class="post-title-link" itemprop="url">MySQL 第3章 - 高级篇 (函数·视图·索引)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="1-字符串函数"><a href="#1-字符串函数" class="headerlink" title="1. 字符串函数"></a>1. 字符串函数</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 拼接</span></span><br><span class="line"><span class="keyword">SELECT</span> CONCAT(<span class="string">&#x27;玩家&#x27;</span>, username, <span class="string">&#x27; 等级:&#x27;</span>, level);      <span class="comment">-- 任一NULL则结果NULL</span></span><br><span class="line"><span class="keyword">SELECT</span> CONCAT_WS(<span class="string">&#x27;-&#x27;</span>, <span class="string">&#x27;2026&#x27;</span>, <span class="string">&#x27;06&#x27;</span>, <span class="string">&#x27;12&#x27;</span>);            <span class="comment">-- 带分隔符，跳过NULL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 截取（从1开始！不是0！）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUBSTRING</span>(<span class="string">&#x27;Hello World&#x27;</span>, <span class="number">1</span>, <span class="number">5</span>);                 <span class="comment">-- Hello</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">LEFT</span>(<span class="string">&#x27;13800138000&#x27;</span>, <span class="number">3</span>);                         <span class="comment">-- 138</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">RIGHT</span>(<span class="string">&#x27;13800138000&#x27;</span>, <span class="number">4</span>);                        <span class="comment">-- 8000</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 替换</span></span><br><span class="line"><span class="keyword">SELECT</span> REPLACE(<span class="string">&#x27;138-0013-8000&#x27;</span>, <span class="string">&#x27;-&#x27;</span>, <span class="string">&#x27;&#x27;</span>);              <span class="comment">-- 去短横线</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 去空格</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">TRIM</span>(<span class="string">&#x27;   张三   &#x27;</span>);                              <span class="comment">-- 张三</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 长度：CHAR_LENGTH（字符数，推荐）vs LENGTH（字节数）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="keyword">CHAR_LENGTH</span>(<span class="string">&#x27;Hello世界&#x27;</span>);                        <span class="comment">-- 7</span></span><br><span class="line"><span class="keyword">SELECT</span> LENGTH(<span class="string">&#x27;Hello世界&#x27;</span>);                             <span class="comment">-- 11（5 + 3×2）</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/06/12/mysql-chapter3-functions-index/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/selenium-chapter1-locating-elements/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="涂伟富">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="涂伟富的博客">
-      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 涂伟富的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/selenium-chapter1-locating-elements/" class="post-title-link" itemprop="url">Selenium 第1章 - 8种元素定位方式详解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="1-Selenium-8种元素定位方式"><a href="#1-Selenium-8种元素定位方式" class="headerlink" title="1. Selenium 8种元素定位方式"></a>1. Selenium 8种元素定位方式</h2><p>在网页上操作任何东西之前，先要”找到”它：</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2026/06/12/selenium-chapter1-locating-elements/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/selenium-chapter2-pom-allure/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="涂伟富">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="涂伟富的博客">
-      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 涂伟富的博客">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/selenium-chapter2-pom-allure/" class="post-title-link" itemprop="url">Selenium 第2章 - Page Object Model 与 Allure 报告</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="1-什么是-Page-Object-Model（POM）"><a href="#1-什么是-Page-Object-Model（POM）" class="headerlink" title="1. 什么是 Page Object Model（POM）"></a>1. 什么是 Page Object Model（POM）</h2><p>POM 的核心思想：<strong>每个页面封装成一个类，页面上的元素和操作都定义在类里</strong>。好处是：</p>
+          <p>前面几章都是手动敲 SQL。但<strong>测试工作里最需要自动化的，恰恰是数据库操作</strong>：</p>
 <ul>
-<li>代码复用：一处修改，所有用到的地方自动更新</li>
-<li>可读性强：测试代码读起来像自然语言</li>
-<li>维护成本低：页面改版只改对应的 Page 类</li>
+<li>每次跑用例前重置数据</li>
+<li>批量造 1000 条测试数据</li>
+<li>用例执行后校验数据是否正确落库</li>
 </ul>
+<p><strong>这些必须靠代码。</strong></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2026/06/12/selenium-chapter2-pom-allure/#more" rel="contents">
+              <a class="btn" href="/2026/07/13/mysql-chapter8-python-automation/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -655,7 +315,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/selenium-intro/">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/07/03/jmeter-04-parameterization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -673,7 +333,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/selenium-intro/" class="post-title-link" itemprop="url">Selenium - Web 自动化测试</a>
+          <a href="/2026/07/03/jmeter-04-parameterization/" class="post-title-link" itemprop="url">JMeter 性能测试 · 参数化：让压测数据活起来</a>
         </h2>
 
         <div class="post-meta-container">
@@ -684,14 +344,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-07-03 09:00:00" itemprop="dateCreated datePublished" datetime="2026-07-03T09:00:00+08:00">2026-07-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:08:37" itemprop="dateModified" datetime="2026-09-30T10:08:37+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -713,12 +373,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="Selenium-专栏介绍"><a href="#Selenium-专栏介绍" class="headerlink" title="Selenium 专栏介绍"></a>Selenium 专栏介绍</h2><p>Selenium 是 Web 端自动化测试的事实标准，支持 Python&#x2F;Java&#x2F;JS 等多语言，是自动化测试工程师的基础技能。</p>
-<p>本专栏以 Python + Selenium 为主线，从零到一搭建 Web 自动化体系。</p>
-<h3 id="你将学到"><a href="#你将学到" class="headerlink" title="你将学到"></a>你将学到</h3>
+          <p>硬编码的压测有个致命问题：<strong>所有虚拟用户发的是一模一样的请求。</strong></p>
+<p>这会导致两个后果：</p>
+<ol>
+<li><strong>测不出真实场景</strong>。真实玩家不会全都查同一个页面、买同一件商品</li>
+<li><strong>服务端的缓存会骗你</strong>。第一个请求查完数据库，后面 999 个都命中缓存，测出来的”高性能”是假的</li>
+</ol>
+<p>参数化解决的就是这个问题。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2026/06/12/selenium-intro/#more" rel="contents">
+              <a class="btn" href="/2026/07/03/jmeter-04-parameterization/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -749,7 +413,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/testing-basics-chapter1-game-testing-core/">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/07/02/mysql-chapter7-transaction-lock/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -767,7 +431,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/testing-basics-chapter1-game-testing-core/" class="post-title-link" itemprop="url">测试基础 第1章 - 游戏测试核心概念</a>
+          <a href="/2026/07/02/mysql-chapter7-transaction-lock/" class="post-title-link" itemprop="url">MySQL 实战 · 第4章：事务、锁与并发问题</a>
         </h2>
 
         <div class="post-meta-container">
@@ -778,14 +442,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-07-02 09:00:00" itemprop="dateCreated datePublished" datetime="2026-07-02T09:00:00+08:00">2026-07-02</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:11:34" itemprop="dateModified" datetime="2026-09-30T10:11:34+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -793,7 +457,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础</span></a>
+          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
         </span>
     </span>
 
@@ -807,10 +471,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="1-游戏测试-vs-软件测试"><a href="#1-游戏测试-vs-软件测试" class="headerlink" title="1. 游戏测试 vs 软件测试"></a>1. 游戏测试 vs 软件测试</h2><p><strong>核心区别：软件测试验证”对不对”，游戏测试还要验证”好不好玩”。</strong></p>
+          <p>游戏里的很多诡异问题，根因在数据库并发：</p>
+<ul>
+<li>“打赢了却没获得领地”（两个队同时结算，后者覆盖前者）</li>
+<li>“明明不够钱却买成功了”（并发扣款，超卖）</li>
+<li>“重复领了两次奖励”（并发领奖，幂等失效）</li>
+</ul>
+<p><strong>这些全是并发问题。</strong> 理解事务和锁，才能在测试时准确描述和定位这类问题。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2026/06/12/testing-basics-chapter1-game-testing-core/#more" rel="contents">
+              <a class="btn" href="/2026/07/02/mysql-chapter7-transaction-lock/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -841,7 +511,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/testing-basics-chapter2-bug-management/">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/29/jmeter-03-assertions/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -859,7 +529,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/testing-basics-chapter2-bug-management/" class="post-title-link" itemprop="url">测试基础 第2章 - BUG管理与测试用例实战</a>
+          <a href="/2026/06/29/jmeter-03-assertions/" class="post-title-link" itemprop="url">JMeter 性能测试 · 断言：让压测真正有意义</a>
         </h2>
 
         <div class="post-meta-container">
@@ -870,14 +540,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-06-29 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-29T09:00:00+08:00">2026-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:08:17" itemprop="dateModified" datetime="2026-09-30T10:08:17+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -885,7 +555,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础</span></a>
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
         </span>
     </span>
 
@@ -899,43 +569,12 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="1-BUG-严重等级划分"><a href="#1-BUG-严重等级划分" class="headerlink" title="1. BUG 严重等级划分"></a>1. BUG 严重等级划分</h2><table>
-<thead>
-<tr>
-<th>等级</th>
-<th>说明</th>
-<th>恐龙岛举例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>致命（Blocker）</td>
-<td>游戏崩溃&#x2F;核心流程阻断</td>
-<td>点击”领地争夺”直接闪退</td>
-</tr>
-<tr>
-<td>严重（Major）</td>
-<td>核心功能不可用</td>
-<td>商城购买扣了钻石但道具未到账</td>
-</tr>
-<tr>
-<td>一般（Normal）</td>
-<td>功能异常但不阻塞</td>
-<td>后台挂机5分钟后停止攻击，UI仍显示”挂机中”</td>
-</tr>
-<tr>
-<td>轻微（Minor）</td>
-<td>不影响功能的瑕疵</td>
-<td>NPC名字”迅猛龙”写成”讯猛龙”</td>
-</tr>
-<tr>
-<td>建议（Suggestion）</td>
-<td>体验优化</td>
-<td>背包满提示只停0.5秒，看不清</td>
-</tr>
-</tbody></table>
+          <p><strong>没有断言的压测只是在”发请求”，不是在”测性能”。</strong></p>
+<p>想象一下：你跑 1000 并发，报告显示错误率 0%、平均响应 200ms，看起来完美。</p>
+<p>但这个”成功”的含义只是<strong>请求发出去了、收到了响应</strong>——响应内容是不是对的？字段有没有少？业务码是不是失败？<strong>这些你根本不知道。</strong></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2026/06/12/testing-basics-chapter2-bug-management/#more" rel="contents">
+              <a class="btn" href="/2026/06/29/jmeter-03-assertions/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -966,7 +605,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/linux-chapter1-essential-commands/">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/29/mysql-chapter6-index-performance/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -984,7 +623,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/linux-chapter1-essential-commands/" class="post-title-link" itemprop="url">Linux 第1章 - 测试工程师常用命令速查</a>
+          <a href="/2026/06/29/mysql-chapter6-index-performance/" class="post-title-link" itemprop="url">MySQL 实战 · 第3章：索引与慢查询优化</a>
         </h2>
 
         <div class="post-meta-container">
@@ -995,14 +634,383 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-06-29 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-29T09:00:00+08:00">2026-06-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:11:09" itemprop="dateModified" datetime="2026-09-30T10:11:09+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><strong>测试人员为什么需要懂索引？</strong></p>
+<p>因为**”接口慢”往往不是代码问题，是 SQL 没走索引**。而判断这件事的手段是 <code>EXPLAIN</code>——一个测试人员完全能掌握的技能。</p>
+<p>学会它，你就能在开发说”这个是网络问题”的时候，拿出数据说话。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/29/mysql-chapter6-index-performance/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/27/jmeter-02-listeners/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/27/jmeter-02-listeners/" class="post-title-link" itemprop="url">JMeter 性能测试 · 监听器与结果分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-27 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-27T09:00:00+08:00">2026-06-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:08:03" itemprop="dateModified" datetime="2026-09-30T10:08:03+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>跑压测容易，<strong>看懂结果难</strong>。</p>
+<p>这篇整理 JMeter 的 6 种监听器，以及它们各自适合什么阶段用。核心原则只有一条：<strong>监听器很吃资源，用错了会污染测试结果。</strong></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/27/jmeter-02-listeners/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/26/jmeter-01-basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/26/jmeter-01-basics/" class="post-title-link" itemprop="url">JMeter 性能测试 · 入门：架构与第一个测试计划</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-26 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T09:00:00+08:00">2026-06-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:07:50" itemprop="dateModified" datetime="2026-09-30T10:07:50+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>性能测试是测试工程师的能力分水岭之一。功能测试能靠细心补，但性能测试<strong>必须靠工具 + 方法</strong>。</p>
+<p>JMeter 是 Apache 开源的纯 Java 性能测试工具，也是目前上手成本最低的一个。</p>
+<p>这个系列按 7 天的学习过程整理成文。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/26/jmeter-01-basics/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/26/jmeter-intro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/26/jmeter-intro/" class="post-title-link" itemprop="url">JMeter 性能测试</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-26 08:00:00" itemprop="dateCreated datePublished" datetime="2026-06-26T08:00:00+08:00">2026-06-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:14:14" itemprop="dateModified" datetime="2026-09-30T10:14:14+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>性能测试是测试工程师的<strong>能力分水岭</strong>。</p>
+<p>功能测试能靠细心补，但性能测试<strong>必须靠工具 + 方法</strong>——而且它有一套自己独立的指标体系，不懂就会得出错误结论。</p>
+<p>JMeter 是 Apache 开源的纯 Java 性能测试工具，是上手成本最低的选择。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2026/06/26/jmeter-intro/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/24/git-cheatsheet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/06/24/git-cheatsheet/" class="post-title-link" itemprop="url">Git 常用命令速查 - 测试工程师版</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-06-24 00:00:00 / 修改时间：17:55:56" itemprop="dateCreated datePublished" datetime="2026-06-24T00:00:00+08:00">2026-06-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1024,15 +1032,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="1-为什么测试要学-Linux"><a href="#1-为什么测试要学-Linux" class="headerlink" title="1. 为什么测试要学 Linux"></a>1. 为什么测试要学 Linux</h2><ul>
-<li>部署测试环境离不开Linux服务器</li>
-<li>查日志定位BUG需要 <code>grep</code> &#x2F; <code>tail</code> &#x2F; <code>less</code></li>
-<li>看服务器状态（CPU&#x2F;内存&#x2F;磁盘）用 <code>top</code> &#x2F; <code>free</code> &#x2F; <code>df</code></li>
-<li>接口测试跑脚本用 Shell 比手工快100倍</li>
-</ul>
+          <p>作为测试工程师，经常要拉取代码、切换分支、提交自动化脚本。把最常用的 Git 命令整理成一份速查表，方便随时翻阅。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2026/06/12/linux-chapter1-essential-commands/#more" rel="contents">
+              <a class="btn" href="/2026/06/24/git-cheatsheet/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1063,7 +1066,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/testing-basics-chapter3-interview-qa/">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/24/pytest-intro/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -1081,7 +1084,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2026/06/12/testing-basics-chapter3-interview-qa/" class="post-title-link" itemprop="url">测试基础 第3章 - 游戏测试面试题实战</a>
+          <a href="/2026/06/24/pytest-intro/" class="post-title-link" itemprop="url">pytest 入门 - 测试框架与常用断言</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1091,15 +1094,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="创建时间：2026-06-24 00:00:00 / 修改时间：17:55:34" itemprop="dateCreated datePublished" datetime="2026-06-24T00:00:00+08:00">2026-06-24</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1107,7 +1104,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础</span></a>
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
         </span>
     </span>
 
@@ -1121,10 +1118,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="题目1：TCP-和-UDP-在网络游戏中的应用"><a href="#题目1：TCP-和-UDP-在网络游戏中的应用" class="headerlink" title="题目1：TCP 和 UDP 在网络游戏中的应用"></a>题目1：TCP 和 UDP 在网络游戏中的应用</h2><p><strong>问</strong>：以恐龙岛这类MMO游戏为例，哪些场景用TCP、哪些用UDP？</p>
+          <p>pytest 是 Python 生态里最受欢迎的测试框架之一，语法简洁、插件丰富，适合写单元测试、接口测试和 UI 自动化测试。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2026/06/12/testing-basics-chapter3-interview-qa/#more" rel="contents">
+              <a class="btn" href="/2026/06/24/pytest-intro/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1148,7 +1145,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

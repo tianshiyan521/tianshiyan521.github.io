@@ -18,21 +18,22 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="Linux 命令专栏介绍测试工程师迟早要跟 Linux 打交道——部署环境、查日志、看服务器状态。 本专栏用每日一条命令的形式，积累 Linux 实用技能。 你将学到">
+    <meta name="description" content="测试工程师迟早要跟 Linux 打交道。不一定要搭服务器，但查日志、看进程、清磁盘这几件事躲不掉。 本专栏用每日一条命令的形式积累，每条都配测试场景的用法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux 命令速查">
 <meta property="og:url" content="https://tianshiyan521.github.io/2026/06/12/linux-intro/index.html">
 <meta property="og:site_name" content="涂伟富的博客">
-<meta property="og:description" content="Linux 命令专栏介绍测试工程师迟早要跟 Linux 打交道——部署环境、查日志、看服务器状态。 本专栏用每日一条命令的形式，积累 Linux 实用技能。 你将学到">
+<meta property="og:description" content="测试工程师迟早要跟 Linux 打交道。不一定要搭服务器，但查日志、看进程、清磁盘这几件事躲不掉。 本专栏用每日一条命令的形式积累，每条都配测试场景的用法。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-06-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-24T09:55:07.929Z">
+<meta property="article:published_time" content="2026-06-12T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:05:12.532Z">
 <meta property="article:author" content="涂伟富">
 <meta property="article:tag" content="命令">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="运维">
+<meta property="article:tag" content="日志排查">
 <meta name="twitter:card" content="summary">
 
 
@@ -56,7 +57,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
 <script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
 
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
 
 
 
@@ -101,6 +104,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -109,11 +113,37 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </header>
         
@@ -133,7 +163,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-%E5%91%BD%E4%BB%A4%E4%B8%93%E6%A0%8F%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Linux 命令专栏介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E5%B0%86%E5%AD%A6%E5%88%B0"><span class="nav-number">1.1.</span> <span class="nav-text">你将学到</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BC%9A-Linux"><span class="nav-number">1.</span> <span class="nav-text">测试为什么要会 Linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%93%E6%A0%8F%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">专栏结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.</span> <span class="nav-text">文件与目录操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">权限管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E4%B8%8E%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="nav-number">2.3.</span> <span class="nav-text">进程与性能监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%8E%92%E6%9F%A5"><span class="nav-number">2.4.</span> <span class="nav-text">网络排查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%8B%E8%AF%95%E6%9C%80%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">文本处理（测试最常用）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E4%B8%8E%E8%84%9A%E6%9C%AC"><span class="nav-number">2.6.</span> <span class="nav-text">定时任务与脚本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E6%9D%A1%E6%95%91%E5%91%BD%E5%91%BD%E4%BB%A4"><span class="nav-number">3.</span> <span class="nav-text">三条救命命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-tail-f-%E2%80%94%E2%80%94-%E5%AE%9E%E6%97%B6%E7%9C%8B%E6%97%A5%E5%BF%97"><span class="nav-number">3.1.</span> <span class="nav-text">1. tail -f —— 实时看日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-grep-A-5-B-5-%E2%80%94%E2%80%94-%E5%B8%A6%E4%B8%8A%E4%B8%8B%E6%96%87%E6%90%9C"><span class="nav-number">3.2.</span> <span class="nav-text">2. grep -A 5 -B 5 —— 带上下文搜</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-df-h-%E2%80%94%E2%80%94-%E6%9F%A5%E7%A3%81%E7%9B%98"><span class="nav-number">3.3.</span> <span class="nav-text">3. df -h —— 查磁盘</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%A6%E4%B9%A0%E5%BB%BA%E8%AE%AE"><span class="nav-number">4.</span> <span class="nav-text">学习建议</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -148,7 +178,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -159,7 +189,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">116</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -223,14 +253,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-06-12 10:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T10:00:00+08:00">2026-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:05:12" itemprop="dateModified" datetime="2026-09-30T10:05:12+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -258,21 +288,77 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="Linux-命令专栏介绍"><a href="#Linux-命令专栏介绍" class="headerlink" title="Linux 命令专栏介绍"></a>Linux 命令专栏介绍</h2><p>测试工程师迟早要跟 Linux 打交道——部署环境、查日志、看服务器状态。</p>
-<p>本专栏用每日一条命令的形式，积累 Linux 实用技能。</p>
-<h3 id="你将学到"><a href="#你将学到" class="headerlink" title="你将学到"></a>你将学到</h3><span id="more"></span>
+    <div class="post-body" itemprop="articleBody"><p>测试工程师迟早要跟 Linux 打交道。不一定要搭服务器，但<strong>查日志、看进程、清磁盘</strong>这几件事躲不掉。</p>
+<p>本专栏用每日一条命令的形式积累，每条都配测试场景的用法。</p>
+<span id="more"></span>
 
-<ul>
-<li><strong>文件操作</strong>：ls&#x2F;cd&#x2F;cp&#x2F;mv&#x2F;find&#x2F;tar&#x2F;grep</li>
-<li><strong>权限管理</strong>：chmod&#x2F;chown&#x2F;sudo</li>
-<li><strong>进程与性能</strong>：ps&#x2F;top&#x2F;free&#x2F;df&#x2F;netstat</li>
-<li><strong>文本处理</strong>：awk&#x2F;sed&#x2F;sort&#x2F;uniq</li>
-<li><strong>Shell 脚本</strong>：变量、条件、循环、定时任务</li>
-<li><strong>实战场景</strong>：部署测试环境、查看接口日志、排查问题</li>
-</ul>
+<h2 id="测试为什么要会-Linux"><a href="#测试为什么要会-Linux" class="headerlink" title="测试为什么要会 Linux"></a>测试为什么要会 Linux</h2><p>三个高频场景：</p>
+<p><strong>① 查日志</strong></p>
+<p>测试环境出了问题，日志在服务器上。不会 <code>grep</code> &#x2F; <code>tail</code>，你只能找开发帮你看——<strong>别人看的结果和自己看，理解的深度完全不同。</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 实时看日志，重点盯 ERROR</span></span><br><span class="line"><span class="built_in">tail</span> -f /var/log/game/server.log | grep -i error</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查某个玩家相关的全部日志</span></span><br><span class="line">grep <span class="string">&quot;player_id=12345&quot;</span> server.log</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查某个时间段的日志（日志里常有时间戳）</span></span><br><span class="line">sed -n <span class="string">&#x27;/2026-09-29 14:00/,/2026-09-29 15:00/p&#x27;</span> server.log</span><br></pre></td></tr></table></figure>
+
+<p><strong>② 看资源占用</strong></p>
+<p>压测的时候服务器 CPU、内存、磁盘、网络什么情况，光看测试报告不够：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">top          <span class="comment"># CPU / 内存实时占用</span></span><br><span class="line"><span class="built_in">df</span> -h        <span class="comment"># 磁盘使用率（日志爆盘是常见事故）</span></span><br><span class="line">netstat -an  <span class="comment"># 网络连接数与端口占用</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>③ 清场与重启</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ps aux | grep game_server   <span class="comment"># 找到进程</span></span><br><span class="line"><span class="built_in">kill</span> 12345                   <span class="comment"># 优雅终止</span></span><br><span class="line"><span class="built_in">kill</span> -9 12345                <span class="comment"># 强制杀死（卡死时用）</span></span><br></pre></td></tr></table></figure>
+
 <hr>
+<h2 id="专栏结构"><a href="#专栏结构" class="headerlink" title="专栏结构"></a>专栏结构</h2><h3 id="文件与目录操作"><a href="#文件与目录操作" class="headerlink" title="文件与目录操作"></a>文件与目录操作</h3><p><code>ls</code> &#x2F; <code>cd</code> &#x2F; <code>cp</code> &#x2F; <code>mv</code> &#x2F; <code>rm</code> &#x2F; <code>find</code> &#x2F; <code>tar</code> &#x2F; <code>ln</code> &#x2F; <code>pwd</code></p>
+<h3 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h3><p><code>chmod</code> &#x2F; <code>chown</code> &#x2F; <code>sudo</code> &#x2F; <code>umask</code></p>
+<h3 id="进程与性能监控"><a href="#进程与性能监控" class="headerlink" title="进程与性能监控"></a>进程与性能监控</h3><p><code>ps</code> &#x2F; <code>top</code> &#x2F; <code>htop</code> &#x2F; <code>kill</code> &#x2F; <code>df</code> &#x2F; <code>du</code> &#x2F; <code>free</code> &#x2F; <code>uptime</code></p>
+<h3 id="网络排查"><a href="#网络排查" class="headerlink" title="网络排查"></a>网络排查</h3><p><code>ping</code> &#x2F; <code>netstat</code> &#x2F; <code>ss</code> &#x2F; <code>curl</code> &#x2F; <code>telnet</code> &#x2F; <code>traceroute</code></p>
+<h3 id="文本处理（测试最常用）"><a href="#文本处理（测试最常用）" class="headerlink" title="文本处理（测试最常用）"></a>文本处理（测试最常用）</h3><p><code>grep</code> &#x2F; <code>awk</code> &#x2F; <code>sed</code> &#x2F; <code>sort</code> &#x2F; <code>uniq</code> &#x2F; <code>wc</code> &#x2F; <code>cut</code> &#x2F; <code>head</code> &#x2F; <code>tail</code></p>
+<h3 id="定时任务与脚本"><a href="#定时任务与脚本" class="headerlink" title="定时任务与脚本"></a>定时任务与脚本</h3><p><code>crontab</code> &#x2F; <code>vim</code> &#x2F; <code>echo</code> &#x2F; 管道与重定向 &#x2F; Shell 变量与循环</p>
+<hr>
+<h2 id="三条救命命令"><a href="#三条救命命令" class="headerlink" title="三条救命命令"></a>三条救命命令</h2><p>如果只记三条，记这三个：</p>
+<h3 id="1-tail-f-——-实时看日志"><a href="#1-tail-f-——-实时看日志" class="headerlink" title="1. tail -f —— 实时看日志"></a>1. <code>tail -f</code> —— 实时看日志</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">tail</span> -f server.log</span><br></pre></td></tr></table></figure>
+
+<p>日志滚动刷新，边操作边看。配合 <code>grep</code> 过滤：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">tail</span> -f server.log | grep --line-buffered <span class="string">&quot;ERROR&quot;</span></span><br></pre></td></tr></table></figure>
+
 <blockquote>
-<p>适合人群：零 Linux 基础的测试&#x2F;运维新人</p>
+<p>⚠️ 管道里不加 <code>--line-buffered</code>，<code>grep</code> 会攒够缓冲区才输出，看起来像”卡住了”。</p>
+</blockquote>
+<h3 id="2-grep-A-5-B-5-——-带上下文搜"><a href="#2-grep-A-5-B-5-——-带上下文搜" class="headerlink" title="2. grep -A 5 -B 5 —— 带上下文搜"></a>2. <code>grep -A 5 -B 5</code> —— 带上下文搜</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -A 5 -B 5 <span class="string">&quot;NullPointerException&quot;</span> server.log</span><br></pre></td></tr></table></figure>
+
+<p><code>-A 5</code> 显示匹配行的后 5 行，<code>-B 5</code> 显示前 5 行。<strong>报错日志的关键信息往往不在报错那一行，而在前后几行。</strong></p>
+<h3 id="3-df-h-——-查磁盘"><a href="#3-df-h-——-查磁盘" class="headerlink" title="3. df -h —— 查磁盘"></a>3. <code>df -h</code> —— 查磁盘</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">df</span> -h</span><br></pre></td></tr></table></figure>
+
+<p>测试环境莫名起不来服务，<strong>第一个要怀疑的就是磁盘满了</strong>。日志没有轮转策略的话，几天就能把盘写满。</p>
+<hr>
+<h2 id="学习建议"><a href="#学习建议" class="headerlink" title="学习建议"></a>学习建议</h2><p>Linux 命令没必要背全表。<strong>按场景记更牢</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>需要的命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查日志</td>
+<td>tail、grep、sed、awk</td>
+</tr>
+<tr>
+<td>看性能</td>
+<td>top、free、df、netstat</td>
+</tr>
+<tr>
+<td>清场重启</td>
+<td>ps、kill、systemctl</td>
+</tr>
+<tr>
+<td>部署环境</td>
+<td>tar、chmod、cp、ln</td>
+</tr>
+<tr>
+<td>定时任务</td>
+<td>crontab</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>适合人群：零 Linux 基础的测试&#x2F;运维新人。</p>
 </blockquote>
 
     </div>
@@ -286,19 +372,20 @@
               <a href="/tags/%E5%91%BD%E4%BB%A4/" rel="tag"># 命令</a>
               <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/%E6%97%A5%E5%BF%97%E6%8E%92%E6%9F%A5/" rel="tag"># 日志排查</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2026/06/12/mysql-chapter1-basics/" rel="prev" title="MySQL 第1章 - 基础篇 (安装·建表·CRUD·条件排序)">
-                  <i class="fa fa-angle-left"></i> MySQL 第1章 - 基础篇 (安装·建表·CRUD·条件排序)
+                <a href="/2026/06/12/selenium-intro/" rel="prev" title="Selenium - Web 自动化测试">
+                  <i class="fa fa-angle-left"></i> Selenium - Web 自动化测试
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/06/12/law-intro/" rel="next" title="法律知识笔记">
-                  法律知识笔记 <i class="fa fa-angle-right"></i>
+                <a href="/2026/06/12/airtest-intro/" rel="next" title="Airtest - 移动端自动化测试">
+                  Airtest - 移动端自动化测试 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

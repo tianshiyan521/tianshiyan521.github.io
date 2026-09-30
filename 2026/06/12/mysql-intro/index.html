@@ -18,21 +18,23 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="MySQL 专栏介绍MySQL 是测试工程师进阶的必备技能——查数据、造数据、验证数据一致性，都离不开 SQL。 本专栏按 30 天计划循序渐进，从零语法到实战应用。 你将学到">
+    <meta name="description" content="MySQL 是测试工程师进阶的分水岭技能。会不会写 SQL，直接决定了你在排查问题时是”等开发查日志”还是”自己上手定位”。 本专栏按 30 天计划整理，从零语法到实战应用。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL 数据库学习">
 <meta property="og:url" content="https://tianshiyan521.github.io/2026/06/12/mysql-intro/index.html">
 <meta property="og:site_name" content="涂伟富的博客">
-<meta property="og:description" content="MySQL 专栏介绍MySQL 是测试工程师进阶的必备技能——查数据、造数据、验证数据一致性，都离不开 SQL。 本专栏按 30 天计划循序渐进，从零语法到实战应用。 你将学到">
+<meta property="og:description" content="MySQL 是测试工程师进阶的分水岭技能。会不会写 SQL，直接决定了你在排查问题时是”等开发查日志”还是”自己上手定位”。 本专栏按 30 天计划整理，从零语法到实战应用。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-06-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-24T09:55:07.930Z">
+<meta property="article:published_time" content="2026-06-12T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:13:00.058Z">
 <meta property="article:author" content="涂伟富">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="SQL">
 <meta property="article:tag" content="数据库">
+<meta property="article:tag" content="索引">
+<meta property="article:tag" content="事务">
 <meta name="twitter:card" content="summary">
 
 
@@ -56,7 +58,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
 <script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
 
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
 
 
 
@@ -101,6 +105,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -109,11 +114,37 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </header>
         
@@ -133,7 +164,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-%E4%B8%93%E6%A0%8F%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">MySQL 专栏介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E5%B0%86%E5%AD%A6%E5%88%B0"><span class="nav-number">1.1.</span> <span class="nav-text">你将学到</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B5%8B%E8%AF%95%E8%A6%81%E5%AD%A6-MySQL"><span class="nav-number">1.</span> <span class="nav-text">为什么测试要学 MySQL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%93%E6%A0%8F%E7%BB%93%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">专栏结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E6%B5%8B%E8%AF%95%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%8F%90%E9%86%92"><span class="nav-number">3.</span> <span class="nav-text">给测试的两个提醒</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E9%86%92%E4%B8%80%EF%BC%9A%E5%8F%AA%E5%AD%A6-SELECT-%E6%98%AF%E8%BF%9C%E8%BF%9C%E4%B8%8D%E5%A4%9F%E7%9A%84"><span class="nav-number">3.1.</span> <span class="nav-text">提醒一：只学 SELECT 是远远不够的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E9%86%92%E4%BA%8C%EF%BC%9A%E7%BA%BF%E4%B8%8A%E7%8E%AF%E5%A2%83%E6%85%8E%E7%94%A8-DML"><span class="nav-number">3.2.</span> <span class="nav-text">提醒二：线上环境慎用 DML</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E"><span class="nav-number">4.</span> <span class="nav-text">环境说明</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -148,7 +179,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -159,7 +190,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">116</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -223,14 +254,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-06-12 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T09:00:00+08:00">2026-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:13:00" itemprop="dateModified" datetime="2026-09-30T10:13:00+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -258,19 +289,80 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="MySQL-专栏介绍"><a href="#MySQL-专栏介绍" class="headerlink" title="MySQL 专栏介绍"></a>MySQL 专栏介绍</h2><p>MySQL 是测试工程师进阶的必备技能——查数据、造数据、验证数据一致性，都离不开 SQL。</p>
-<p>本专栏按 30 天计划循序渐进，从零语法到实战应用。</p>
-<h3 id="你将学到"><a href="#你将学到" class="headerlink" title="你将学到"></a>你将学到</h3><span id="more"></span>
+    <div class="post-body" itemprop="articleBody"><p>MySQL 是测试工程师进阶的<strong>分水岭技能</strong>。会不会写 SQL，直接决定了你在排查问题时是”等开发查日志”还是”自己上手定位”。</p>
+<p>本专栏按 30 天计划整理，从零语法到实战应用。</p>
+<span id="more"></span>
 
-<ul>
-<li><strong>Day 1-10</strong>：SELECT&#x2F;WHERE&#x2F;ORDER BY&#x2F;JOIN&#x2F;子查询&#x2F;聚合函数</li>
-<li><strong>Day 11-20</strong>：索引优化、EXPLAIN 执行计划、慢查询分析</li>
-<li><strong>Day 21-30</strong>：数据库设计、事务隔离、备份恢复</li>
-<li><strong>测试实战</strong>：用 SQL 造测试数据、验证接口落库、统计 BUG 分布</li>
-</ul>
+<h2 id="为什么测试要学-MySQL"><a href="#为什么测试要学-MySQL" class="headerlink" title="为什么测试要学 MySQL"></a>为什么测试要学 MySQL</h2><p>三个最实在的理由：</p>
+<p><strong>① 验证数据真的落库了</strong></p>
+<p>接口返回 <code>code=0</code> 之后呢？金币真的加了吗？订单真的写进去了吗？只信接口响应是自欺欺人——<strong>要去数据库里确认。</strong></p>
+<p><strong>② 自己造测试数据</strong></p>
+<p>要测 100 级的角色、要测背包满的场景、要测 30 天没登录的账号——找开发帮你改数据，不如自己一条 SQL 改完。</p>
+<p><strong>③ 排查问题定位更快</strong></p>
+<p>线上反馈”道具没到账”，你能直接查：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> user_item </span><br><span class="line"><span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">12345</span> <span class="keyword">AND</span> item_id <span class="operator">=</span> <span class="number">8888</span> </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> create_time <span class="keyword">DESC</span> LIMIT <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>没有记录 → 是没发下来</strong>；<strong>有记录但状态异常 → 是发放逻辑问题</strong>。这一条查询就能把问题甩给正确的方向。</p>
 <hr>
+<h2 id="专栏结构"><a href="#专栏结构" class="headerlink" title="专栏结构"></a>专栏结构</h2><p>本专栏按 30 天的学习内容重新整理为 9 章，重点是<strong>每一章都落到测试场景</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>章节</th>
+<th>内容</th>
+<th>测试价值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 章</strong></td>
+<td>CRUD 基础与查询入门</td>
+<td>造数据 &#x2F; 验证落库 &#x2F; 定位问题</td>
+</tr>
+<tr>
+<td><strong>第 2 章</strong></td>
+<td>聚合、分组与多表关联</td>
+<td>统计分布 &#x2F; 找漏发数据 &#x2F; 核对账目</td>
+</tr>
+<tr>
+<td><strong>第 3 章</strong></td>
+<td>索引与慢查询优化</td>
+<td><strong>用 EXPLAIN 写性能断言</strong></td>
+</tr>
+<tr>
+<td><strong>第 4 章</strong></td>
+<td>事务、锁与并发问题</td>
+<td>超卖 &#x2F; 覆盖 &#x2F; 重复领奖的根因</td>
+</tr>
+<tr>
+<td><strong>第 5 章</strong></td>
+<td>Python + MySQL 自动化</td>
+<td>用例前置重置 &#x2F; 批量造数 &#x2F; 落库校验</td>
+</tr>
+<tr>
+<td><strong>第 6 章</strong></td>
+<td>库表设计与安全测试</td>
+<td>数据库评审清单 &#x2F; SQL 注入检测</td>
+</tr>
+</tbody></table>
+<p>另外还有散落在各章的关键结论——比如<strong>金额要用 DECIMAL 不能用 FLOAT</strong>、<strong>订单要存价格快照</strong>、<strong>utf8 存不了 emoji</strong>，这些都是测试时看一眼表结构就能发现的问题。</p>
+<hr>
+<h2 id="给测试的两个提醒"><a href="#给测试的两个提醒" class="headerlink" title="给测试的两个提醒"></a>给测试的两个提醒</h2><h3 id="提醒一：只学-SELECT-是远远不够的"><a href="#提醒一：只学-SELECT-是远远不够的" class="headerlink" title="提醒一：只学 SELECT 是远远不够的"></a>提醒一：只学 SELECT 是远远不够的</h3><p>测试场景里经常需要 <strong>UPDATE 和 DELETE</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 重置某个玩家的每日任务进度，方便重复测试</span></span><br><span class="line"><span class="keyword">UPDATE</span> user_daily_task </span><br><span class="line"><span class="keyword">SET</span> progress <span class="operator">=</span> <span class="number">0</span>, status <span class="operator">=</span> <span class="number">0</span> </span><br><span class="line"><span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">12345</span> <span class="keyword">AND</span> task_date <span class="operator">=</span> CURDATE();</span><br></pre></td></tr></table></figure>
+
+<p>不会写 UPDATE，你测个每日重置功能就得等第二天。</p>
+<h3 id="提醒二：线上环境慎用-DML"><a href="#提醒二：线上环境慎用-DML" class="headerlink" title="提醒二：线上环境慎用 DML"></a>提醒二：线上环境慎用 DML</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- ⚠️ 这条 SQL 上线前请把 WHERE 条件读三遍</span></span><br><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> user_item <span class="keyword">WHERE</span> user_id <span class="operator">=</span> <span class="number">12345</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>安全习惯</strong>：</p>
+<ol>
+<li>动手前先 <code>SELECT</code> 一遍，确认影响范围</li>
+<li>加 <code>LIMIT</code> 限制影响行数</li>
+<li>生产库操作前<strong>先备份</strong>，或者至少先 <code>SELECT ... FOR UPDATE</code> 试一下</li>
+<li>能用测试环境就别碰生产</li>
+</ol>
+<hr>
+<h2 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h2><p>本系列的实践基于一个游戏业务数据库（角色、背包、任务、订单等表结构），所有示例都是测试工作中真实会用到的查询。</p>
 <blockquote>
-<p>适合人群：不会 SQL 或只会基础查询的测试工程师</p>
+<p>适合人群：不会 SQL、或只会基础查询的测试工程师。</p>
 </blockquote>
 
     </div>
@@ -284,19 +376,21 @@
               <a href="/tags/MySQL/" rel="tag"># MySQL</a>
               <a href="/tags/SQL/" rel="tag"># SQL</a>
               <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+              <a href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag"># 索引</a>
+              <a href="/tags/%E4%BA%8B%E5%8A%A1/" rel="tag"># 事务</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2026/06/12/mysql-chapter3-functions-index/" rel="prev" title="MySQL 第3章 - 高级篇 (函数·视图·索引)">
-                  <i class="fa fa-angle-left"></i> MySQL 第3章 - 高级篇 (函数·视图·索引)
+                <a href="/2026/06/12/testing-basics-intro/" rel="prev" title="测试基础知识">
+                  <i class="fa fa-angle-left"></i> 测试基础知识
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/06/12/mysql-chapter2-advanced/" rel="next" title="MySQL 第2章 - 进阶篇 (聚合·JOIN·子查询·UNION)">
-                  MySQL 第2章 - 进阶篇 (聚合·JOIN·子查询·UNION) <i class="fa fa-angle-right"></i>
+                <a href="/2026/06/12/interview-qa-01-basics/" rel="next" title="游戏测试面试题实战 · 基础概念与 BUG 管理">
+                  游戏测试面试题实战 · 基础概念与 BUG 管理 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

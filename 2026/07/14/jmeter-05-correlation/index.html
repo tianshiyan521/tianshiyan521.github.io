@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="前面几课都是独立的接口请求。但真实的业务是一串链路的： 1登录 → 拿 token → 用 token 查角色 → 用角色 ID 查背包 → 用背包里的道具发起战斗  每一步的输入，都来自上一步的输出。这就是关联。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JMeter 性能测试 · 关联：接口之间的数据传递">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/07/14/jmeter-05-correlation/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="前面几课都是独立的接口请求。但真实的业务是一串链路的： 1登录 → 拿 token → 用 token 查角色 → 用角色 ID 查背包 → 用背包里的道具发起战斗  每一步的输入，都来自上一步的输出。这就是关联。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-14T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:08:54.632Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="性能测试">
+<meta property="article:tag" content="JMeter">
+<meta property="article:tag" content="关联">
+<meta property="article:tag" content="JSONPath">
+<meta property="article:tag" content="正则表达式">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/07/14/jmeter-05-correlation/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/07/14/jmeter-05-correlation/","path":"2026/07/14/jmeter-05-correlation/","title":"JMeter 性能测试 · 关联：接口之间的数据传递"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JMeter 性能测试 · 关联：接口之间的数据传递 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%B3%E8%81%94"><span class="nav-number">1.</span> <span class="nav-text">一、什么是关联</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83"><span class="nav-number">1.1.</span> <span class="nav-text">为什么需要它</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94-vs-%E5%8F%82%E6%95%B0%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">关联 vs 参数化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%B8%89%E7%A7%8D%E6%8F%90%E5%8F%96%E5%99%A8"><span class="nav-number">2.</span> <span class="nav-text">二、三种提取器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8F%90%E5%8F%96%E5%99%A8%EF%BC%88Regex-Extractor%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1. 正则表达式提取器（Regex Extractor）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-JSON-%E6%8F%90%E5%8F%96%E5%99%A8%EF%BC%88JSON-Extractor%EF%BC%89%E2%AD%90-%E6%8E%A8%E8%8D%90"><span class="nav-number">2.2.</span> <span class="nav-text">2. JSON 提取器（JSON Extractor）⭐ 推荐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%BE%B9%E7%95%8C%E6%8F%90%E5%8F%96%E5%99%A8%EF%BC%88Boundary-Extractor%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">3. 边界提取器（Boundary Extractor）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%A4%9A%E7%BA%A7%E5%85%B3%E8%81%94%E5%AE%9E%E6%88%98"><span class="nav-number">3.</span> <span class="nav-text">三、多级关联实战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%AD%A3%E5%88%99%E6%96%B9%E6%A1%88-vs-JSON-%E6%96%B9%E6%A1%88%E6%80%8E%E4%B9%88%E9%80%89"><span class="nav-number">4.</span> <span class="nav-text">四、正则方案 vs JSON 方案怎么选</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">五、小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/07/14/jmeter-05-correlation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JMeter 性能测试 · 关联：接口之间的数据传递 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JMeter 性能测试 · 关联：接口之间的数据传递
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-07-14 09:00:00" itemprop="dateCreated datePublished" datetime="2026-07-14T09:00:00+08:00">2026-07-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:08:54" itemprop="dateModified" datetime="2026-09-30T10:08:54+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>前面几课都是<strong>独立的接口请求</strong>。但真实的业务是一串链路的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">登录 → 拿 token → 用 token 查角色 → 用角色 ID 查背包 → 用背包里的道具发起战斗</span><br></pre></td></tr></table></figure>
+
+<p>每一步的输入，都来自上一步的输出。<strong>这就是关联。</strong></p>
+<span id="more"></span>
+
+<h2 id="一、什么是关联"><a href="#一、什么是关联" class="headerlink" title="一、什么是关联"></a>一、什么是关联</h2><blockquote>
+<p><strong>关联就是”把上一个请求的返回值掏出来，喂给下一个请求”。</strong></p>
+</blockquote>
+<h3 id="为什么需要它"><a href="#为什么需要它" class="headerlink" title="为什么需要它"></a>为什么需要它</h3><p>HTTP 是无状态的。在真实项目中，很多动态数据<strong>无法写死</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>动态值</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>登录后拿 token</td>
+<td>session_id &#x2F; token</td>
+<td><strong>每次登录都不同</strong></td>
+</tr>
+<tr>
+<td>创建订单后查详情</td>
+<td>order_id</td>
+<td>服务端生成</td>
+</tr>
+<tr>
+<td>列表页点进详情</td>
+<td>帖子&#x2F;商品 ID</td>
+<td>列表返回</td>
+</tr>
+<tr>
+<td>分页翻页</td>
+<td>下一页的 URL</td>
+<td>响应中返回</td>
+</tr>
+</tbody></table>
+<p><strong>这些值不能硬编码，只能从响应里提取。</strong></p>
+<h3 id="关联-vs-参数化"><a href="#关联-vs-参数化" class="headerlink" title="关联 vs 参数化"></a>关联 vs 参数化</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>参数化</th>
+<th>关联</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>数据来源</strong></td>
+<td>外部（CSV &#x2F; 函数 &#x2F; 变量）</td>
+<td><strong>上一个请求的响应</strong></td>
+</tr>
+<tr>
+<td><strong>数据特点</strong></td>
+<td>预先准备好</td>
+<td><strong>运行时动态生成</strong></td>
+</tr>
+<tr>
+<td><strong>典型工具</strong></td>
+<td>CSV Data Set Config</td>
+<td>正则 &#x2F; JSON 提取器</td>
+</tr>
+<tr>
+<td><strong>本质</strong></td>
+<td>输入驱动</td>
+<td><strong>输出驱动输入</strong></td>
+</tr>
+</tbody></table>
+<p><strong>实际项目两者都会用</strong>：<br>用 CSV 参数化提供测试账号 → 用关联提取登录返回的 token → 后续请求带着 token 发。</p>
+<blockquote>
+<p>单独用任何一个都不够。<strong>参数化解决”用什么数据测”，关联解决”怎么串起来测”。</strong></p>
+</blockquote>
+<hr>
+<h2 id="二、三种提取器"><a href="#二、三种提取器" class="headerlink" title="二、三种提取器"></a>二、三种提取器</h2><h3 id="1-正则表达式提取器（Regex-Extractor）"><a href="#1-正则表达式提取器（Regex-Extractor）" class="headerlink" title="1. 正则表达式提取器（Regex Extractor）"></a>1. 正则表达式提取器（Regex Extractor）</h3><p>最通用，适合<strong>非结构化响应</strong>或格式不规范的场景。</p>
+<p><strong>核心参数：</strong></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Apply to（scope）</td>
+<td>搜索范围：body &#x2F; headers &#x2F; URL &#x2F; response_code 等</td>
+</tr>
+<tr>
+<td>Reference Name</td>
+<td>变量名，后续用 <code>$&#123;变量名&#125;</code> 引用</td>
+</tr>
+<tr>
+<td>Regular Expression</td>
+<td>正则表达式，<strong>括号 <code>()</code> 是捕获组</strong></td>
+</tr>
+<tr>
+<td>Template</td>
+<td>模板，<code>$1$</code>&#x3D;第 1 组，<code>$2$</code>&#x3D;第 2 组</td>
+</tr>
+<tr>
+<td><strong>Match No.</strong></td>
+<td><strong>0&#x3D;随机，正数&#x3D;第 N 次匹配，-1&#x3D;全部</strong></td>
+</tr>
+<tr>
+<td>Default Value</td>
+<td>匹配失败时的默认值</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 **Default Value 建议设成 <code>NOT_FOUND</code>**，不要留空。<br>留空的话，匹配失败时变量是空字符串，后续请求会带着空值发出去，报错信息很含糊。<br>设成 <code>NOT_FOUND</code> 就能一眼看出”是提取失败，不是接口失败”。</p>
+</blockquote>
+<p><strong>Match No. 详解：</strong></p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>含义</th>
+<th>生成变量</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>第 1 次匹配</td>
+<td><code>$&#123;refname&#125;</code></td>
+<td>只要第一个结果</td>
+</tr>
+<tr>
+<td>2, 3, …</td>
+<td>第 N 次匹配</td>
+<td><code>$&#123;refname&#125;</code></td>
+<td>指定位置</td>
+</tr>
+<tr>
+<td>0</td>
+<td>随机</td>
+<td><code>$&#123;refname&#125;</code></td>
+<td>模拟随机点击</td>
+</tr>
+<tr>
+<td><strong>-1</strong></td>
+<td><strong>所有匹配</strong></td>
+<td><code>$&#123;refname&#125;_1</code>, <code>$&#123;refname&#125;_2</code>, …, <code>$&#123;refname&#125;_matchNr</code></td>
+<td><strong>遍历所有结果</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong><code>-1</code> 是个很实用的功能</strong>：一次提取所有匹配项，配合 <code>$&#123;refname&#125;_matchNr</code> 拿到总数，可以做”遍历列表全部元素”的测试。</p>
+</blockquote>
+<hr>
+<h3 id="2-JSON-提取器（JSON-Extractor）⭐-推荐"><a href="#2-JSON-提取器（JSON-Extractor）⭐-推荐" class="headerlink" title="2. JSON 提取器（JSON Extractor）⭐ 推荐"></a>2. JSON 提取器（JSON Extractor）⭐ 推荐</h3><p><strong>JSON 接口优先用这个，不要用正则。</strong></p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>正则方案</th>
+<th>JSONPath 方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>字段位置&#x2F;换行变化</td>
+<td><strong>容易失效</strong></td>
+<td>按路径定位，稳定</td>
+</tr>
+<tr>
+<td>多层嵌套</td>
+<td>正则难写</td>
+<td>用 <code>$</code> 路径层级轻松穿透</td>
+</tr>
+<tr>
+<td>数组提取</td>
+<td>要写循环</td>
+<td><code>$[*].field</code> 一行搞定</td>
+</tr>
+<tr>
+<td>可读性</td>
+<td>差</td>
+<td>好</td>
+</tr>
+</tbody></table>
+<p><strong>核心参数：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Names of variables     →  变量名，多个用 ; 分隔（post_id;user_id）</span><br><span class="line">JSON Path expressions  →  JSONPath 表达式，多个用 ; 分隔</span><br><span class="line">Match No. (0 for Any)  →  0=随机/任意；正数=第N个；-1=全部</span><br><span class="line">Default Values         →  匹配失败默认值，多个用 ; 分隔</span><br><span class="line">Compute concatenation  →  勾选后 -1 时拼接所有结果到 varName_ALL</span><br></pre></td></tr></table></figure>
+
+<p><strong>常用 JSONPath 语法：</strong></p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>$</code></td>
+<td>根对象</td>
+<td>整个响应</td>
+</tr>
+<tr>
+<td><code>$.id</code></td>
+<td>取对象中的 id 字段</td>
+<td><code>&#123;&quot;id&quot;:1&#125;</code> → 1</td>
+</tr>
+<tr>
+<td><code>$[0]</code></td>
+<td>取数组第 1 个元素</td>
+<td><code>[&#123;&quot;id&quot;:1&#125;,...]</code> → <code>&#123;&quot;id&quot;:1&#125;</code></td>
+</tr>
+<tr>
+<td><code>$[0].id</code></td>
+<td>取数组第 1 个元素的 id</td>
+<td>→ 1</td>
+</tr>
+<tr>
+<td><code>$[*].email</code></td>
+<td>取数组所有元素的 email</td>
+<td><code>[a,b,c]</code></td>
+</tr>
+<tr>
+<td><code>$..name</code></td>
+<td><strong>递归</strong>取所有 name 字段</td>
+<td>所有层级</td>
+</tr>
+<tr>
+<td><code>$[?(@.id==1)]</code></td>
+<td><strong>条件过滤</strong></td>
+<td>取 id&#x3D;1 的对象</td>
+</tr>
+<tr>
+<td><code>$[0:3]</code></td>
+<td><strong>切片</strong>取前 3 个</td>
+<td>索引 0,1,2</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong><code>$[?(@.id==1)]</code> 这个条件过滤很有用</strong>：从列表里按条件挑出目标对象，不用先算位置。</p>
+<p><strong><code>$..name</code> 的递归搜索</strong>也值得记 —— 响应层级太深、不想数路径时，直接递归找。</p>
+</blockquote>
+<blockquote>
+<p>⚠️ <strong>注意</strong>：JSON Extractor 用 <code>match_no=-1</code> 时，会生成 <code>var_1</code>, <code>var_2</code>, … 和 <code>var_matchNr</code>，和正则提取器行为一致。</p>
+</blockquote>
+<hr>
+<h3 id="3-边界提取器（Boundary-Extractor）"><a href="#3-边界提取器（Boundary-Extractor）" class="headerlink" title="3. 边界提取器（Boundary Extractor）"></a>3. 边界提取器（Boundary Extractor）</h3><p>最简单的方案：<strong>给定左边界和右边界，抠出中间的内容</strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">左边界（Left Boundary）  →  开始标记</span><br><span class="line">右边界（Right Boundary） →  结束标记</span><br></pre></td></tr></table></figure>
+
+<p><strong>适用场景</strong>：响应格式固定、内容位置明确、<strong>不想写正则</strong>的时候。</p>
+<p>比如响应里有：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;token&quot;</span> <span class="attr">value</span>=<span class="string">&quot;abc123def456&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>左边界：<code>value=&quot;</code></li>
+<li>右边界：<code>&quot;&gt;</code></li>
+</ul>
+<p><strong>优势</strong>：不看正则语法的人也能维护。</p>
+<p><strong>劣势</strong>：<strong>只要响应格式有一点变化就失效</strong>，而且提取多个匹配项的能力不如前两者。</p>
+<hr>
+<h2 id="三、多级关联实战"><a href="#三、多级关联实战" class="headerlink" title="三、多级关联实战"></a>三、多级关联实战</h2><p><strong>链路设计</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">① 登录         →  提取 token</span><br><span class="line">② 查角色信息   →  带 token，提取 roleId</span><br><span class="line">③ 查背包       →  带 token + roleId，提取第一个道具 itemId</span><br><span class="line">④ 使用道具     →  带 token + roleId + itemId，验证结果</span><br></pre></td></tr></table></figure>
+
+<p><strong>关键点：</strong></p>
+<ol>
+<li><p><strong>每一步都要断言</strong>，不能只看最后一步<br>→ 如果第 ③ 步提取失败，第 ④ 步的错误信息会误导你以为是用道具的问题</p>
+</li>
+<li><p><strong>提取失败要能识别</strong><br>→ Default Value 设成 <code>NOT_FOUND</code>，一眼看出是”提取失败”</p>
+</li>
+<li><p><strong>中间任何一步挂了，整条链路都断了</strong><br>→ 但报告里要能看出是哪一步，这就是为什么每步都要断言</p>
+</li>
+</ol>
+<hr>
+<h2 id="四、正则方案-vs-JSON-方案怎么选"><a href="#四、正则方案-vs-JSON-方案怎么选" class="headerlink" title="四、正则方案 vs JSON 方案怎么选"></a>四、正则方案 vs JSON 方案怎么选</h2><table>
+<thead>
+<tr>
+<th>情况</th>
+<th>选哪个</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>响应是标准 JSON</td>
+<td><strong>JSON 提取器</strong></td>
+</tr>
+<tr>
+<td>响应是 HTML &#x2F; XML &#x2F; 文本</td>
+<td>正则提取器</td>
+</tr>
+<tr>
+<td>格式极简单、左右边界明确</td>
+<td>边界提取器</td>
+</tr>
+<tr>
+<td>响应格式不规范、字段可能缺失</td>
+<td>正则（但要写宽松一点）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>一句话原则</strong>：<strong>能用 JSONPath 就别用正则。</strong></p>
+<p>正则依赖字符位置和格式，JSONPath 依赖结构。<strong>结构比格式稳定得多</strong>——接口多返回一个空格，正则可能就失效了，而 JSONPath 毫不知情地继续工作。</p>
+</blockquote>
+<hr>
+<h2 id="五、小结"><a href="#五、小结" class="headerlink" title="五、小结"></a>五、小结</h2><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>关联本质</strong></td>
+<td>把上一个请求的返回值掏出来，喂给下一个请求</td>
+</tr>
+<tr>
+<td><strong>关联 vs 参数化</strong></td>
+<td>关联&#x3D;输出驱动输入；参数化&#x3D;输入驱动</td>
+</tr>
+<tr>
+<td><strong>正则提取器</strong></td>
+<td>通用；<code>Match No.</code> 支持随机(0)&#x2F;指定(N)&#x2F;全部(-1)</td>
+</tr>
+<tr>
+<td><strong>JSON 提取器</strong></td>
+<td>⭐ JSON 接口首选；JSONPath 语法强大</td>
+</tr>
+<tr>
+<td><strong>边界提取器</strong></td>
+<td>简单但脆弱，格式一变就失效</td>
+</tr>
+<tr>
+<td><strong>实践建议</strong></td>
+<td>Default Value 设 <code>NOT_FOUND</code>；每步都要断言</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>本课要点</strong>：关联是输出驱动输入｜JSONPath 优于正则｜提取失败要能一眼识别｜每步都要断言</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag"># 性能测试</a>
+              <a href="/tags/JMeter/" rel="tag"># JMeter</a>
+              <a href="/tags/%E5%85%B3%E8%81%94/" rel="tag"># 关联</a>
+              <a href="/tags/JSONPath/" rel="tag"># JSONPath</a>
+              <a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="tag"># 正则表达式</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/13/mysql-chapter8-python-automation/" rel="prev" title="MySQL 实战 · 第5章：Python + MySQL 测试数据自动化">
+                  <i class="fa fa-angle-left"></i> MySQL 实战 · 第5章：Python + MySQL 测试数据自动化
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/20/mysql-chapter9-design-security/" rel="next" title="MySQL 实战 · 第6章：库表设计与安全测试">
+                  MySQL 实战 · 第6章：库表设计与安全测试 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="1. BUG 严重等级划分   等级 说明 恐龙岛举例    致命（Blocker） 游戏崩溃&#x2F;核心流程阻断 点击”领地争夺”直接闪退   严重（Major） 核心功能不可用 商城购买扣了钻石但道具未到账   一般（Normal） 功能异常但不阻塞 后台挂机5分钟后停止攻击，UI仍显示”挂机中”   轻微（Minor） 不影响功能的瑕疵 NPC名字”迅猛龙”写成”讯猛龙”   建议（Su">
 <meta property="og:type" content="article">
@@ -28,12 +28,12 @@
 <meta property="og:description" content="1. BUG 严重等级划分   等级 说明 恐龙岛举例    致命（Blocker） 游戏崩溃&#x2F;核心流程阻断 点击”领地争夺”直接闪退   严重（Major） 核心功能不可用 商城购买扣了钻石但道具未到账   一般（Normal） 功能异常但不阻塞 后台挂机5分钟后停止攻击，UI仍显示”挂机中”   轻微（Minor） 不影响功能的瑕疵 NPC名字”迅猛龙”写成”讯猛龙”   建议（Su">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-06-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-24T09:55:07.933Z">
+<meta property="article:modified_time" content="2026-09-30T02:20:57.022Z">
 <meta property="article:author" content="涂伟富">
 <meta property="article:tag" content="BUG管理">
 <meta property="article:tag" content="测试用例">
 <meta property="article:tag" content="优先级">
-<meta property="article:tag" content="TAPD">
+<meta property="article:tag" content="缺陷跟踪">
 <meta name="twitter:card" content="summary">
 
 
@@ -57,7 +57,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
 <script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
 
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
 
 
 
@@ -102,6 +104,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -110,11 +113,37 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </header>
         
@@ -149,7 +178,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -160,7 +189,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">116</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -231,7 +260,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:20:57" itemprop="dateModified" datetime="2026-09-30T10:20:57+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -302,7 +331,7 @@
 <li>详细记录环境、操作步骤、日志</li>
 <li>尝试多种条件复现（切换设备、切换网络）</li>
 <li>必要时协助开发加日志定位</li>
-<li>在TAPD上标记”偶现”，附上所有已知信息</li>
+<li>在缺陷管理平台上标记”偶现”，附上所有已知信息</li>
 </ol>
 <h2 id="4-测试用例设计实战-—-恐龙岛自动培养池"><a href="#4-测试用例设计实战-—-恐龙岛自动培养池" class="headerlink" title="4. 测试用例设计实战 — 恐龙岛自动培养池"></a>4. 测试用例设计实战 — 恐龙岛自动培养池</h2><p>用 Excel 格式输出了完整的45条测试用例，覆盖6个模块：</p>
 <table>
@@ -383,20 +412,20 @@
               <a href="/tags/BUG%E7%AE%A1%E7%90%86/" rel="tag"># BUG管理</a>
               <a href="/tags/%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B/" rel="tag"># 测试用例</a>
               <a href="/tags/%E4%BC%98%E5%85%88%E7%BA%A7/" rel="tag"># 优先级</a>
-              <a href="/tags/TAPD/" rel="tag"># TAPD</a>
+              <a href="/tags/%E7%BC%BA%E9%99%B7%E8%B7%9F%E8%B8%AA/" rel="tag"># 缺陷跟踪</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2026/06/12/linux-chapter1-essential-commands/" rel="prev" title="Linux 第1章 - 测试工程师常用命令速查">
-                  <i class="fa fa-angle-left"></i> Linux 第1章 - 测试工程师常用命令速查
+                <a href="/2026/06/11/interview-qa-00-overview/" rel="prev" title="游戏测试面试题实战 · 系列总览">
+                  <i class="fa fa-angle-left"></i> 游戏测试面试题实战 · 系列总览
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/06/12/testing-basics-chapter1-game-testing-core/" rel="next" title="测试基础 第1章 - 游戏测试核心概念">
-                  测试基础 第1章 - 游戏测试核心概念 <i class="fa fa-angle-right"></i>
+                <a href="/2026/06/12/testing-basics-chapter3-interview-qa/" rel="next" title="测试基础 第3章 - 游戏测试面试题实战">
+                  测试基础 第3章 - 游戏测试面试题实战 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

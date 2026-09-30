@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="写这个系列之前，我先给自己做了一次能力盘点——因为”学过”和”会”是两码事。 这份学习地图记录了我们诊断出的真实缺口，以及补齐的路径。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接口测试学习地图：从零到能打真实项目">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/09/23/api-testing-00-study-map/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="写这个系列之前，我先给自己做了一次能力盘点——因为”学过”和”会”是两码事。 这份学习地图记录了我们诊断出的真实缺口，以及补齐的路径。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-09-23T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:07:19.406Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="接口测试">
+<meta property="article:tag" content="学习路线">
+<meta property="article:tag" content="测试方法">
+<meta property="article:tag" content="能力模型">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/09/23/api-testing-00-study-map/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/09/23/api-testing-00-study-map/","path":"2026/09/23/api-testing-00-study-map/","title":"接口测试学习地图：从零到能打真实项目"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>接口测试学习地图：从零到能打真实项目 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%B5%B7%E7%82%B9%E8%AF%8A%E6%96%AD"><span class="nav-number">1.</span> <span class="nav-text">一、起点诊断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.</span> <span class="nav-text">二、接口测试是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94-UI-%E6%B5%8B%E8%AF%95%E6%9B%B4%E5%80%BC%E5%BE%97%E6%8A%95%E5%85%A5"><span class="nav-number">2.1.</span> <span class="nav-text">为什么比 UI 测试更值得投入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%B5%8B%E4%BB%80%E4%B9%88%EF%BC%9A%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%8F%A3%E7%9A%84%E4%BA%94%E5%A4%A7%E7%BB%B4%E5%BA%A6"><span class="nav-number">3.</span> <span class="nav-text">三、测什么：一个接口的五大维度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%8C%E6%95%B4%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">4.</span> <span class="nav-text">四、完整工作流</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B1%82%E6%A0%A1%E9%AA%8C%EF%BC%9A%E7%BC%BA%E4%B8%80%E5%B1%82%E5%B0%B1%E5%8F%AF%E8%83%BD%E6%BC%8F-bug"><span class="nav-number">4.1.</span> <span class="nav-text">分层校验：缺一层就可能漏 bug</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E4%B8%89%E4%B8%AA%E9%AB%98%E9%A2%91%E7%BF%BB%E8%BD%A6%E7%82%B9"><span class="nav-number">5.</span> <span class="nav-text">五、三个高频翻车点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%AA%E6%B5%8B%E6%AD%A3%E5%B8%B8%E6%B5%81%E7%A8%8B"><span class="nav-number">5.1.</span> <span class="nav-text">1. 只测正常流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%94%A8%E4%BE%8B%E4%BA%92%E7%9B%B8%E6%B1%A1%E6%9F%93"><span class="nav-number">5.2.</span> <span class="nav-text">2. 用例互相污染</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%96%AD%E8%A8%80%E5%A4%AA%E5%BC%B1"><span class="nav-number">5.3.</span> <span class="nav-text">3. 断言太弱</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%B3%BB%E5%88%97%E7%9B%AE%E5%BD%95"><span class="nav-number">6.</span> <span class="nav-text">六、系列目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%AF%A5%E8%A1%A5%E4%BB%80%E4%B9%88"><span class="nav-number">7.</span> <span class="nav-text">七、下一步该补什么</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/09/23/api-testing-00-study-map/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="接口测试学习地图：从零到能打真实项目 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          接口测试学习地图：从零到能打真实项目
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-09-23 09:00:00" itemprop="dateCreated datePublished" datetime="2026-09-23T09:00:00+08:00">2026-09-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:07:19" itemprop="dateModified" datetime="2026-09-30T10:07:19+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>写这个系列之前，我先给自己做了一次能力盘点——<strong>因为”学过”和”会”是两码事。</strong></p>
+<p>这份学习地图记录了我们诊断出的真实缺口，以及补齐的路径。</p>
+<span id="more"></span>
+
+<h2 id="一、起点诊断"><a href="#一、起点诊断" class="headerlink" title="一、起点诊断"></a>一、起点诊断</h2><table>
+<thead>
+<tr>
+<th>层级</th>
+<th>能力项</th>
+<th>状态</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>L1 协议地基</strong></td>
+<td>HTTP 方法、状态码、Header、JSON、鉴权</td>
+<td>✅ 已掌握</td>
+<td>有基础</td>
+</tr>
+<tr>
+<td><strong>L2 工具链</strong></td>
+<td>Postman、Apifox、抓包分析、接口文档</td>
+<td>△ 待补强</td>
+<td>工具熟练度不足</td>
+</tr>
+<tr>
+<td><strong>L3 用例设计</strong></td>
+<td>等价类、边界值、场景串联、异常安全</td>
+<td>❌ <strong>最大缺口</strong></td>
+<td>此前是”照文档写脚本”，非独立设计</td>
+</tr>
+<tr>
+<td><strong>L4 自动化</strong></td>
+<td>requests、pytest、断言、数据驱动、报告</td>
+<td>✅ 已掌握</td>
+<td>能写脚本</td>
+</tr>
+<tr>
+<td><strong>L5 工程化</strong></td>
+<td>分层框架、多环境、Mock、CI、契约测试</td>
+<td>△ 待补强</td>
+<td>有思路，未落地真实项目</td>
+</tr>
+</tbody></table>
+<p><strong>结论</strong>：补齐 <strong>L3（用例设计思维）+ L2（工具熟练度）+ L5（工程落地）</strong>，即可打通完整能力链。</p>
+<blockquote>
+<p>⚠️ 注意 L3 被标为”最大缺口”，而且它是<strong>认知层</strong>的问题，不是技术层的。<br>会写 <code>requests.post()</code> 不等于会设计用例。<strong>这是两条完全不同的能力。</strong></p>
+</blockquote>
+<hr>
+<h2 id="二、接口测试是什么"><a href="#二、接口测试是什么" class="headerlink" title="二、接口测试是什么"></a>二、接口测试是什么</h2><p><strong>本质</strong>：绕开界面，直接验证系统之间的”契约”——<strong>按约定发什么，就必须按约定还什么，无论输入正常还是垃圾。</strong></p>
+<p>后半句是关键。很多人只测了”正常输入正确返回”，但<strong>真正的 bug 都藏在异常输入里</strong>。</p>
+<h3 id="为什么比-UI-测试更值得投入"><a href="#为什么比-UI-测试更值得投入" class="headerlink" title="为什么比 UI 测试更值得投入"></a>为什么比 UI 测试更值得投入</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>接口测试</th>
+<th>UI 测试</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>时机</strong></td>
+<td>后端交付即可测，不等前端</td>
+<td>必须等界面完成</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>单接口 100ms 级</td>
+<td>单用例 30s 级</td>
+</tr>
+<tr>
+<td><strong>稳定性</strong></td>
+<td>业务逻辑变了才挂</td>
+<td>改个按钮挂一片</td>
+</tr>
+<tr>
+<td><strong>覆盖度</strong></td>
+<td>能打异常分支、越权、边界</td>
+<td>只能覆盖用户点得到的路径</td>
+</tr>
+</tbody></table>
+<p><strong>测试金字塔占比</strong>：接口测试 **60<del>70%**，单元 **20</del>30%**，UI **10%**。</p>
+<hr>
+<h2 id="三、测什么：一个接口的五大维度"><a href="#三、测什么：一个接口的五大维度" class="headerlink" title="三、测什么：一个接口的五大维度"></a>三、测什么：一个接口的五大维度</h2><p>沿这五条线展开，用例就不会漏：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>维度</th>
+<th>具体校验点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>功能正确性</strong></td>
+<td>正常入参返回预期结果、字段值准确、单据真的落库</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>参数校验</strong></td>
+<td>必填缺失、类型错误、长度边界、特殊字符、多余字段</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>业务逻辑</strong></td>
+<td>状态流转合法性、接口依赖串联、幂等性、并发一致性</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>异常与容错</strong></td>
+<td>错误码语义区分、超时重试、服务降级、重复提交</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>安全与权限</strong></td>
+<td>鉴权失效、水平&#x2F;垂直越权、注入、敏感信息泄露</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="四、完整工作流"><a href="#四、完整工作流" class="headerlink" title="四、完整工作流"></a>四、完整工作流</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">① 拿到接口信息   Swagger / 接口文档 / 抓包反推 / 找开发要 cURL</span><br><span class="line">② 拆解契约       入参出参字段、错误码表、依赖了哪些其他接口</span><br><span class="line">③ 设计用例       按五大维度展开，而非想到哪测到哪</span><br><span class="line">④ 执行           Postman 手工验证 → Python 代码自动化</span><br><span class="line">⑤ 校验响应       分层校验（见下）</span><br><span class="line">⑥ 沉淀           用例入库 → 纳入回归集 → CI 自动触发</span><br></pre></td></tr></table></figure>
+
+<h3 id="分层校验：缺一层就可能漏-bug"><a href="#分层校验：缺一层就可能漏-bug" class="headerlink" title="分层校验：缺一层就可能漏 bug"></a>分层校验：缺一层就可能漏 bug</h3><table>
+<thead>
+<tr>
+<th>层</th>
+<th>验什么</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>协议层</strong></td>
+<td>HTTP 状态码</td>
+<td>200 &#x2F; 401 &#x2F; 500</td>
+</tr>
+<tr>
+<td><strong>业务层</strong></td>
+<td>响应体业务码</td>
+<td><code>code == 0</code></td>
+</tr>
+<tr>
+<td><strong>数据层</strong></td>
+<td>字段值与格式</td>
+<td><code>data.level == 12</code>、关键字段非空</td>
+</tr>
+<tr>
+<td><strong>副作用层</strong></td>
+<td>数据库&#x2F;下游真的变了</td>
+<td>查库确认金币真的扣了</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、三个高频翻车点"><a href="#五、三个高频翻车点" class="headerlink" title="五、三个高频翻车点"></a>五、三个高频翻车点</h2><h3 id="1-只测正常流程"><a href="#1-只测正常流程" class="headerlink" title="1. 只测正常流程"></a>1. 只测正常流程</h3><p>开发写代码时想的是”正常走通”，<strong>bug 都藏在异常分支里</strong>。</p>
+<h3 id="2-用例互相污染"><a href="#2-用例互相污染" class="headerlink" title="2. 用例互相污染"></a>2. 用例互相污染</h3><p>用例 A 创建的数据被用例 B 用掉，执行顺序一变就全红。</p>
+<p><strong>必须有数据隔离策略</strong>：每条用例自带前置，不依赖其他用例的副作用。</p>
+<h3 id="3-断言太弱"><a href="#3-断言太弱" class="headerlink" title="3. 断言太弱"></a>3. 断言太弱</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> r.status_code == <span class="number">200</span>   <span class="comment"># ← 等于没测</span></span><br></pre></td></tr></table></figure>
+
+<p>游戏服务端的网关尤其如此——<strong>很多游戏网关的 HTTP 状态码永远是 200</strong>，真实成败藏在响应体里。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 看起来成功了，其实等级不够</span></span><br><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">50002</span><span class="punctuation">,</span> <span class="attr">&quot;msg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;level not enough&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、系列目录"><a href="#六、系列目录" class="headerlink" title="六、系列目录"></a>六、系列目录</h2><table>
+<thead>
+<tr>
+<th>篇目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>第 1 课</strong></td>
+<td>先跑起来别管理论：HTTP 200 ≠ 通过、五大维度、幂等性</td>
+</tr>
+<tr>
+<td><strong>第 2 课</strong></td>
+<td>把手动点的事交给脚本：四块骨架、用例隔离、断言设计</td>
+</tr>
+<tr>
+<td><strong>第 3 课</strong></td>
+<td>从客户端日志逆推私有协议：protobuf、0x0A 陷阱、<strong>499 不是限流</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、下一步该补什么"><a href="#七、下一步该补什么" class="headerlink" title="七、下一步该补什么"></a>七、下一步该补什么</h2><p>按这五个缺口排优先级：</p>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>补什么</th>
+<th>怎么补</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>P0</strong></td>
+<td>用例设计思维</td>
+<td>用真实接口把五大维度各出一遍，请人 review</td>
+</tr>
+<tr>
+<td><strong>P0</strong></td>
+<td>接口文档没有时怎么拿</td>
+<td>抓包反推 &#x2F; 读日志（第 3 课已覆盖）</td>
+</tr>
+<tr>
+<td><strong>P1</strong></td>
+<td>数据驱动</td>
+<td>用例挪到 Excel&#x2F;YAML，做到”加用例不改代码”</td>
+</tr>
+<tr>
+<td><strong>P1</strong></td>
+<td>报告与 CI</td>
+<td>pytest + Allure + GitHub Actions</td>
+</tr>
+<tr>
+<td><strong>P2</strong></td>
+<td>契约测试与 Mock</td>
+<td>前后端解耦测试、并行开发</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>一句实话</strong>：接口测试的”难”不在写代码，在于<strong>你没测过的异常情况，你想不到</strong>。</p>
+<p>所以最有价值的投入永远是——<strong>去把别人踩过的坑变成自己的用例</strong>。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag"># 接口测试</a>
+              <a href="/tags/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" rel="tag"># 学习路线</a>
+              <a href="/tags/%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95/" rel="tag"># 测试方法</a>
+              <a href="/tags/%E8%83%BD%E5%8A%9B%E6%A8%A1%E5%9E%8B/" rel="tag"># 能力模型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/09/22/api-testing-intro/" rel="prev" title="接口测试入门 - Python requests 实战">
+                  <i class="fa fa-angle-left"></i> 接口测试入门 - Python requests 实战
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/09/24/api-testing-chapter1-getting-started/" rel="next" title="接口测试实战 · 第1课：先跑起来，别管理论">
+                  接口测试实战 · 第1课：先跑起来，别管理论 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

@@ -18,21 +18,23 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="Airtest 专栏介绍Airtest 是由网易开源的跨平台 UI 自动化测试框架，主要面向手机游戏和 App 的自动化测试。 本专栏将系统记录 Airtest 的学习笔记和实战经验，内容包括但不限于： 你将学到">
+    <meta name="description" content="Airtest 由网易开源，专为手机游戏和 App 的 UI 自动化设计。它的最大特点是基于图像识别——不依赖控件树，截个图就能点。 这个特性对游戏测试尤其友好：游戏 UI 多是自绘的，控件树里往往什么都拿不到。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Airtest - 移动端自动化测试">
 <meta property="og:url" content="https://tianshiyan521.github.io/2026/06/12/airtest-intro/index.html">
 <meta property="og:site_name" content="涂伟富的博客">
-<meta property="og:description" content="Airtest 专栏介绍Airtest 是由网易开源的跨平台 UI 自动化测试框架，主要面向手机游戏和 App 的自动化测试。 本专栏将系统记录 Airtest 的学习笔记和实战经验，内容包括但不限于： 你将学到">
+<meta property="og:description" content="Airtest 由网易开源，专为手机游戏和 App 的 UI 自动化设计。它的最大特点是基于图像识别——不依赖控件树，截个图就能点。 这个特性对游戏测试尤其友好：游戏 UI 多是自绘的，控件树里往往什么都拿不到。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-06-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-24T09:55:07.928Z">
+<meta property="article:published_time" content="2026-06-12T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:05:25.061Z">
 <meta property="article:author" content="涂伟富">
 <meta property="article:tag" content="Airtest">
-<meta property="article:tag" content="移动端测试">
 <meta property="article:tag" content="Python">
+<meta property="article:tag" content="移动端测试">
+<meta property="article:tag" content="图像识别">
+<meta property="article:tag" content="Poco">
 <meta name="twitter:card" content="summary">
 
 
@@ -56,7 +58,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
 <script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
 
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
 
 
 
@@ -101,6 +105,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -109,11 +114,37 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </header>
         
@@ -133,7 +164,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Airtest-%E4%B8%93%E6%A0%8F%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">Airtest 专栏介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E5%B0%86%E5%AD%A6%E5%88%B0"><span class="nav-number">1.1.</span> <span class="nav-text">你将学到</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B8%B8%E6%88%8F%E6%B5%8B%E8%AF%95%E7%94%A8-Airtest"><span class="nav-number">1.</span> <span class="nav-text">为什么游戏测试用 Airtest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E8%83%BD%E5%8A%9B"><span class="nav-number">2.</span> <span class="nav-text">核心能力</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB-API"><span class="nav-number">2.1.</span> <span class="nav-text">图像识别 API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Poco-%E6%8E%A7%E4%BB%B6%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">Poco 控件模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%93%E6%A0%8F%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">专栏结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E7%8E%B0%E5%AE%9E%E6%8F%90%E9%86%92"><span class="nav-number">4.</span> <span class="nav-text">三个现实提醒</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0-%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB%E4%B8%8D%E6%98%AF%E4%B8%87%E8%83%BD%E7%9A%84"><span class="nav-number">4.1.</span> <span class="nav-text">① 图像识别不是万能的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1-%E8%87%AA%E5%8A%A8%E5%8C%96%E8%B7%91%E6%B8%B8%E6%88%8F%E5%BE%88%E5%90%83%E8%B5%84%E6%BA%90"><span class="nav-number">4.2.</span> <span class="nav-text">② 自动化跑游戏很吃资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A2-%E5%85%88%E9%97%AE%E2%80%9D%E5%80%BC%E4%B8%8D%E5%80%BC%E5%BE%97%E8%87%AA%E5%8A%A8%E5%8C%96%E2%80%9D"><span class="nav-number">4.3.</span> <span class="nav-text">③ 先问”值不值得自动化”</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -148,7 +179,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -159,7 +190,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">116</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -223,14 +254,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-06-12 10:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T10:00:00+08:00">2026-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:05:25" itemprop="dateModified" datetime="2026-09-30T10:05:25+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -258,20 +289,70 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="Airtest-专栏介绍"><a href="#Airtest-专栏介绍" class="headerlink" title="Airtest 专栏介绍"></a>Airtest 专栏介绍</h2><p>Airtest 是由网易开源的跨平台 UI 自动化测试框架，主要面向<strong>手机游戏和 App</strong> 的自动化测试。</p>
-<p>本专栏将系统记录 Airtest 的学习笔记和实战经验，内容包括但不限于：</p>
-<h3 id="你将学到"><a href="#你将学到" class="headerlink" title="你将学到"></a>你将学到</h3><span id="more"></span>
+    <div class="post-body" itemprop="articleBody"><p>Airtest 由网易开源，专为<strong>手机游戏和 App</strong> 的 UI 自动化设计。它的最大特点是<strong>基于图像识别</strong>——不依赖控件树，截个图就能点。</p>
+<p>这个特性对游戏测试尤其友好：游戏 UI 多是自绘的，控件树里往往什么都拿不到。</p>
+<span id="more"></span>
 
-<ul>
+<h2 id="为什么游戏测试用-Airtest"><a href="#为什么游戏测试用-Airtest" class="headerlink" title="为什么游戏测试用 Airtest"></a>为什么游戏测试用 Airtest</h2><p>传统 UI 自动化靠控件定位（id &#x2F; class &#x2F; xpath）。但游戏引擎渲染的界面，控件树里常常只有一个大 Surface，具体按钮<strong>根本不在树里</strong>。</p>
+<p>Airtest 换了个思路：<strong>把按钮截图存下来，运行时在屏幕上找这张图，找到了就点它。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> airtest.core.api <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接设备</span></span><br><span class="line">connect_device(<span class="string">&quot;Android:///&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 点击屏幕上长得像 btn_login.png 的位置</span></span><br><span class="line">touch(Template(<span class="string">&quot;btn_login.png&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>代价是识别率受分辨率、画质、特效影响，但<strong>对游戏场景来说，这是目前最实用的方案</strong>。</p>
+<hr>
+<h2 id="核心能力"><a href="#核心能力" class="headerlink" title="核心能力"></a>核心能力</h2><h3 id="图像识别-API"><a href="#图像识别-API" class="headerlink" title="图像识别 API"></a>图像识别 API</h3><table>
+<thead>
+<tr>
+<th>API</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>touch(Template(...))</code></td>
+<td>找到图片位置并点击</td>
+</tr>
+<tr>
+<td><code>exists(Template(...))</code></td>
+<td>判断是否存在，返回坐标或 False</td>
+</tr>
+<tr>
+<td><code>assert_exists(Template(...))</code></td>
+<td>断言存在，不存在则用例失败</td>
+</tr>
+<tr>
+<td><code>wait(Template(...), timeout=10)</code></td>
+<td>等待某个图出现</td>
+</tr>
+<tr>
+<td><code>swipe()</code></td>
+<td>滑动</td>
+</tr>
+<tr>
+<td><code>text()</code></td>
+<td>输入文本</td>
+</tr>
+</tbody></table>
+<h3 id="Poco-控件模式"><a href="#Poco-控件模式" class="headerlink" title="Poco 控件模式"></a>Poco 控件模式</h3><p>对于有控件树的环境（如 Unity 接入了 Poco SDK），可以用控件定位替代图像识别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pocoui.drivers.unity3d <span class="keyword">import</span> UnityPoco</span><br><span class="line"></span><br><span class="line">poco = UnityPoco()</span><br><span class="line">poco(<span class="string">&quot;btn_login&quot;</span>).click()</span><br></pre></td></tr></table></figure>
+
+<p><strong>控件定位比图像识别稳定得多</strong>，但前提是开发接入了 Poco SDK。能谈下来的话，优先争取这个方案。</p>
+<hr>
+<h2 id="专栏结构"><a href="#专栏结构" class="headerlink" title="专栏结构"></a>专栏结构</h2><ul>
 <li><strong>基础入门</strong>：安装、环境配置、连接真机&#x2F;模拟器</li>
-<li><strong>图像识别</strong>：<code>touch()</code>、<code>exists()</code>、<code>assert_exists()</code> 等核心 API</li>
-<li><strong>Poco 控件</strong>：脱离了图像识别的控件定位方式</li>
-<li><strong>实战案例</strong>：恐龙岛项目的自动化回归脚本</li>
-<li><strong>踩坑集锦</strong>：真机连接失败、分辨率适配、多设备管理等</li>
+<li><strong>图像识别实战</strong>：截图精度、分辨率适配、识别失败排查</li>
+<li><strong>Poco 控件</strong>：控件树定位、常见 API</li>
+<li><strong>AirtestIDE 使用</strong>：录制回放、生成报告</li>
+<li><strong>实战案例</strong>：游戏日常任务回归、挂机流程验证</li>
+<li><strong>踩坑集锦</strong>：真机连接失败、多设备管理、脚本稳定性</li>
 </ul>
 <hr>
+<h2 id="三个现实提醒"><a href="#三个现实提醒" class="headerlink" title="三个现实提醒"></a>三个现实提醒</h2><h3 id="①-图像识别不是万能的"><a href="#①-图像识别不是万能的" class="headerlink" title="① 图像识别不是万能的"></a>① 图像识别不是万能的</h3><p>同一张按钮图，在<strong>不同分辨率、不同画质档位、不同机型</strong>下长得都不一样。跨设备跑必然出问题。</p>
+<p><strong>应对</strong>：为关键按钮准备多套模板图，或者脚本里做分辨率判断。</p>
+<h3 id="②-自动化跑游戏很吃资源"><a href="#②-自动化跑游戏很吃资源" class="headerlink" title="② 自动化跑游戏很吃资源"></a>② 自动化跑游戏很吃资源</h3><p>一台设备跑一个游戏实例，跑 10 台就要 10 台设备。<strong>真机云</strong>（如网易云真机、腾讯 WeTest）是更现实的选择。</p>
+<h3 id="③-先问”值不值得自动化”"><a href="#③-先问”值不值得自动化”" class="headerlink" title="③ 先问”值不值得自动化”"></a>③ 先问”值不值得自动化”</h3><p>游戏 UI 变动频繁，这个版本录的脚本下个版本可能全废。</p>
+<p><strong>适合自动化</strong>：登录流程、日常任务、领奖流程、回归测试的固定路径<br><strong>不适合</strong>：体验评价、频繁改动的界面、只跑一次的验证</p>
+<hr>
 <blockquote>
-<p>适合人群：游戏测试工程师、移动端 QA</p>
+<p>适合人群：游戏测试工程师、移动端 QA。</p>
 </blockquote>
 
     </div>
@@ -283,21 +364,23 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Airtest/" rel="tag"># Airtest</a>
-              <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%B5%8B%E8%AF%95/" rel="tag"># 移动端测试</a>
               <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF%E6%B5%8B%E8%AF%95/" rel="tag"># 移动端测试</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E8%AF%86%E5%88%AB/" rel="tag"># 图像识别</a>
+              <a href="/tags/Poco/" rel="tag"># Poco</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2026/06/12/law-chapter1-labor-law/" rel="prev" title="法律知识 第1章 - 劳动法与打工人权益">
-                  <i class="fa fa-angle-left"></i> 法律知识 第1章 - 劳动法与打工人权益
+                <a href="/2026/06/12/linux-intro/" rel="prev" title="Linux 命令速查">
+                  <i class="fa fa-angle-left"></i> Linux 命令速查
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/06/12/airtest-chapter1-core-concepts/" rel="next" title="Airtest 第1章 - 核心概念与恐龙岛实战">
-                  Airtest 第1章 - 核心概念与恐龙岛实战 <i class="fa fa-angle-right"></i>
+                <a href="/2026/06/12/law-intro/" rel="next" title="法律知识笔记">
+                  法律知识笔记 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

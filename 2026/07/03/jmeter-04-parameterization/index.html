@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="硬编码的压测有个致命问题：所有虚拟用户发的是一模一样的请求。 这会导致两个后果：  测不出真实场景。真实玩家不会全都查同一个页面、买同一件商品 服务端的缓存会骗你。第一个请求查完数据库，后面 999 个都命中缓存，测出来的”高性能”是假的  参数化解决的就是这个问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JMeter 性能测试 · 参数化：让压测数据活起来">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/07/03/jmeter-04-parameterization/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="硬编码的压测有个致命问题：所有虚拟用户发的是一模一样的请求。 这会导致两个后果：  测不出真实场景。真实玩家不会全都查同一个页面、买同一件商品 服务端的缓存会骗你。第一个请求查完数据库，后面 999 个都命中缓存，测出来的”高性能”是假的  参数化解决的就是这个问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-03T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:08:37.736Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="性能测试">
+<meta property="article:tag" content="JMeter">
+<meta property="article:tag" content="参数化">
+<meta property="article:tag" content="CSV">
+<meta property="article:tag" content="数据驱动">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/07/03/jmeter-04-parameterization/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/07/03/jmeter-04-parameterization/","path":"2026/07/03/jmeter-04-parameterization/","title":"JMeter 性能测试 · 参数化：让压测数据活起来"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JMeter 性能测试 · 参数化：让压测数据活起来 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E9%9D%99%E6%80%81%E5%8F%82%E6%95%B0%E5%8C%96%EF%BC%9ACSV-Data-Set-Config"><span class="nav-number">1.</span> <span class="nav-text">一、静态参数化：CSV Data Set Config</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">基本配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%98%85-Sharing-Mode-%E8%AF%A6%E8%A7%A3%EF%BC%88%E6%9C%80%E5%AE%B9%E6%98%93%E9%85%8D%E9%94%99%E7%9A%84%E5%9C%B0%E6%96%B9%EF%BC%89"><span class="nav-number">1.2.</span> <span class="nav-text">★ Sharing Mode 详解（最容易配错的地方）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E9%85%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text">实战配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%88%97-CSV"><span class="nav-number">1.4.</span> <span class="nav-text">多列 CSV</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F%EF%BC%88%E5%85%A8%E5%B1%80-%E5%B1%80%E9%83%A8%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">二、用户定义变量（全局 &#x2F; 局部）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%BA%A7%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">2.1.</span> <span class="nav-text">两级作用域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E6%88%98%E5%8F%98%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">实战变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E9%BB%98%E8%AE%A4%E5%80%BC-vs-%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP 请求默认值 vs 用户定义变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%8A%A8%E6%80%81%E5%8F%82%E6%95%B0%E5%8C%96%EF%BC%9A%E5%86%85%E7%BD%AE%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">三、动态参数化：内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E9%80%9F%E6%9F%A5"><span class="nav-number">3.1.</span> <span class="nav-text">常用函数速查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#counter-%E7%9A%84%E5%8F%82%E6%95%B0%E5%BE%88%E5%85%B3%E9%94%AE"><span class="nav-number">3.2.</span> <span class="nav-text">__counter 的参数很关键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#time-%E6%A0%BC%E5%BC%8F%E5%8F%82%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">__time 格式参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%98%85-%E7%BB%84%E5%90%88%E6%A1%88%E4%BE%8B%EF%BC%9A4-%E4%B8%AA%E5%87%BD%E6%95%B0%E6%8B%BC%E5%87%BA%E5%94%AF%E4%B8%80%E8%AF%B7%E6%B1%82%E4%BD%93"><span class="nav-number">3.4.</span> <span class="nav-text">★ 组合案例：4 个函数拼出唯一请求体</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E6%B5%8B%E7%BB%93%E6%9E%9C"><span class="nav-number">4.</span> <span class="nav-text">四、实测结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">五、小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/07/03/jmeter-04-parameterization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JMeter 性能测试 · 参数化：让压测数据活起来 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JMeter 性能测试 · 参数化：让压测数据活起来
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-07-03 09:00:00" itemprop="dateCreated datePublished" datetime="2026-07-03T09:00:00+08:00">2026-07-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:08:37" itemprop="dateModified" datetime="2026-09-30T10:08:37+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/automation/" itemprop="url" rel="index"><span itemprop="name">自动化测试</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>硬编码的压测有个致命问题：<strong>所有虚拟用户发的是一模一样的请求。</strong></p>
+<p>这会导致两个后果：</p>
+<ol>
+<li><strong>测不出真实场景</strong>。真实玩家不会全都查同一个页面、买同一件商品</li>
+<li><strong>服务端的缓存会骗你</strong>。第一个请求查完数据库，后面 999 个都命中缓存，测出来的”高性能”是假的</li>
+</ol>
+<p>参数化解决的就是这个问题。</p>
+<span id="more"></span>
+
+<h2 id="一、静态参数化：CSV-Data-Set-Config"><a href="#一、静态参数化：CSV-Data-Set-Config" class="headerlink" title="一、静态参数化：CSV Data Set Config"></a>一、静态参数化：CSV Data Set Config</h2><p>最核心、最常用的参数化方式。</p>
+<h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Filename</td>
+<td>CSV 文件路径（支持相对&#x2F;绝对）</td>
+</tr>
+<tr>
+<td>Variable Names</td>
+<td>列名映射，逗号分隔</td>
+</tr>
+<tr>
+<td>Delimiter</td>
+<td>分隔符</td>
+</tr>
+<tr>
+<td>File Encoding</td>
+<td>编码（中文一定要设 UTF-8）</td>
+</tr>
+<tr>
+<td>Ignore First Line</td>
+<td>是否跳过标题行</td>
+</tr>
+<tr>
+<td><strong>Recycle on EOF</strong></td>
+<td>读完是否循环（<code>TRUE</code>&#x3D;循环 &#x2F; <code>FALSE</code>&#x3D;停止）</td>
+</tr>
+<tr>
+<td><strong>Stop Thread on EOF</strong></td>
+<td>读完后是否停线程（<code>TRUE</code>&#x3D;停 &#x2F; <code>FALSE</code>&#x3D;继续，变量变 <code>&lt;EOF&gt;</code>）</td>
+</tr>
+<tr>
+<td><strong>Sharing Mode</strong></td>
+<td>线程间共享方式</td>
+</tr>
+</tbody></table>
+<h3 id="★-Sharing-Mode-详解（最容易配错的地方）"><a href="#★-Sharing-Mode-详解（最容易配错的地方）" class="headerlink" title="★ Sharing Mode 详解（最容易配错的地方）"></a>★ Sharing Mode 详解（最容易配错的地方）</h3><table>
+<thead>
+<tr>
+<th>模式</th>
+<th>行为</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>all</code></td>
+<td><strong>所有线程共享同一迭代指针</strong>，轮流读不同行</td>
+<td><strong>每个虚拟用户读不同数据</strong></td>
+</tr>
+<tr>
+<td><code>thread</code></td>
+<td><strong>每个线程独立迭代指针</strong>，各自从头读</td>
+<td>所有用户用同一组数据</td>
+</tr>
+<tr>
+<td><code>currentGroup</code></td>
+<td>当前线程组内共享</td>
+<td>线程组隔离</td>
+</tr>
+</tbody></table>
+<p><strong>这个选择直接决定测试是否有意义：</strong></p>
+<blockquote>
+<p>⚠️ <strong>常见踩坑</strong>：设了 <code>all</code> 但线程数 &gt; CSV 行数 → 读完循环后又从头开始，导致数据重复。</p>
+<p>如果业务上有唯一性要求（比如注册不同用户名），可能出现”用户名已存在”的失败，<strong>而这失败其实是测试数据没准备好，不是系统问题</strong>。</p>
+</blockquote>
+<p><strong>配错的表现</strong>：</p>
+<ul>
+<li>想让每个用户用不同账号，结果用了 <code>thread</code> → <strong>所有用户都在用第一行数据</strong>，等于没参数化</li>
+<li>想让所有用户循环用同一组数据，结果用了 <code>all</code> → 线程数超过行数后数据错乱</li>
+</ul>
+<h3 id="实战配置"><a href="#实战配置" class="headerlink" title="实战配置"></a>实战配置</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CSV 文件: day5_param_pages.csv</span><br><span class="line">page_id,page_title,expected_status</span><br><span class="line">1,Post One,200</span><br><span class="line">2,Post Two,200</span><br><span class="line">3,Post Three,200</span><br><span class="line">4,Post Four,200</span><br><span class="line">5,Post Five,200</span><br></pre></td></tr></table></figure>
+
+<p><strong>引用方式：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">URL 路径：/posts/$&#123;page_id&#125;          →  第 1 次循环请求 /posts/1</span><br><span class="line">断言参数：$&#123;expected_status&#125;         →  动态期望状态码</span><br><span class="line">JSON 断言：$&#123;page_id&#125;                →  动态期望字段值</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 最后一条值得注意：<strong>期望值也能参数化</strong>。这样同一个采样器就能覆盖”不同输入 → 不同期望输出”的多种场景，不用为每个场景单独建采样器。</p>
+</blockquote>
+<h3 id="多列-CSV"><a href="#多列-CSV" class="headerlink" title="多列 CSV"></a>多列 CSV</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">username,password,email,role</span><br><span class="line">admin,admin123,admin@test.com,administrator</span><br><span class="line">testuser1,pass111,user1@test.com,normal</span><br></pre></td></tr></table></figure>
+
+<p>POST 请求体同时引用 4 列：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Post by $&#123;username&#125;($&#123;role&#125;)&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;body&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Email:$&#123;email&#125; | Password:$&#123;password&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;userId&quot;</span><span class="punctuation">:</span> $<span class="punctuation">&#123;</span>__Random(<span class="number">1</span><span class="punctuation">,</span><span class="number">10</span><span class="punctuation">,</span>user_id)<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、用户定义变量（全局-局部）"><a href="#二、用户定义变量（全局-局部）" class="headerlink" title="二、用户定义变量（全局 &#x2F; 局部）"></a>二、用户定义变量（全局 &#x2F; 局部）</h2><h3 id="两级作用域"><a href="#两级作用域" class="headerlink" title="两级作用域"></a>两级作用域</h3><table>
+<thead>
+<tr>
+<th>级别</th>
+<th>位置</th>
+<th>作用域</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TestPlan 级</strong></td>
+<td>测试计划 → 用户定义变量</td>
+<td><strong>所有线程组共享</strong></td>
+<td>低（可被覆盖）</td>
+</tr>
+<tr>
+<td><strong>线程组级</strong></td>
+<td>线程组内 → Arguments 元件</td>
+<td><strong>只在本线程组内可见</strong></td>
+<td>高（覆盖上级）</td>
+</tr>
+</tbody></table>
+<p><strong>覆盖规则</strong>：子级覆盖父级，但<strong>不能跨线程组引用局部变量</strong>。</p>
+<h3 id="实战变量"><a href="#实战变量" class="headerlink" title="实战变量"></a>实战变量</h3><table>
+<thead>
+<tr>
+<th>变量</th>
+<th>值</th>
+<th>级别</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>BASE_URL</code></td>
+<td><code>jsonplaceholder.typicode.com</code></td>
+<td>TestPlan 级</td>
+<td>统一域名</td>
+</tr>
+<tr>
+<td><code>PROTOCOL</code></td>
+<td><code>http</code></td>
+<td>TestPlan 级</td>
+<td>统一协议</td>
+</tr>
+<tr>
+<td><code>TEST_TAG</code></td>
+<td><code>Day5-ParamTest</code></td>
+<td>TestPlan 级</td>
+<td>测试标记</td>
+</tr>
+<tr>
+<td><code>LOCAL_TAG</code></td>
+<td><code>ThreadGroup2-Demo</code></td>
+<td>线程组级</td>
+<td>线程组 2 专用</td>
+</tr>
+<tr>
+<td><code>RANDOM_POST_ID</code></td>
+<td><code>$&#123;__Random(1,100,rand_post)&#125;</code></td>
+<td>线程组级</td>
+<td>动态变量</td>
+</tr>
+</tbody></table>
+<h3 id="HTTP-请求默认值-vs-用户定义变量"><a href="#HTTP-请求默认值-vs-用户定义变量" class="headerlink" title="HTTP 请求默认值 vs 用户定义变量"></a>HTTP 请求默认值 vs 用户定义变量</h3><p>这两个容易混，区别在于：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>HTTP Request Defaults</th>
+<th>用户定义变量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>作用</strong></td>
+<td>填<strong>采样器留空</strong>的字段</td>
+<td><strong>主动替换</strong> <code>$&#123;变量&#125;</code> 引用</td>
+</tr>
+<tr>
+<td><strong>感觉</strong></td>
+<td>“默认值”</td>
+<td>“变量”</td>
+</tr>
+</tbody></table>
+<p><strong>实践建议</strong>：域名、协议、端口用 <strong>HTTP Request Defaults</strong>；业务数据用<strong>用户定义变量</strong>。</p>
+<hr>
+<h2 id="三、动态参数化：内置函数"><a href="#三、动态参数化：内置函数" class="headerlink" title="三、动态参数化：内置函数"></a>三、动态参数化：内置函数</h2><p><strong>静态数据（CSV）+ 动态数据（函数）</strong> 组合，才能构造出真实、唯一、可追溯的请求。</p>
+<h3 id="常用函数速查"><a href="#常用函数速查" class="headerlink" title="常用函数速查"></a>常用函数速查</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>语法</th>
+<th>返回值</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>__Random</code></td>
+<td><code>$&#123;__Random(min,max,var)&#125;</code></td>
+<td>min~max 随机整数</td>
+<td>随机 ID、随机字段</td>
+</tr>
+<tr>
+<td><code>__counter</code></td>
+<td><code>$&#123;__counter(TRUE,var)&#125;</code></td>
+<td>递增计数器</td>
+<td>迭代编号、UA 标记</td>
+</tr>
+<tr>
+<td><code>__threadNum</code></td>
+<td><code>$&#123;__threadNum()&#125;</code></td>
+<td>当前线程号（1,2,…）</td>
+<td>区分不同线程的请求</td>
+</tr>
+<tr>
+<td><code>__time</code></td>
+<td><code>$&#123;__time(format,var)&#125;</code></td>
+<td>时间戳</td>
+<td>请求 ID、日志标记</td>
+</tr>
+<tr>
+<td><code>__UUID</code></td>
+<td><code>$&#123;__UUID()&#125;</code></td>
+<td>UUID 字符串</td>
+<td>唯一标识符</td>
+</tr>
+</tbody></table>
+<h3 id="counter-的参数很关键"><a href="#counter-的参数很关键" class="headerlink" title="__counter 的参数很关键"></a><code>__counter</code> 的参数很关键</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>TRUE</code>（per-thread）</td>
+<td><strong>每个线程独立计数</strong>：线程 1 是 1,2,3…；线程 2 也是 1,2,3…</td>
+</tr>
+<tr>
+<td><code>FALSE</code>（global）</td>
+<td><strong>全局共享计数</strong>：所有线程共用 1,2,3,4,5,6…</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>选择标准</strong>：要”每个用户的第几次操作”用 <code>TRUE</code>；要”全局唯一序号”用 <code>FALSE</code>。</p>
+</blockquote>
+<h3 id="time-格式参数"><a href="#time-格式参数" class="headerlink" title="__time 格式参数"></a><code>__time</code> 格式参数</h3><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>空或 <code>time</code></td>
+<td><code>1783041196150</code>（Unix 毫秒时间戳）</td>
+</tr>
+<tr>
+<td><code>YMDHMS</code></td>
+<td><code>20260703091316</code></td>
+</tr>
+<tr>
+<td><code>YMD</code></td>
+<td><code>20260703</code></td>
+</tr>
+<tr>
+<td><code>HMS</code></td>
+<td><code>091316</code></td>
+</tr>
+</tbody></table>
+<h3 id="★-组合案例：4-个函数拼出唯一请求体"><a href="#★-组合案例：4-个函数拼出唯一请求体" class="headerlink" title="★ 组合案例：4 个函数拼出唯一请求体"></a>★ 组合案例：4 个函数拼出唯一请求体</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;TEST_TAG&#125;-Thread$&#123;__threadNum()&#125;-Iter$&#123;__counter(TRUE,iter_cnt)&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;body&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Auto test at $&#123;__time(YMDHMS,ts)&#125; - randomId=$&#123;__Random(1,50,body_rand)&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;userId&quot;</span><span class="punctuation">:</span> $<span class="punctuation">&#123;</span>__threadNum()<span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>每个请求的 body 都独一无二：</strong></p>
+<ul>
+<li>线程 1 第 1 次：<code>Day5-ParamTest-Thread1-Iter1 / 20260703091316-3247 / userId=1</code></li>
+<li>线程 2 第 2 次：<code>Day5-ParamTest-Thread2-Iter2 / 20260703091322-8751 / userId=2</code></li>
+</ul>
+<p><strong>请求头也用函数：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">X-Request-Id: $&#123;__time(YMDHMS,)&#125;-$&#123;__Random(1000,9999,req_rand)&#125;</span><br><span class="line">User-Agent: JMeter-Day5-Param/$&#123;__counter(FALSE,)&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>💡 <strong>为什么要给每个请求打唯一标记？</strong></p>
+<p>当压测出现异常请求时，你可以<strong>用这个标记去服务端日志里精确捞出对应记录</strong>。<br>没有唯一标记的话，你只知道”有请求失败了”，但无法定位是哪一次、什么参数。</p>
+<p><strong>这是”可观测性”在压测里的体现</strong> —— 好的压测不只是”发出去了”，还得能”查得回来”。</p>
+</blockquote>
+<hr>
+<h2 id="四、实测结果"><a href="#四、实测结果" class="headerlink" title="四、实测结果"></a>四、实测结果</h2><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>总样本数</td>
+<td>44</td>
+</tr>
+<tr>
+<td>错误率</td>
+<td>0.00%</td>
+</tr>
+<tr>
+<td>吞吐量</td>
+<td>7.3&#x2F;s</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、小结"><a href="#五、小结" class="headerlink" title="五、小结"></a>五、小结</h2><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>静态参数化</strong></td>
+<td>CSV Data Set Config</td>
+</tr>
+<tr>
+<td><strong>Sharing Mode</strong></td>
+<td><code>all</code>&#x3D;各用户不同数据 &#x2F; <code>thread</code>&#x3D;各用户相同数据</td>
+</tr>
+<tr>
+<td><strong>Recycle &#x2F; Stop on EOF</strong></td>
+<td>决定数据读完后的行为，配错会导致数据重复</td>
+</tr>
+<tr>
+<td><strong>两级变量</strong></td>
+<td>TestPlan 级全局、线程组级局部（覆盖上级）</td>
+</tr>
+<tr>
+<td><strong>动态函数</strong></td>
+<td>Random &#x2F; counter &#x2F; threadNum &#x2F; time &#x2F; UUID</td>
+</tr>
+<tr>
+<td><strong>组合价值</strong></td>
+<td>静态 + 动态 &#x3D; 真实、唯一、可追溯的请求</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>本课要点</strong>：硬编码的压测是假的｜Sharing Mode 决定测试有没有意义｜给每个请求打唯一标记</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag"># 性能测试</a>
+              <a href="/tags/JMeter/" rel="tag"># JMeter</a>
+              <a href="/tags/%E5%8F%82%E6%95%B0%E5%8C%96/" rel="tag"># 参数化</a>
+              <a href="/tags/CSV/" rel="tag"># CSV</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8/" rel="tag"># 数据驱动</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/02/mysql-chapter7-transaction-lock/" rel="prev" title="MySQL 实战 · 第4章：事务、锁与并发问题">
+                  <i class="fa fa-angle-left"></i> MySQL 实战 · 第4章：事务、锁与并发问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/13/mysql-chapter8-python-automation/" rel="next" title="MySQL 实战 · 第5章：Python + MySQL 测试数据自动化">
+                  MySQL 实战 · 第5章：Python + MySQL 测试数据自动化 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

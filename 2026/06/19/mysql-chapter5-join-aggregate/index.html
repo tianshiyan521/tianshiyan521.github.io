@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="真实的项目里，数据几乎不会只存在一张表里。 玩家信息在 players，背包在 backpack，装备属性在 equipment，战斗记录在 battle_records…… 想看”某个玩家的攻击力总和”，就得跨表查。 这就是关联查询。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 实战 · 第2章：聚合、分组与多表关联">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/06/19/mysql-chapter5-join-aggregate/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="真实的项目里，数据几乎不会只存在一张表里。 玩家信息在 players，背包在 backpack，装备属性在 equipment，战斗记录在 battle_records…… 想看”某个玩家的攻击力总和”，就得跨表查。 这就是关联查询。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-19T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:10:39.767Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="SQL">
+<meta property="article:tag" content="JOIN">
+<meta property="article:tag" content="GROUP BY">
+<meta property="article:tag" content="聚合函数">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/06/19/mysql-chapter5-join-aggregate/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/06/19/mysql-chapter5-join-aggregate/","path":"2026/06/19/mysql-chapter5-join-aggregate/","title":"MySQL 实战 · 第2章：聚合、分组与多表关联"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MySQL 实战 · 第2章：聚合、分组与多表关联 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BA%94%E5%A4%A7%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0"><span class="nav-number">1.</span> <span class="nav-text">一、五大聚合函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-COUNT-vs-COUNT-%E5%AD%97%E6%AE%B5-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.</span> <span class="nav-text">⚠️ COUNT(*) vs COUNT(字段) 的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-AVG-%E4%BC%9A%E8%87%AA%E5%8A%A8%E5%BF%BD%E7%95%A5-NULL"><span class="nav-number">1.2.</span> <span class="nav-text">⚠️ AVG 会自动忽略 NULL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81GROUP-BY-%E5%88%86%E7%BB%84"><span class="nav-number">2.</span> <span class="nav-text">二、GROUP BY 分组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%98%85-WHERE-vs-HAVING%EF%BC%88%E9%AB%98%E9%A2%91%E8%80%83%E7%82%B9%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">★ WHERE vs HAVING（高频考点）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%9B%9B%E7%A7%8D-JOIN"><span class="nav-number">3.</span> <span class="nav-text">三、四种 JOIN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%98%85-LEFT-JOIN-%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84%E7%94%A8%E9%80%94%EF%BC%9A%E6%89%BE%E2%80%9D%E6%B2%A1%E6%9C%89%E5%85%B3%E8%81%94%E6%95%B0%E6%8D%AE%E2%80%9D%E7%9A%84%E8%AE%B0%E5%BD%95"><span class="nav-number">3.1.</span> <span class="nav-text">★ LEFT JOIN 最常见的用途：找”没有关联数据”的记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-CROSS-JOIN-%E7%9A%84%E5%9D%91"><span class="nav-number">3.2.</span> <span class="nav-text">⚠️ CROSS JOIN 的坑</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%A4%9A%E8%A1%A8%E5%85%B3%E8%81%94%EF%BC%883-%E8%A1%A8%E4%BB%A5%E4%B8%8A%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">四、多表关联（3 表以上）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5"><span class="nav-number">4.1.</span> <span class="nav-text">自连接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%BB%99%E6%B5%8B%E8%AF%95%E7%9A%84%E5%AE%9E%E7%94%A8%E6%9F%A5%E8%AF%A2"><span class="nav-number">5.</span> <span class="nav-text">五、给测试的实用查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0-%E7%BB%9F%E8%AE%A1%E5%90%84%E6%A8%A1%E5%9D%97%E7%9A%84-BUG-%E5%88%86%E5%B8%83"><span class="nav-number">5.1.</span> <span class="nav-text">① 统计各模块的 BUG 分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1-%E6%89%BE%E5%87%BA%E2%80%9D%E5%BA%94%E8%AF%A5%E5%8F%91%E5%A5%96%E4%BD%86%E6%B2%A1%E5%8F%91%E2%80%9D%E7%9A%84%E7%8E%A9%E5%AE%B6"><span class="nav-number">5.2.</span> <span class="nav-text">② 找出”应该发奖但没发”的玩家</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A2-%E9%AA%8C%E8%AF%81%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%88%E8%B7%A8%E8%A1%A8%E6%A0%B8%E5%AF%B9%EF%BC%89"><span class="nav-number">5.3.</span> <span class="nav-text">③ 验证数据一致性（跨表核对）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E5%B0%8F%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">六、小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/19/mysql-chapter5-join-aggregate/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MySQL 实战 · 第2章：聚合、分组与多表关联 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL 实战 · 第2章：聚合、分组与多表关联
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-19 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-19T09:00:00+08:00">2026-06-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:10:39" itemprop="dateModified" datetime="2026-09-30T10:10:39+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>真实的项目里，<strong>数据几乎不会只存在一张表里</strong>。</p>
+<p>玩家信息在 <code>players</code>，背包在 <code>backpack</code>，装备属性在 <code>equipment</code>，战斗记录在 <code>battle_records</code>……</p>
+<p><strong>想看”某个玩家的攻击力总和”，就得跨表查。</strong> 这就是关联查询。</p>
+<span id="more"></span>
+
+<h2 id="一、五大聚合函数"><a href="#一、五大聚合函数" class="headerlink" title="一、五大聚合函数"></a>一、五大聚合函数</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">COUNT <span class="operator">/</span> SUM <span class="operator">/</span> AVG <span class="operator">/</span> MAX <span class="operator">/</span> MIN</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- COUNT：统计行数</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> players;                   <span class="comment">-- 所有行（含 NULL）</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(level) <span class="keyword">FROM</span> players;               <span class="comment">-- level 非 NULL 的行数</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="keyword">DISTINCT</span> server_id) <span class="keyword">FROM</span> players;  <span class="comment">-- 不同服务器数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- SUM / AVG / MAX / MIN</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(gold) <span class="keyword">FROM</span> players;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">AVG</span>(level) <span class="keyword">FROM</span> players;</span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">MAX</span>(level), <span class="built_in">MIN</span>(level) <span class="keyword">FROM</span> players;</span><br></pre></td></tr></table></figure>
+
+<h3 id="⚠️-COUNT-vs-COUNT-字段-的区别"><a href="#⚠️-COUNT-vs-COUNT-字段-的区别" class="headerlink" title="⚠️ COUNT(*) vs COUNT(字段) 的区别"></a>⚠️ <code>COUNT(*)</code> vs <code>COUNT(字段)</code> 的区别</h3><p><strong>这是最容易出错的地方：</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> players;         <span class="comment">-- 统计总行数</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(phone) <span class="keyword">FROM</span> players;     <span class="comment">-- 只统计 phone 不为 NULL 的行数</span></span><br></pre></td></tr></table></figure>
+
+<p>如果 100 个玩家里有 30 个没填手机号：</p>
+<ul>
+<li><code>COUNT(*)</code> → <strong>100</strong></li>
+<li><code>COUNT(phone)</code> → <strong>70</strong></li>
+</ul>
+<p><strong>“这个字段有没有填”的统计，必须用 <code>COUNT(字段)</code>。</strong></p>
+<h3 id="⚠️-AVG-会自动忽略-NULL"><a href="#⚠️-AVG-会自动忽略-NULL" class="headerlink" title="⚠️ AVG 会自动忽略 NULL"></a>⚠️ AVG 会自动忽略 NULL</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 假设有 3 个玩家：level 分别是 10、20、NULL</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="built_in">AVG</span>(level) <span class="keyword">FROM</span> players;    <span class="comment">-- 结果 15，不是 10</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>AVG 的分母是”非 NULL 的行数”，不是总行数。</strong></p>
+<p>统计时如果没意识到这点，算出来的”平均等级”会偏高。要包含 NULL 就得用：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">SUM</span>(level) <span class="operator">/</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> players;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、GROUP-BY-分组"><a href="#二、GROUP-BY-分组" class="headerlink" title="二、GROUP BY 分组"></a>二、GROUP BY 分组</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 按服务器统计玩家数</span></span><br><span class="line"><span class="keyword">SELECT</span> server_id, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> player_count</span><br><span class="line"><span class="keyword">FROM</span> players</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> server_id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 多字段分组</span></span><br><span class="line"><span class="keyword">SELECT</span> server_id, vip_level, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> player_count</span><br><span class="line"><span class="keyword">FROM</span> players</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> server_id, vip_level;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 分组 + 多种聚合</span></span><br><span class="line"><span class="keyword">SELECT</span> server_id,</span><br><span class="line">       <span class="built_in">AVG</span>(level) <span class="keyword">AS</span> avg_level,</span><br><span class="line">       <span class="built_in">SUM</span>(gold)  <span class="keyword">AS</span> total_gold</span><br><span class="line"><span class="keyword">FROM</span> players</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> server_id;</span><br></pre></td></tr></table></figure>
+
+<h3 id="★-WHERE-vs-HAVING（高频考点）"><a href="#★-WHERE-vs-HAVING（高频考点）" class="headerlink" title="★ WHERE vs HAVING（高频考点）"></a>★ WHERE vs HAVING（高频考点）</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>WHERE</th>
+<th>HAVING</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>执行时机</strong></td>
+<td><strong>分组前</strong></td>
+<td><strong>分组后</strong></td>
+</tr>
+<tr>
+<td><strong>过滤对象</strong></td>
+<td>原始行</td>
+<td>分组结果</td>
+</tr>
+<tr>
+<td><strong>能否用聚合函数</strong></td>
+<td>❌ 不能</td>
+<td>✅ 能</td>
+</tr>
+</tbody></table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- ✅ WHERE 过滤原始行（分组前）</span></span><br><span class="line"><span class="keyword">SELECT</span> server_id, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> players</span><br><span class="line"><span class="keyword">WHERE</span> status <span class="operator">=</span> <span class="number">1</span>              <span class="comment">-- 只要正常状态的玩家</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> server_id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- ✅ HAVING 过滤分组结果（分组后）</span></span><br><span class="line"><span class="keyword">SELECT</span> server_id, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> cnt <span class="keyword">FROM</span> players</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> server_id</span><br><span class="line"><span class="keyword">HAVING</span> cnt <span class="operator">&gt;</span> <span class="number">100</span>;             <span class="comment">-- 只看玩家数超过 100 的服务器</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>记忆方法</strong>：</p>
+<blockquote>
+<p><strong>WHERE 管”哪些行参与统计”，HAVING 管”哪些统计结果要显示”。</strong></p>
+</blockquote>
+<p><strong>执行顺序</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM → WHERE → GROUP BY → 聚合 → HAVING → SELECT → ORDER BY → LIMIT</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这也解释了为什么 <strong>WHERE 里不能用聚合函数</strong> —— 执行 WHERE 时还没算聚合呢。</p>
+</blockquote>
+<hr>
+<h2 id="三、四种-JOIN"><a href="#三、四种-JOIN" class="headerlink" title="三、四种 JOIN"></a>三、四种 JOIN</h2><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>行为</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>INNER JOIN</strong></td>
+<td>取<strong>交集</strong></td>
+<td>只返回两表都匹配的行</td>
+</tr>
+<tr>
+<td><strong>LEFT JOIN</strong></td>
+<td><strong>左表全保留</strong></td>
+<td>右表匹配不到填 NULL</td>
+</tr>
+<tr>
+<td><strong>RIGHT JOIN</strong></td>
+<td><strong>右表全保留</strong></td>
+<td>左表匹配不到填 NULL</td>
+</tr>
+<tr>
+<td><strong>CROSS JOIN</strong></td>
+<td><strong>笛卡尔积</strong></td>
+<td>左表行数 × 右表行数</td>
+</tr>
+</tbody></table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- INNER JOIN：只查出有背包物品的玩家</span></span><br><span class="line"><span class="keyword">SELECT</span> a.player_name, b.item_name</span><br><span class="line"><span class="keyword">FROM</span> player a</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> backpack b <span class="keyword">ON</span> a.player_id <span class="operator">=</span> b.player_id;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- LEFT JOIN：所有玩家都显示，没物品的 item_name 为 NULL</span></span><br><span class="line"><span class="keyword">SELECT</span> a.player_name, b.item_name</span><br><span class="line"><span class="keyword">FROM</span> player a</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> backpack b <span class="keyword">ON</span> a.player_id <span class="operator">=</span> b.player_id;</span><br></pre></td></tr></table></figure>
+
+<h3 id="★-LEFT-JOIN-最常见的用途：找”没有关联数据”的记录"><a href="#★-LEFT-JOIN-最常见的用途：找”没有关联数据”的记录" class="headerlink" title="★ LEFT JOIN 最常见的用途：找”没有关联数据”的记录"></a>★ LEFT JOIN 最常见的用途：找”没有关联数据”的记录</h3><p><strong>这是测试场景里的高频需求。</strong></p>
+<blockquote>
+<p>“找出所有<strong>没有</strong>登录过的玩家”<br>“找出所有<strong>没有</strong>绑定手机的账号”<br>“找出所有<strong>没有</strong>收到奖励的玩家”</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 找出没有背包物品的玩家</span></span><br><span class="line"><span class="keyword">SELECT</span> a.player_name</span><br><span class="line"><span class="keyword">FROM</span> player a</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> backpack b <span class="keyword">ON</span> a.player_id <span class="operator">=</span> b.player_id</span><br><span class="line"><span class="keyword">WHERE</span> b.player_id <span class="keyword">IS</span> <span class="keyword">NULL</span>;      <span class="comment">-- ← 关键：右表匹配不到的，就是没有关联的</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>这个套路很值得记</strong>：LEFT JOIN 之后 <code>WHERE 右表.主键 IS NULL</code>，就能筛出”左表有、右表没有”的记录。</p>
+<p><strong>测试中验证”数据该发的都发了吗”，用的就是这招。</strong></p>
+</blockquote>
+<h3 id="⚠️-CROSS-JOIN-的坑"><a href="#⚠️-CROSS-JOIN-的坑" class="headerlink" title="⚠️ CROSS JOIN 的坑"></a>⚠️ CROSS JOIN 的坑</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.player_name, b.skin_name</span><br><span class="line"><span class="keyword">FROM</span> player a</span><br><span class="line"><span class="keyword">CROSS</span> <span class="keyword">JOIN</span> skin b;</span><br></pre></td></tr></table></figure>
+
+<p><strong>有 100 个玩家、50 款皮肤 → 结果 5000 行。</strong></p>
+<p><strong>如果不小心在 JOIN 时漏写 ON 条件，就等于在做 CROSS JOIN</strong>：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- ⚠️ 漏了 ON 条件（或 ON 条件写错）</span></span><br><span class="line"><span class="keyword">SELECT</span> a.player_name, b.item_name</span><br><span class="line"><span class="keyword">FROM</span> player a, backpack b;</span><br><span class="line"><span class="comment">-- 结果 = 玩家数 × 背包记录数，可能几百万行，数据库直接卡死</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>这是”慢查询”最常见的成因之一</strong>，排查时第一眼就该看 JOIN 条件写全了没。</p>
+<hr>
+<h2 id="四、多表关联（3-表以上）"><a href="#四、多表关联（3-表以上）" class="headerlink" title="四、多表关联（3 表以上）"></a>四、多表关联（3 表以上）</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查：玩家名 + 装备名 + 装备属性</span></span><br><span class="line"><span class="keyword">SELECT</span> p.player_name, e.equip_name, e.attack_power, e.defense_power</span><br><span class="line"><span class="keyword">FROM</span> player p</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> backpack bp <span class="keyword">ON</span> p.player_id <span class="operator">=</span> bp.player_id</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> equipment e <span class="keyword">ON</span> bp.equip_id <span class="operator">=</span> e.equip_id</span><br><span class="line"><span class="keyword">WHERE</span> e.attack_power <span class="operator">&gt;</span> <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>链路</strong>：<code>player → backpack（中间表） → equipment</code></p>
+<blockquote>
+<p>这种”<strong>通过中间表关联</strong>“的结构很常见：<br>玩家和装备是<strong>多对多</strong>关系（一个玩家多件装备，一件装备可被多个玩家拥有），<br>所以需要一个中间表 <code>backpack</code> 来承载这层关系。</p>
+</blockquote>
+<h3 id="自连接"><a href="#自连接" class="headerlink" title="自连接"></a>自连接</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查每个玩家的推荐人是谁（推荐人也在 player 表里）</span></span><br><span class="line"><span class="keyword">SELECT</span> p.player_name, r.player_name <span class="keyword">AS</span> referrer</span><br><span class="line"><span class="keyword">FROM</span> player p</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> player r <span class="keyword">ON</span> p.referrer_id <span class="operator">=</span> r.player_id;</span><br></pre></td></tr></table></figure>
+
+<p><strong>同一张表 JOIN 自己</strong>，必须起两个不同的别名。</p>
+<p><strong>游戏里的应用场景</strong>：推荐关系、师徒关系、公会层级关系（层级树）。</p>
+<hr>
+<h2 id="五、给测试的实用查询"><a href="#五、给测试的实用查询" class="headerlink" title="五、给测试的实用查询"></a>五、给测试的实用查询</h2><h3 id="①-统计各模块的-BUG-分布"><a href="#①-统计各模块的-BUG-分布" class="headerlink" title="① 统计各模块的 BUG 分布"></a>① 统计各模块的 BUG 分布</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">module</span>, <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> bug_count</span><br><span class="line"><span class="keyword">FROM</span> bug_records</span><br><span class="line"><span class="keyword">WHERE</span> create_time <span class="operator">&gt;=</span> <span class="string">&#x27;2026-09-01&#x27;</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> <span class="keyword">module</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> bug_count <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>用数据说话比”感觉 XX 模块问题多”有说服力得多。</strong></p>
+<h3 id="②-找出”应该发奖但没发”的玩家"><a href="#②-找出”应该发奖但没发”的玩家" class="headerlink" title="② 找出”应该发奖但没发”的玩家"></a>② 找出”应该发奖但没发”的玩家</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> p.player_id, p.username</span><br><span class="line"><span class="keyword">FROM</span> players p</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> reward_records r</span><br><span class="line">       <span class="keyword">ON</span> p.player_id <span class="operator">=</span> r.player_id <span class="keyword">AND</span> r.reward_id <span class="operator">=</span> <span class="number">1001</span></span><br><span class="line"><span class="keyword">WHERE</span> p.vip_level <span class="operator">&gt;=</span> <span class="number">5</span></span><br><span class="line">  <span class="keyword">AND</span> r.player_id <span class="keyword">IS</span> <span class="keyword">NULL</span>;     <span class="comment">-- ← 满足条件但没收到奖励</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>这是上面那个 LEFT JOIN 套路的实战应用。</strong></p>
+<h3 id="③-验证数据一致性（跨表核对）"><a href="#③-验证数据一致性（跨表核对）" class="headerlink" title="③ 验证数据一致性（跨表核对）"></a>③ 验证数据一致性（跨表核对）</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 玩家表记录的金币 vs 流水表加总，是否一致？</span></span><br><span class="line"><span class="keyword">SELECT</span> p.player_id,</span><br><span class="line">       p.gold <span class="keyword">AS</span> 表中金币,</span><br><span class="line">       <span class="built_in">COALESCE</span>(<span class="built_in">SUM</span>(t.amount), <span class="number">0</span>) <span class="keyword">AS</span> 流水加总</span><br><span class="line"><span class="keyword">FROM</span> players p</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> gold_transactions t <span class="keyword">ON</span> p.player_id <span class="operator">=</span> t.player_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> p.player_id, p.gold</span><br><span class="line"><span class="keyword">HAVING</span> p.gold <span class="operator">!=</span> <span class="built_in">COALESCE</span>(<span class="built_in">SUM</span>(t.amount), <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>这条查询能直接找出账目对不上的玩家</strong>——是数据一致性问题排查的经典手法。</p>
+<blockquote>
+<p>💡 <strong><code>HAVING 字段 != 聚合值</code></strong> 这个写法是找”账对不上”的通用套路。<br>换到别的业务也一样：库存 vs 出入库流水、积分 vs 积分流水。</p>
+</blockquote>
+<hr>
+<h2 id="六、小结"><a href="#六、小结" class="headerlink" title="六、小结"></a>六、小结</h2><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>COUNT(*)</strong></td>
+<td>统计总行数；<code>COUNT(字段)</code> 只统计非 NULL</td>
+</tr>
+<tr>
+<td><strong>AVG</strong></td>
+<td>⚠️ 自动忽略 NULL，分母是非 NULL 行数</td>
+</tr>
+<tr>
+<td><strong>WHERE vs HAVING</strong></td>
+<td>WHERE 分组前（不能用聚合）；HAVING 分组后</td>
+</tr>
+<tr>
+<td><strong>INNER JOIN</strong></td>
+<td>交集</td>
+</tr>
+<tr>
+<td><strong>LEFT JOIN</strong></td>
+<td>左表全保留；<code>WHERE 右表 IS NULL</code> 找”没有关联的”</td>
+</tr>
+<tr>
+<td><strong>CROSS JOIN</strong></td>
+<td>⚠️ 漏写 ON 条件 &#x3D; 笛卡尔积 &#x3D; 慢查询</td>
+</tr>
+<tr>
+<td><strong>测试用途</strong></td>
+<td>统计分布 &#x2F; 找漏发数据 &#x2F; 核对账目一致性</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>本课要点</strong>：COUNT(*) 与 COUNT(字段) 不同｜AVG 忽略 NULL｜WHERE 管行 HAVING 管组｜LEFT JOIN + IS NULL 找漏数据</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/SQL/" rel="tag"># SQL</a>
+              <a href="/tags/JOIN/" rel="tag"># JOIN</a>
+              <a href="/tags/GROUP-BY/" rel="tag"># GROUP BY</a>
+              <a href="/tags/%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0/" rel="tag"># 聚合函数</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/16/mysql-chapter4-crud/" rel="prev" title="MySQL 实战 · 第1章：CRUD 基础与查询入门">
+                  <i class="fa fa-angle-left"></i> MySQL 实战 · 第1章：CRUD 基础与查询入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/24/pytest-intro/" rel="next" title="pytest 入门 - 测试框架与常用断言">
+                  pytest 入门 - 测试框架与常用断言 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

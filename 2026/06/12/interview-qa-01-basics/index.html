@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="面试游戏测试时，基础概念和 BUG 管理这两块几乎必问。它们不难，但最容易答得”飘”——很多人能背出定义，却举不出自己项目里的例子。 这篇把这两类题的答题框架整理出来，每题都配了具体的答题思路。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="游戏测试面试题实战 · 基础概念与 BUG 管理">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/06/12/interview-qa-01-basics/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="面试游戏测试时，基础概念和 BUG 管理这两块几乎必问。它们不难，但最容易答得”飘”——很多人能背出定义，却举不出自己项目里的例子。 这篇把这两类题的答题框架整理出来，每题都配了具体的答题思路。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-12T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:03:59.520Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="游戏测试">
+<meta property="article:tag" content="面试题">
+<meta property="article:tag" content="BUG管理">
+<meta property="article:tag" content="用例设计">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/06/12/interview-qa-01-basics/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/06/12/interview-qa-01-basics/","path":"2026/06/12/interview-qa-01-basics/","title":"游戏测试面试题实战 · 基础概念与 BUG 管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>游戏测试面试题实战 · 基础概念与 BUG 管理 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E7%B1%BB"><span class="nav-number">1.</span> <span class="nav-text">一、基础概念类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q1%EF%BC%9A%E6%B8%B8%E6%88%8F%E6%B5%8B%E8%AF%95%E5%92%8C%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E6%9C%89%E4%BB%80%E4%B9%88%E6%9C%AC%E8%B4%A8%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">Q1：游戏测试和软件测试有什么本质区别？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q2%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%92%E7%83%9F%E6%B5%8B%E8%AF%95%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">Q2：什么是冒烟测试？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q3%EF%BC%9AMonkey-%E6%B5%8B%E8%AF%95%E9%80%82%E5%90%88%E6%B8%B8%E6%88%8F%E5%90%97%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">Q3：Monkey 测试适合游戏吗？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81BUG-%E7%AE%A1%E7%90%86%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">二、BUG 管理类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q4%EF%BC%9ABUG-%E4%B8%A5%E9%87%8D%E7%AD%89%E7%BA%A7%E6%80%8E%E4%B9%88%E5%88%92%E5%88%86%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">Q4：BUG 严重等级怎么划分？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q5%EF%BC%9ABUG-%E6%8A%A5%E5%91%8A%E6%80%8E%E4%B9%88%E5%86%99%E6%89%8D%E7%AE%97%E5%90%88%E6%A0%BC%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">Q5：BUG 报告怎么写才算合格？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q6%EF%BC%9A%E5%81%B6%E7%8E%B0-BUG-%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">Q6：偶现 BUG 怎么处理？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q7%EF%BC%9A%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%9E%E5%BD%92%E6%B5%8B%E8%AF%95%EF%BC%9F%E4%B8%BA%E4%BB%80%E4%B9%88%E9%87%8D%E8%A6%81%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">Q7：什么是回归测试？为什么重要？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%B7%A5%E5%85%B7%E4%B8%8E%E8%83%BD%E5%8A%9B%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">三、工具与能力类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q8%EF%BC%9A%E4%BD%A0%E7%86%9F%E6%82%89%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">Q8：你熟悉的自动化测试工具有哪些？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q9%EF%BC%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E5%9C%A8%E6%B8%B8%E6%88%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E6%80%8E%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">Q9：自动化测试在游戏测试中怎么用？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%80%BB%E8%BE%91%E4%B8%8E%E5%9C%BA%E6%99%AF%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">四、逻辑与场景题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Q10%EF%BC%9A%E4%B8%8A%E7%BA%BF%E5%89%8D%E4%B8%80%E5%A4%A9%E5%8F%91%E7%8E%B0%E4%B8%80%E4%B8%AA%E5%81%B6%E7%8E%B0%E9%97%AA%E9%80%80-BUG%EF%BC%8C%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">Q10：上线前一天发现一个偶现闪退 BUG，怎么办？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q11%EF%BC%9A%E6%9F%90%E4%B8%AA%E6%80%AA%E7%89%A9%E6%8E%89%E8%90%BD%E7%8E%87-5-%EF%BC%8C%E6%80%8E%E4%B9%88%E9%AA%8C%E8%AF%81%EF%BC%9F"><span class="nav-number">4.2.</span> <span class="nav-text">Q11：某个怪物掉落率 5%，怎么验证？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q12%EF%BC%9A%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1%E4%B8%80%E4%B8%AA%E6%96%B0%E5%8A%9F%E8%83%BD%E7%9A%84%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%EF%BC%9F"><span class="nav-number">4.3.</span> <span class="nav-text">Q12：怎么设计一个新功能的测试用例？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/06/12/interview-qa-01-basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="游戏测试面试题实战 · 基础概念与 BUG 管理 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          游戏测试面试题实战 · 基础概念与 BUG 管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-06-12 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T09:00:00+08:00">2026-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:03:59" itemprop="dateModified" datetime="2026-09-30T10:03:59+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>面试游戏测试时，基础概念和 BUG 管理这两块几乎必问。它们不难，但最容易答得”飘”——很多人能背出定义，却举不出自己项目里的例子。</p>
+<p>这篇把这两类题的答题框架整理出来，每题都配了具体的答题思路。</p>
+<span id="more"></span>
+
+<h2 id="一、基础概念类"><a href="#一、基础概念类" class="headerlink" title="一、基础概念类"></a>一、基础概念类</h2><h3 id="Q1：游戏测试和软件测试有什么本质区别？"><a href="#Q1：游戏测试和软件测试有什么本质区别？" class="headerlink" title="Q1：游戏测试和软件测试有什么本质区别？"></a>Q1：游戏测试和软件测试有什么本质区别？</h3><p>标准答案会说”游戏测试多了体验维度”，但这样答太干。我给一个更好用的框架：</p>
+<p><strong>核心区别一句话：软件测试验证”对不对”，游戏测试还要验证”好不好玩”。</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>软件测试</th>
+<th>游戏测试</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>目标</td>
+<td>功能正确、无 BUG</td>
+<td>功能正确 + 体验流畅 + 趣味性</td>
+</tr>
+<tr>
+<td>判定标准</td>
+<td>客观（通过&#x2F;不通过）</td>
+<td>主客观混合，主观占比大</td>
+</tr>
+<tr>
+<td>性能关注</td>
+<td>响应时间、并发量</td>
+<td>帧率、卡顿、发热、耗电</td>
+</tr>
+<tr>
+<td>兼容性</td>
+<td>浏览器&#x2F;系统版本</td>
+<td>机型 + GPU + 分辨率 + 操作方式</td>
+</tr>
+<tr>
+<td>UI 测试</td>
+<td>布局正确、交互正常</td>
+<td>还要看美术表现、动效节奏、操作手感</td>
+</tr>
+<tr>
+<td>用户行为</td>
+<td>按预期路径操作</td>
+<td>玩家会做各种”不按套路出牌”的事</td>
+</tr>
+</tbody></table>
+<p><strong>关键在举例。</strong> 面试官想听的是你能不能划清边界：</p>
+<ul>
+<li><strong>软件测试思维就够的场景</strong>：商城购买道具 → 验证扣钻石正确、道具到账、异常处理。这跟测电商支付没本质区别。</li>
+<li><strong>必须用游戏测试思维的场景</strong>：多人同屏战斗 → 不仅要验证胜负结算正确，还得关注：<ul>
+<li>20 人同屏时帧率是否稳定（纯软件测试不测帧率）</li>
+<li>技能特效是否遮挡关键 UI（美术 + 交互的交叉问题）</li>
+<li>击杀反馈的震动&#x2F;音效&#x2F;飘字节奏是否”爽”（纯体验层）</li>
+<li>低端机玩 30 分钟后是否烫手（游戏独有维度）</li>
+<li>玩家连打 10 场是否无聊（留存与疲劳度）</li>
+</ul>
+</li>
+</ul>
+<p>一句话总结：<strong>软件测试保证”能用”，游戏测试还得保证”玩家愿意一直用”。</strong></p>
+<h3 id="Q2：什么是冒烟测试？"><a href="#Q2：什么是冒烟测试？" class="headerlink" title="Q2：什么是冒烟测试？"></a>Q2：什么是冒烟测试？</h3><p>对新版本做<strong>基础功能快速验证</strong>，核心功能可用才进入深入测试。</p>
+<p>我喜欢用开发视角解释它存在的意义：如果连登录都进不去，你再花两天测活动玩法全是白费。冒烟测试就是**用最小成本判断”这版值不值得测”**。</p>
+<h3 id="Q3：Monkey-测试适合游戏吗？"><a href="#Q3：Monkey-测试适合游戏吗？" class="headerlink" title="Q3：Monkey 测试适合游戏吗？"></a>Q3：Monkey 测试适合游戏吗？</h3><p>随机生成大量操作输入，<strong>适合发现崩溃类问题，对逻辑性 BUG 帮助有限</strong>。</p>
+<p>游戏里的实际用法是：版本提测时先跑一轮 Monkey 看有没有必崩的点，跑通过后再开始正式用例。它替代不了用例，但能当一个廉价的兜底网。</p>
+<hr>
+<h2 id="二、BUG-管理类"><a href="#二、BUG-管理类" class="headerlink" title="二、BUG 管理类"></a>二、BUG 管理类</h2><h3 id="Q4：BUG-严重等级怎么划分？"><a href="#Q4：BUG-严重等级怎么划分？" class="headerlink" title="Q4：BUG 严重等级怎么划分？"></a>Q4：BUG 严重等级怎么划分？</h3><p>五级划分，每级都要能举出自己项目的例子。下面用 SLG 类项目举例：</p>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>说明</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>致命（Blocker）</td>
+<td>崩溃 &#x2F; 核心流程阻断</td>
+<td>点击核心玩法入口直接闪退，所有玩家无法进入该玩法</td>
+</tr>
+<tr>
+<td>严重（Major）</td>
+<td>核心功能不可用</td>
+<td>商城购买道具扣了钻石但道具未到账，影响付费体验</td>
+</tr>
+<tr>
+<td>一般（Normal）</td>
+<td>功能异常但不阻塞</td>
+<td>自动挂机切到后台 5 分钟后停止攻击，但 UI 仍显示”挂机中”</td>
+</tr>
+<tr>
+<td>轻微（Minor）</td>
+<td>不影响功能的瑕疵</td>
+<td>NPC 名字”迅猛龙”写成”讯猛龙”，一看就出戏</td>
+</tr>
+<tr>
+<td>建议（Suggestion）</td>
+<td>体验优化</td>
+<td>背包已满的提示只停留 0.5 秒，来不及看清</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>记住这个口诀</strong>：致命 &#x3D; 不能玩，严重 &#x3D; 核心玩不了，一般 &#x3D; 能用但不对，轻微 &#x3D; 能用但不爽，建议 &#x3D; 能用但可以更好。</p>
+</blockquote>
+<p>⚠️ <strong>一个常见坑</strong>：等级不是由”技术上多严重”决定，而是由<strong>业务影响面</strong>决定。同一个空指针，崩在登录页是致命，崩在某个冷门成就弹窗上可能就是一般。提 BUG 时把”影响多少用户、走哪条路径能碰到”写清楚，等级自然站得住。</p>
+<h3 id="Q5：BUG-报告怎么写才算合格？"><a href="#Q5：BUG-报告怎么写才算合格？" class="headerlink" title="Q5：BUG 报告怎么写才算合格？"></a>Q5：BUG 报告怎么写才算合格？</h3><p>模板：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">标题：简要描述问题（建议的写法见下）</span><br><span class="line">版本：发现时的版本号</span><br><span class="line">设备：机型 / PC 配置 / 系统版本</span><br><span class="line">步骤：1.打开游戏 → 2.点击XX → 3.……</span><br><span class="line">实际结果：发生了什么</span><br><span class="line">预期结果：应该发生什么</span><br><span class="line">附件：截图 / 日志 / 录屏</span><br></pre></td></tr></table></figure>
+
+<p><strong>标题是最容易被低估的一环。</strong> 对比一下：</p>
+<ul>
+<li>❌ <code>领地争夺有 bug</code> —— 等于没说</li>
+<li>❌ <code>结算有问题</code> —— 还是等于没说</li>
+<li>✅ <code>【领地争夺】两队同时攻打同一块领地时，后结算方覆盖先结算方结果，导致胜利方未获得归属权</code></li>
+</ul>
+<p>好标题 &#x3D; <strong>模块 + 触发条件 + 现象 + 后果</strong>。开发看标题就知道该去翻哪段代码。</p>
+<h3 id="Q6：偶现-BUG-怎么处理？"><a href="#Q6：偶现-BUG-怎么处理？" class="headerlink" title="Q6：偶现 BUG 怎么处理？"></a>Q6：偶现 BUG 怎么处理？</h3><p>偶现 BUG 是测试最头疼的，处理逻辑分四步：</p>
+<ol>
+<li><strong>详细记录</strong>：环境（机型&#x2F;系统&#x2F;网络&#x2F;画质）、时间点、操作步骤、日志。<strong>截图和录屏一定要留</strong>，后面很难再复现。</li>
+<li><strong>尝试多条件复现</strong>：切换设备、切换网络（WiFi&#x2F;4G&#x2F;弱网）、改变操作节奏、连续操作多次、切换账号。同一条操作路径多走几次，往往能摸出触发规律。</li>
+<li><strong>协助开发加日志</strong>：现象说不清时，主动申请在可疑分支加临时日志，下个版本再抓一次。</li>
+<li><strong>标注清楚</strong>：在单子上明确写”偶现，复现率约 X&#x2F;50”，**不要写成”必现”**，误导开发会浪费大量排查时间。</li>
+</ol>
+<blockquote>
+<p>心态上：偶现 BUG 不是”测不出来就不提”。提上去、标清楚复现率，本身就是有价值的输出。</p>
+</blockquote>
+<h3 id="Q7：什么是回归测试？为什么重要？"><a href="#Q7：什么是回归测试？为什么重要？" class="headerlink" title="Q7：什么是回归测试？为什么重要？"></a>Q7：什么是回归测试？为什么重要？</h3><p>修完 BUG 或新增功能后，对<strong>相关区域再次测试</strong>，防止旧问题复发或引入新问题。</p>
+<p>实战里的关键问题是”<strong>相关区域怎么划</strong>“：</p>
+<ul>
+<li>改了领奖逻辑 → 所有发奖入口都要过一遍（活动、邮件、GM 补偿）</li>
+<li>改了背包结构 → 道具的获得、使用、出售、过期全链路都要测</li>
+<li>改了战斗数值计算 → 所有涉及伤害的玩法都要抽测</li>
+</ul>
+<p>划不出范围时，<strong>直接去问开发改了哪些文件</strong>，比凭感觉猜靠谱得多。</p>
+<hr>
+<h2 id="三、工具与能力类"><a href="#三、工具与能力类" class="headerlink" title="三、工具与能力类"></a>三、工具与能力类</h2><h3 id="Q8：你熟悉的自动化测试工具有哪些？"><a href="#Q8：你熟悉的自动化测试工具有哪些？" class="headerlink" title="Q8：你熟悉的自动化测试工具有哪些？"></a>Q8：你熟悉的自动化测试工具有哪些？</h3><p>按场景分，这样答显得有体系：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>工具</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Web 端</td>
+<td>Selenium</td>
+</tr>
+<tr>
+<td>手游 &#x2F; PC 游戏 UI</td>
+<td>Airtest、Poco</td>
+</tr>
+<tr>
+<td>移动端原生 App</td>
+<td>Appium</td>
+</tr>
+<tr>
+<td>Windows 桌面程序</td>
+<td>pywinauto</td>
+</tr>
+<tr>
+<td>接口层</td>
+<td>requests + pytest、Postman</td>
+</tr>
+</tbody></table>
+<h3 id="Q9：自动化测试在游戏测试中怎么用？"><a href="#Q9：自动化测试在游戏测试中怎么用？" class="headerlink" title="Q9：自动化测试在游戏测试中怎么用？"></a>Q9：自动化测试在游戏测试中怎么用？</h3><p><strong>适合</strong>：重复性高、流程固定的测试 —— 跑图、日常任务、回归测试、登录链路、接口校验。</p>
+<p><strong>不适合</strong>：体验评价、主观判断（打击感爽不爽）、一次性场景、频繁变动的 UI。</p>
+<blockquote>
+<p>判断标准很简单：<strong>这件事明天、后天、下个月还要再做一遍吗？</strong> 要的话就值得自动化。</p>
+</blockquote>
+<hr>
+<h2 id="四、逻辑与场景题"><a href="#四、逻辑与场景题" class="headerlink" title="四、逻辑与场景题"></a>四、逻辑与场景题</h2><h3 id="Q10：上线前一天发现一个偶现闪退-BUG，怎么办？"><a href="#Q10：上线前一天发现一个偶现闪退-BUG，怎么办？" class="headerlink" title="Q10：上线前一天发现一个偶现闪退 BUG，怎么办？"></a>Q10：上线前一天发现一个偶现闪退 BUG，怎么办？</h3><p>这题考的不是技术，是<strong>决策与沟通</strong>：</p>
+<ol>
+<li><strong>立刻上报</strong>，同时标注严重等级（崩溃类一般是致命）</li>
+<li><strong>提供所有材料</strong>：日志、复现步骤、复现率、影响范围</li>
+<li><strong>给出你的判断</strong>：是否建议延期上线 —— 但<strong>决策权不在你</strong>，由项目经理和技术负责人拍板</li>
+<li><strong>继续尝试复现</strong>，同时准备好应急方案（热更新回滚、灰度停量）</li>
+</ol>
+<p>⚠️ <strong>答这题千万别逞强说”我自己决定上线”<strong>。测试的正确姿态是：</strong>把风险讲清楚，把决策交给该决策的人。</strong></p>
+<h3 id="Q11：某个怪物掉落率-5-，怎么验证？"><a href="#Q11：某个怪物掉落率-5-，怎么验证？" class="headerlink" title="Q11：某个怪物掉落率 5%，怎么验证？"></a>Q11：某个怪物掉落率 5%，怎么验证？</h3><p>杀 1000 次统计掉落次数，看是否落在置信区间内（期望 50 次 ± 合理偏差）。</p>
+<p><strong>关键在于提”小样本不靠谱”这句</strong>：</p>
+<ul>
+<li>杀 20 次掉了 3 次 → 15%，看起来偏高 → 但样本太小，完全是随机波动</li>
+<li>杀 1000 次掉 58 次 → 5.8% → 才具备参考意义</li>
+</ul>
+<p>如果是高频玩法，用自动化脚本批量跑，比手动杀怪靠谱得多。</p>
+<h3 id="Q12：怎么设计一个新功能的测试用例？"><a href="#Q12：怎么设计一个新功能的测试用例？" class="headerlink" title="Q12：怎么设计一个新功能的测试用例？"></a>Q12：怎么设计一个新功能的测试用例？</h3><p>标准四步：</p>
+<ol>
+<li><strong>读需求文档</strong>，理解功能逻辑和边界规则（不清的地方<strong>当场问策划</strong>，别猜）</li>
+<li>用<strong>等价类划分 + 边界值分析 + 场景法</strong>设计用例</li>
+<li>覆盖四类：正常流程 + 异常流程 + 边界条件 + 兼容性</li>
+<li><strong>标注优先级</strong>（P0&#x2F;P1&#x2F;P2），P0 是核心链路必须过</li>
+</ol>
+<blockquote>
+<p><strong>补充一句加分</strong>：写完用例我会找开发&#x2F;策划过一遍，确认业务规则理解一致——很多漏测其实是”理解错了”，而不是”没想到”。</p>
+</blockquote>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这两类题的共同点是：<strong>答案框架谁都会背，差别全在你举的例子。</strong></p>
+<p>准备面试时，别背文字，去翻自己的工作记录，给每个知识点挂上 1-2 个真实案例。面试官追问”能具体说说吗”的时候，你就稳了。</p>
+<p>下一篇整理<strong>专项测试类</strong>题目：网络稳定性、支付、存档、兼容性、性能、压测。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B8%B8%E6%88%8F%E6%B5%8B%E8%AF%95/" rel="tag"># 游戏测试</a>
+              <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag"># 面试题</a>
+              <a href="/tags/BUG%E7%AE%A1%E7%90%86/" rel="tag"># BUG管理</a>
+              <a href="/tags/%E7%94%A8%E4%BE%8B%E8%AE%BE%E8%AE%A1/" rel="tag"># 用例设计</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/06/12/mysql-intro/" rel="prev" title="MySQL 数据库学习">
+                  <i class="fa fa-angle-left"></i> MySQL 数据库学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/06/12/selenium-intro/" rel="next" title="Selenium - Web 自动化测试">
+                  Selenium - Web 自动化测试 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

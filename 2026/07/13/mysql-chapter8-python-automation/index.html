@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="前面几章都是手动敲 SQL。但测试工作里最需要自动化的，恰恰是数据库操作：  每次跑用例前重置数据 批量造 1000 条测试数据 用例执行后校验数据是否正确落库  这些必须靠代码。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 实战 · 第5章：Python + MySQL 测试数据自动化">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/07/13/mysql-chapter8-python-automation/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="前面几章都是手动敲 SQL。但测试工作里最需要自动化的，恰恰是数据库操作：  每次跑用例前重置数据 批量造 1000 条测试数据 用例执行后校验数据是否正确落库  这些必须靠代码。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-13T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:12:03.637Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="自动化测试">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="pymysql">
+<meta property="article:tag" content="测试数据">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/07/13/mysql-chapter8-python-automation/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/07/13/mysql-chapter8-python-automation/","path":"2026/07/13/mysql-chapter8-python-automation/","title":"MySQL 实战 · 第5章：Python + MySQL 测试数据自动化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MySQL 实战 · 第5章：Python + MySQL 测试数据自动化 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81pymysql-%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">一、pymysql 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%98%85-SQL-%E6%B3%A8%E5%85%A5%EF%BC%9A%E5%8F%82%E6%95%B0%E5%8C%96%E6%9F%A5%E8%AF%A2%E4%B8%8D%E6%98%AF%E5%8F%AF%E9%80%89%E9%A1%B9"><span class="nav-number">1.1.</span> <span class="nav-text">★ SQL 注入：参数化查询不是可选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%BB%93%E6%9E%9C"><span class="nav-number">1.2.</span> <span class="nav-text">获取结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">二、事务管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-with-conn-cursor-%E4%B8%8D%E7%AE%A1%E4%BA%8B%E5%8A%A1"><span class="nav-number">2.1.</span> <span class="nav-text">⚠️ with conn.cursor() 不管事务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%BF%9E%E6%8E%A5%E6%B1%A0%EF%BC%88%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E5%BF%85%E5%A4%87%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">三、连接池（生产环境必备）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E2%98%85-%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">四、★ 封装一个数据库类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E5%B0%81%E8%A3%85%E7%9A%84%E5%9B%9B%E4%B8%AA%E8%AE%BE%E8%AE%A1%E7%82%B9"><span class="nav-number">4.1.</span> <span class="nav-text">这个封装的四个设计点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E2%98%85-%E5%9C%A8%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E9%87%8C%E6%80%8E%E4%B9%88%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">五、★ 在测试用例里怎么用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E9%80%94-1%EF%BC%9A%E7%94%A8%E4%BE%8B%E5%89%8D%E7%BD%AE-%E2%80%94%E2%80%94-%E9%87%8D%E7%BD%AE%E6%95%B0%E6%8D%AE"><span class="nav-number">5.1.</span> <span class="nav-text">用途 1：用例前置 —— 重置数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E9%80%94-2%EF%BC%9A%E6%89%B9%E9%87%8F%E9%80%A0%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE"><span class="nav-number">5.2.</span> <span class="nav-text">用途 2：批量造测试数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E9%80%94-3%EF%BC%9A%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%E6%A0%A1%E9%AA%8C"><span class="nav-number">5.3.</span> <span class="nav-text">用途 3：数据一致性校验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E4%B8%80%E4%B8%AA%E5%AE%9E%E7%94%A8%E7%9A%84%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E7%94%9F%E6%88%90%E5%A5%97%E8%B7%AF"><span class="nav-number">6.</span> <span class="nav-text">六、一个实用的测试数据生成套路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%B0%8F%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">七、小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="涂伟富"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">116</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/07/13/mysql-chapter8-python-automation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MySQL 实战 · 第5章：Python + MySQL 测试数据自动化 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL 实战 · 第5章：Python + MySQL 测试数据自动化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-07-13 09:00:00" itemprop="dateCreated datePublished" datetime="2026-07-13T09:00:00+08:00">2026-07-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-09-30 10:12:03" itemprop="dateModified" datetime="2026-09-30T10:12:03+08:00">2026-09-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/database/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>前面几章都是手动敲 SQL。但<strong>测试工作里最需要自动化的，恰恰是数据库操作</strong>：</p>
+<ul>
+<li>每次跑用例前重置数据</li>
+<li>批量造 1000 条测试数据</li>
+<li>用例执行后校验数据是否正确落库</li>
+</ul>
+<p><strong>这些必须靠代码。</strong></p>
+<span id="more"></span>
+
+<h2 id="一、pymysql-基础"><a href="#一、pymysql-基础" class="headerlink" title="一、pymysql 基础"></a>一、pymysql 基础</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pymysql</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(</span><br><span class="line">    host=<span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">    port=<span class="number">3306</span>,</span><br><span class="line">    user=<span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">    password=<span class="string">&#x27;your_password&#x27;</span>,</span><br><span class="line">    database=<span class="string">&#x27;game_db&#x27;</span>,</span><br><span class="line">    charset=<span class="string">&#x27;utf8mb4&#x27;</span>,</span><br><span class="line">    cursorclass=pymysql.cursors.DictCursor   <span class="comment"># ★ 返回字典而不是元组</span></span><br><span class="line">)</span><br><span class="line">cursor = conn.cursor()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong><code>DictCursor</code> 几乎是必选项。</strong><br>默认游标返回<strong>元组</strong> <code>(1, &#39;张三&#39;, 50)</code>，你得记住第几列是什么。<br>用 <code>DictCursor</code> 返回 **<code>&#123;&#39;id&#39;: 1, &#39;name&#39;: &#39;张三&#39;, &#39;level&#39;: 50&#125;</code>**，可读性天差地别。</p>
+</blockquote>
+<h3 id="★-SQL-注入：参数化查询不是可选项"><a href="#★-SQL-注入：参数化查询不是可选项" class="headerlink" title="★ SQL 注入：参数化查询不是可选项"></a>★ SQL 注入：参数化查询不是可选项</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ❌ 危险：字符串拼接</span></span><br><span class="line">cursor.execute(<span class="string">f&quot;SELECT * FROM players WHERE name = &#x27;<span class="subst">&#123;player_name&#125;</span>&#x27;&quot;</span>)</span><br><span class="line"><span class="comment"># 如果 player_name 是   &#x27; OR &#x27;1&#x27;=&#x27;1</span></span><br><span class="line"><span class="comment"># 拼出来就是：SELECT * FROM players WHERE name = &#x27;&#x27; OR &#x27;1&#x27;=&#x27;1&#x27;  → 查出全表！</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ✅ 正确：参数化查询</span></span><br><span class="line">cursor.execute(<span class="string">&quot;SELECT * FROM players WHERE name = %s&quot;</span>, (player_name,))</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意 pymysql 用 <code>%s</code> 占位符</strong>（不是 <code>?</code>，那是 sqlite3）。</p>
+<blockquote>
+<p>⚠️ <strong>测试人员特别要注意这点</strong>：我们经常用<strong>脏数据</strong>测试（特殊字符、超长串、引号），<br>如果用拼接写法，<strong>测试脚本自己就会崩</strong>，甚至误删数据。</p>
+<p><strong>参数化查询既是安全要求，也是测试脚本稳定性的要求。</strong></p>
+</blockquote>
+<h3 id="获取结果"><a href="#获取结果" class="headerlink" title="获取结果"></a>获取结果</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">row   = cursor.fetchone()        <span class="comment"># 单行</span></span><br><span class="line">rows  = cursor.fetchmany(<span class="number">10</span>)     <span class="comment"># 指定数量</span></span><br><span class="line">all_  = cursor.fetchall()        <span class="comment"># 全部</span></span><br><span class="line">n     = cursor.rowcount          <span class="comment"># 影响行数</span></span><br><span class="line">newid = cursor.lastrowid         <span class="comment"># 最后插入的 ID</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="二、事务管理"><a href="#二、事务管理" class="headerlink" title="二、事务管理"></a>二、事务管理</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 手动事务</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    cursor.execute(<span class="string">&quot;UPDATE accounts SET balance = balance - 100 WHERE id = 1&quot;</span>)</span><br><span class="line">    cursor.execute(<span class="string">&quot;UPDATE accounts SET balance = balance + 100 WHERE id = 2&quot;</span>)</span><br><span class="line">    conn.commit()          <span class="comment"># 提交</span></span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    conn.rollback()        <span class="comment"># 回滚</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;事务失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="⚠️-with-conn-cursor-不管事务"><a href="#⚠️-with-conn-cursor-不管事务" class="headerlink" title="⚠️ with conn.cursor() 不管事务"></a>⚠️ <code>with conn.cursor()</code> 不管事务</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">    cursor.execute(<span class="string">&quot;UPDATE ...&quot;</span>)</span><br><span class="line">    cursor.execute(<span class="string">&quot;UPDATE ...&quot;</span>)</span><br><span class="line">conn.commit()      <span class="comment"># ← 这句仍然必须写！</span></span><br></pre></td></tr></table></figure>
+
+<p><strong><code>with</code> 只负责关闭游标，不会自动提交。</strong></p>
+<p><strong>这是很容易误解的地方</strong> —— 很多人以为 <code>with</code> 就自带事务保护，其实没有。不 commit 的话，改动不会生效。</p>
+<hr>
+<h2 id="三、连接池（生产环境必备）"><a href="#三、连接池（生产环境必备）" class="headerlink" title="三、连接池（生产环境必备）"></a>三、连接池（生产环境必备）</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># pip install DBUtils</span></span><br><span class="line"><span class="keyword">from</span> dbutils.pooled_db <span class="keyword">import</span> PooledDB</span><br><span class="line"></span><br><span class="line">pool = PooledDB(</span><br><span class="line">    creator=pymysql,</span><br><span class="line">    maxconnections=<span class="number">10</span>,    <span class="comment"># 最大连接数</span></span><br><span class="line">    mincached=<span class="number">2</span>,          <span class="comment"># 初始空闲连接数</span></span><br><span class="line">    blocking=<span class="literal">True</span>,        <span class="comment"># 连接耗尽时等待而非报错</span></span><br><span class="line">    host=<span class="string">&#x27;localhost&#x27;</span>, user=<span class="string">&#x27;root&#x27;</span>, password=<span class="string">&#x27;xxx&#x27;</span>,</span><br><span class="line">    database=<span class="string">&#x27;game_db&#x27;</span>, charset=<span class="string">&#x27;utf8mb4&#x27;</span>,</span><br><span class="line">    cursorclass=pymysql.cursors.DictCursor</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">conn = pool.connection()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>为什么需要连接池？</strong></p>
+<p>每次 <code>pymysql.connect()</code> 都要经过 TCP 握手、认证等过程，<strong>开销不小</strong>。<br>频繁创建销毁连接，性能很差，而且容易把数据库的连接数打满。</p>
+<p><strong>连接池预先建好一批连接，用完归还而不是关闭。</strong></p>
+</blockquote>
+<hr>
+<h2 id="四、★-封装一个数据库类"><a href="#四、★-封装一个数据库类" class="headerlink" title="四、★ 封装一个数据库类"></a>四、★ 封装一个数据库类</h2><p><strong>核心目标：让测试代码里只出现”业务语义”，不出现连接管理和 SQL 拼接。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">game_db.py - 游戏数据库操作封装类</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Optional</span>, <span class="type">List</span>, <span class="type">Dict</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GameDB</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;游戏数据库操作类&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, host=<span class="string">&#x27;localhost&#x27;</span>, port=<span class="number">3306</span>, user=<span class="string">&#x27;root&#x27;</span>,</span></span><br><span class="line"><span class="params">                 password=<span class="string">&#x27;root&#x27;</span>, database=<span class="string">&#x27;game_db&#x27;</span>, charset=<span class="string">&#x27;utf8mb4&#x27;</span></span>):</span><br><span class="line">        <span class="variable language_">self</span>.config = &#123;</span><br><span class="line">            <span class="string">&#x27;host&#x27;</span>: host, <span class="string">&#x27;port&#x27;</span>: port, <span class="string">&#x27;user&#x27;</span>: user,</span><br><span class="line">            <span class="string">&#x27;password&#x27;</span>: password, <span class="string">&#x27;database&#x27;</span>: database,</span><br><span class="line">            <span class="string">&#x27;charset&#x27;</span>: charset, <span class="string">&#x27;cursorclass&#x27;</span>: pymysql.cursors.DictCursor</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="variable language_">self</span>._conn: <span class="type">Optional</span>[pymysql.Connection] = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">connect</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>._conn <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">or</span> <span class="keyword">not</span> <span class="variable language_">self</span>._conn.<span class="built_in">open</span>:</span><br><span class="line">            <span class="variable language_">self</span>._conn = pymysql.connect(**<span class="variable language_">self</span>.config)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">close</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="variable language_">self</span>._conn <span class="keyword">and</span> <span class="variable language_">self</span>._conn.<span class="built_in">open</span>:</span><br><span class="line">            <span class="variable language_">self</span>._conn.close()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">self, sql: <span class="built_in">str</span>, params: <span class="built_in">tuple</span> = <span class="literal">None</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;执行写操作，返回影响行数&quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.connect()</span><br><span class="line">        <span class="keyword">with</span> <span class="variable language_">self</span>._conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(sql, params <span class="keyword">or</span> ())</span><br><span class="line">            <span class="variable language_">self</span>._conn.commit()</span><br><span class="line">            <span class="keyword">return</span> cursor.rowcount</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">fetchone</span>(<span class="params">self, sql: <span class="built_in">str</span>, params: <span class="built_in">tuple</span> = <span class="literal">None</span></span>) -&gt; <span class="type">Optional</span>[<span class="type">Dict</span>]:</span><br><span class="line">        <span class="variable language_">self</span>.connect()</span><br><span class="line">        <span class="keyword">with</span> <span class="variable language_">self</span>._conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(sql, params <span class="keyword">or</span> ())</span><br><span class="line">            <span class="keyword">return</span> cursor.fetchone()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">fetchall</span>(<span class="params">self, sql: <span class="built_in">str</span>, params: <span class="built_in">tuple</span> = <span class="literal">None</span></span>) -&gt; <span class="type">List</span>[<span class="type">Dict</span>]:</span><br><span class="line">        <span class="variable language_">self</span>.connect()</span><br><span class="line">        <span class="keyword">with</span> <span class="variable language_">self</span>._conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(sql, params <span class="keyword">or</span> ())</span><br><span class="line">            <span class="keyword">return</span> cursor.fetchall()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">fetchcol</span>(<span class="params">self, sql: <span class="built_in">str</span>, params: <span class="built_in">tuple</span> = <span class="literal">None</span>, col: <span class="built_in">str</span> = <span class="literal">None</span></span>) -&gt; <span class="type">List</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;只取单列，返回列表&quot;&quot;&quot;</span></span><br><span class="line">        rows = <span class="variable language_">self</span>.fetchall(sql, params)</span><br><span class="line">        <span class="keyword">if</span> col:</span><br><span class="line">            <span class="keyword">return</span> [row[col] <span class="keyword">for</span> row <span class="keyword">in</span> rows]</span><br><span class="line">        <span class="keyword">return</span> [<span class="built_in">list</span>(row.values())[<span class="number">0</span>] <span class="keyword">for</span> row <span class="keyword">in</span> rows]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">insert</span>(<span class="params">self, sql: <span class="built_in">str</span>, params: <span class="built_in">tuple</span> = <span class="literal">None</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;插入并返回新 ID&quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.connect()</span><br><span class="line">        <span class="keyword">with</span> <span class="variable language_">self</span>._conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.execute(sql, params <span class="keyword">or</span> ())</span><br><span class="line">            <span class="variable language_">self</span>._conn.commit()</span><br><span class="line">            <span class="keyword">return</span> cursor.lastrowid</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">insertmany</span>(<span class="params">self, sql: <span class="built_in">str</span>, data: <span class="type">List</span>[<span class="built_in">tuple</span>]</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;批量插入&quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.connect()</span><br><span class="line">        <span class="keyword">with</span> <span class="variable language_">self</span>._conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">            cursor.executemany(sql, data)</span><br><span class="line">            <span class="variable language_">self</span>._conn.commit()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">transaction</span>(<span class="params">self, operations: <span class="built_in">list</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;事务：全部成功才提交</span></span><br><span class="line"><span class="string">        operations: [(sql, params), ...]</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.connect()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">with</span> <span class="variable language_">self</span>._conn.cursor() <span class="keyword">as</span> cursor:</span><br><span class="line">                <span class="keyword">for</span> sql, params <span class="keyword">in</span> operations:</span><br><span class="line">                    cursor.execute(sql, params <span class="keyword">or</span> ())</span><br><span class="line">            <span class="variable language_">self</span>._conn.commit()</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="variable language_">self</span>._conn.rollback()</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;事务回滚: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="这个封装的四个设计点"><a href="#这个封装的四个设计点" class="headerlink" title="这个封装的四个设计点"></a>这个封装的四个设计点</h3><table>
+<thead>
+<tr>
+<th>设计</th>
+<th>好处</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>connect()</code> 懒加载</td>
+<td>用的时候才连，避免空跑也建连接</td>
+</tr>
+<tr>
+<td><code>DictCursor</code></td>
+<td>返回字典，取值靠字段名不靠位置</td>
+</tr>
+<tr>
+<td><code>fetchcol()</code></td>
+<td>只取一列的场景很常见（查 ID 列表）</td>
+</tr>
+<tr>
+<td><code>transaction(operations)</code></td>
+<td><strong>把一组操作当成原子单元</strong>，适合”造数据”这种多步操作</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="五、★-在测试用例里怎么用"><a href="#五、★-在测试用例里怎么用" class="headerlink" title="五、★ 在测试用例里怎么用"></a>五、★ 在测试用例里怎么用</h2><h3 id="用途-1：用例前置-——-重置数据"><a href="#用途-1：用例前置-——-重置数据" class="headerlink" title="用途 1：用例前置 —— 重置数据"></a>用途 1：用例前置 —— 重置数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test_claim_reward</span>(<span class="params">db</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;测试领奖：确保玩家处于&quot;未领过&quot;的状态&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 前置：清掉历史领取记录</span></span><br><span class="line">    db.execute(<span class="string">&quot;DELETE FROM reward_records WHERE user_id = %s AND reward_id = %s&quot;</span>,</span><br><span class="line">               (<span class="number">1001</span>, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行：调用接口领奖</span></span><br><span class="line">    r = requests.post(CLAIM_URL, json=&#123;<span class="string">&quot;token&quot;</span>: TOKEN, <span class="string">&quot;rewardId&quot;</span>: <span class="number">1</span>&#125;)</span><br><span class="line">    <span class="keyword">assert</span> r.json()[<span class="string">&quot;code&quot;</span>] == <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 校验：数据库里真的写入了</span></span><br><span class="line">    row = db.fetchone(</span><br><span class="line">        <span class="string">&quot;SELECT * FROM reward_records WHERE user_id = %s AND reward_id = %s&quot;</span>,</span><br><span class="line">        (<span class="number">1001</span>, <span class="number">1</span>)</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">assert</span> row <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>, <span class="string">&quot;接口返回成功，但数据库没有记录！&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>最后那句断言是关键</strong>：<code>assert row is not None, &quot;接口返回成功，但数据库没有记录！&quot;</code></p>
+<p><strong>这是接口测试最容易被跳过的一层校验。</strong><br>接口返回 <code>code=0</code> 只代表业务逻辑认为成功了，<strong>不代表数据真的落库了</strong>。</p>
+</blockquote>
+<h3 id="用途-2：批量造测试数据"><a href="#用途-2：批量造测试数据" class="headerlink" title="用途 2：批量造测试数据"></a>用途 2：批量造测试数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">gen_players</span>(<span class="params">db, count=<span class="number">1000</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;批量造玩家数据（用 executemany 性能比循环插入高几十倍）&quot;&quot;&quot;</span></span><br><span class="line">    data = [</span><br><span class="line">        (<span class="string">f&quot;test_<span class="subst">&#123;i:05d&#125;</span>&quot;</span>, random.randint(<span class="number">1</span>, <span class="number">80</span>), random.randint(<span class="number">0</span>, <span class="number">50000</span>))</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(count)</span><br><span class="line">    ]</span><br><span class="line">    db.insertmany(</span><br><span class="line">        <span class="string">&quot;INSERT INTO players (username, level, gold) VALUES (%s, %s, %s)&quot;</span>,</span><br><span class="line">        data</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>⚠️ <code>executemany</code> 和循环 <code>execute</code> 的性能差距是几十倍。</strong><br>1000 条数据，<code>executemany</code> 可能 0.1 秒，循环插入要 5 秒以上。<br><strong>造大批量测试数据时，务必用 <code>executemany</code>。</strong></p>
+</blockquote>
+<h3 id="用途-3：数据一致性校验"><a href="#用途-3：数据一致性校验" class="headerlink" title="用途 3：数据一致性校验"></a>用途 3：数据一致性校验</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">test_gold_consistency</span>(<span class="params">db</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;金币一致性：玩家表余额 vs 流水表加总&quot;&quot;&quot;</span></span><br><span class="line">    rows = db.fetchall(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        SELECT p.id, p.gold,</span></span><br><span class="line"><span class="string">               COALESCE(SUM(t.amount), 0) AS calc_gold</span></span><br><span class="line"><span class="string">        FROM players p</span></span><br><span class="line"><span class="string">        LEFT JOIN gold_transactions t ON p.id = t.player_id</span></span><br><span class="line"><span class="string">        GROUP BY p.id, p.gold</span></span><br><span class="line"><span class="string">        HAVING p.gold != COALESCE(SUM(t.amount), 0)</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span>)</span><br><span class="line">    <span class="keyword">assert</span> <span class="keyword">not</span> rows, <span class="string">f&quot;发现 <span class="subst">&#123;<span class="built_in">len</span>(rows)&#125;</span> 个玩家金币对不上账: <span class="subst">&#123;rows[:<span class="number">3</span>]&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>这类”跨表核对”的用例，是接口测试做不到的</strong> —— 只有查数据库才能发现账目问题。</p>
+<hr>
+<h2 id="六、一个实用的测试数据生成套路"><a href="#六、一个实用的测试数据生成套路" class="headerlink" title="六、一个实用的测试数据生成套路"></a>六、一个实用的测试数据生成套路</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> faker <span class="keyword">import</span> Faker   <span class="comment"># pip install faker</span></span><br><span class="line"></span><br><span class="line">fake = Faker(<span class="string">&#x27;zh_CN&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gen_player</span>():</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        fake.user_name()[:<span class="number">20</span>],           <span class="comment"># 昵称（截断到字段长度内）</span></span><br><span class="line">        random.randint(<span class="number">1</span>, <span class="number">100</span>),          <span class="comment"># 等级</span></span><br><span class="line">        random.randint(<span class="number">0</span>, <span class="number">999999</span>),       <span class="comment"># 金币</span></span><br><span class="line">        random.choice([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]),        <span class="comment"># VIP 等级</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意 <code>fake.user_name()[:20]</code> 的截断</strong> —— 字段定义是 <code>VARCHAR(20)</code>，生成超长字符串会<strong>插入失败</strong>。</p>
+<blockquote>
+<p>💡 <strong>造数据时一定要注意字段长度限制</strong>。<br>批量插入时如果有一条超长，<code>executemany</code> 会整个失败（或者部分成功，取决于配置）。<br><strong>安全的做法</strong>：生成时就按字段长度截断。</p>
+</blockquote>
+<hr>
+<h2 id="七、小结"><a href="#七、小结" class="headerlink" title="七、小结"></a>七、小结</h2><table>
+<thead>
+<tr>
+<th>要点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>pymysql</strong></td>
+<td><code>DictCursor</code> 几乎必选</td>
+</tr>
+<tr>
+<td><strong>参数化查询</strong></td>
+<td>用 <code>%s</code>，<strong>绝不能拼接字符串</strong></td>
+</tr>
+<tr>
+<td><strong><code>with cursor</code></strong></td>
+<td>⚠️ <strong>只关游标，不自动提交</strong></td>
+</tr>
+<tr>
+<td><strong>连接池</strong></td>
+<td>生产环境必备，避免频繁建连</td>
+</tr>
+<tr>
+<td><strong>封装类</strong></td>
+<td>懒加载 &#x2F; DictCursor &#x2F; fetchcol &#x2F; transaction</td>
+</tr>
+<tr>
+<td><strong>用例前置</strong></td>
+<td>每条用例自己重置数据</td>
+</tr>
+<tr>
+<td><strong>必做校验</strong></td>
+<td><strong>接口返回成功 ≠ 数据落库成功</strong></td>
+</tr>
+<tr>
+<td><strong>批量插入</strong></td>
+<td>用 <code>executemany</code>，比循环快几十倍</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>本课要点</strong>：参数化查询防注入也防脚本崩｜with 不自动提交｜接口成功 ≠ 落库成功｜executemany 快几十倍</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95/" rel="tag"># 自动化测试</a>
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/pymysql/" rel="tag"># pymysql</a>
+              <a href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag"># 测试数据</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/07/03/jmeter-04-parameterization/" rel="prev" title="JMeter 性能测试 · 参数化：让压测数据活起来">
+                  <i class="fa fa-angle-left"></i> JMeter 性能测试 · 参数化：让压测数据活起来
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2026/07/14/jmeter-05-correlation/" rel="next" title="JMeter 性能测试 · 关联：接口之间的数据传递">
+                  JMeter 性能测试 · 关联：接口之间的数据传递 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"tianshiyan521/tianshiyan521.github.io","issue_term":"pathname","theme":"preferred-color-scheme"}</script>
+<script src="/js/third-party/comments/utterances.js" defer></script>
+
+</body>
+</html>

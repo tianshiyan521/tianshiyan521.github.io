@@ -18,18 +18,20 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="测试基础知识专栏介绍万丈高楼平地起，自动化工具再强也离不开扎实的测试基础。 本专栏覆盖软件测试&#x2F;游戏测试的核心理论，面向面试和日常工作。 你将学到">
+    <meta name="description" content="万丈高楼平地起。自动化工具再强，也离不开扎实的测试基础。 而且有个反直觉的事实：工具学得快，基础却很难补。 写个 Selenium 脚本一周就能上手；但”看到一个新功能知道该怎么设计用例”，往往需要做一两年才能练出来。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="测试基础知识">
 <meta property="og:url" content="https://tianshiyan521.github.io/2026/06/12/testing-basics-intro/index.html">
 <meta property="og:site_name" content="涂伟富的博客">
-<meta property="og:description" content="测试基础知识专栏介绍万丈高楼平地起，自动化工具再强也离不开扎实的测试基础。 本专栏覆盖软件测试&#x2F;游戏测试的核心理论，面向面试和日常工作。 你将学到">
+<meta property="og:description" content="万丈高楼平地起。自动化工具再强，也离不开扎实的测试基础。 而且有个反直觉的事实：工具学得快，基础却很难补。 写个 Selenium 脚本一周就能上手；但”看到一个新功能知道该怎么设计用例”，往往需要做一两年才能练出来。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-06-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2026-06-24T09:55:07.934Z">
+<meta property="article:published_time" content="2026-06-12T01:00:00.000Z">
+<meta property="article:modified_time" content="2026-09-30T02:13:38.025Z">
 <meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="BUG管理">
+<meta property="article:tag" content="用例设计">
 <meta property="article:tag" content="面试">
 <meta property="article:tag" content="测试基础">
 <meta property="article:tag" content="理论">
@@ -56,7 +58,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
 <script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
 
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
 
 
 
@@ -101,6 +105,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -109,11 +114,37 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </header>
         
@@ -133,7 +164,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E4%B8%93%E6%A0%8F%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">测试基础知识专栏介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E5%B0%86%E5%AD%A6%E5%88%B0"><span class="nav-number">1.1.</span> <span class="nav-text">你将学到</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%AA%E4%B8%93%E6%A0%8F%E8%AE%B2%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">这个专栏讲什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E6%9C%80%E5%80%BC%E5%BE%97%E5%85%88%E6%8E%8C%E6%8F%A1%E7%9A%84%E7%82%B9"><span class="nav-number">2.</span> <span class="nav-text">三个最值得先掌握的点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A0-%E7%94%A8%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%B3%95%E4%B8%8D%E6%98%AF%E7%94%A8%E6%9D%A5%E8%83%8C%E7%9A%84"><span class="nav-number">2.1.</span> <span class="nav-text">① 用例设计方法不是用来背的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A1-HTTP-200-%E2%89%A0-%E7%94%A8%E4%BE%8B%E9%80%9A%E8%BF%87"><span class="nav-number">2.2.</span> <span class="nav-text">② HTTP 200 ≠ 用例通过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%91%A2-%E9%87%8D%E8%AF%95%E9%80%BB%E8%BE%91%E5%BF%85%E9%A1%BB%E5%BB%BA%E7%AB%8B%E5%9C%A8%E2%80%9D%E5%B7%B2%E8%AF%81%E6%98%8E%E6%98%AF%E7%9E%AC%E6%97%B6%E6%8A%96%E5%8A%A8%E2%80%9D%E4%B9%8B%E4%B8%8A"><span class="nav-number">2.3.</span> <span class="nav-text">③ 重试逻辑必须建立在”已证明是瞬时抖动”之上</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%93%E6%A0%8F%E7%9B%AE%E5%BD%95"><span class="nav-number">3.</span> <span class="nav-text">专栏目录</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -148,7 +179,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -159,7 +190,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">61</span>
+        <span class="site-state-item-count">116</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -223,14 +254,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2026-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T00:00:00+08:00">2026-06-12</time>
+      <time title="创建时间：2026-06-12 09:00:00" itemprop="dateCreated datePublished" datetime="2026-06-12T09:00:00+08:00">2026-06-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-06-24 17:55:07" itemprop="dateModified" datetime="2026-06-24T17:55:07+08:00">2026-06-24</time>
+      <time title="修改时间：2026-09-30 10:13:38" itemprop="dateModified" datetime="2026-09-30T10:13:38+08:00">2026-09-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -258,21 +289,125 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="测试基础知识专栏介绍"><a href="#测试基础知识专栏介绍" class="headerlink" title="测试基础知识专栏介绍"></a>测试基础知识专栏介绍</h2><p>万丈高楼平地起，自动化工具再强也离不开扎实的测试基础。</p>
-<p>本专栏覆盖软件测试&#x2F;游戏测试的核心理论，面向面试和日常工作。</p>
-<h3 id="你将学到"><a href="#你将学到" class="headerlink" title="你将学到"></a>你将学到</h3><span id="more"></span>
+    <div class="post-body" itemprop="articleBody"><p>万丈高楼平地起。<strong>自动化工具再强，也离不开扎实的测试基础。</strong></p>
+<p>而且有个反直觉的事实：<strong>工具学得快，基础却很难补。</strong></p>
+<p>写个 Selenium 脚本一周就能上手；但”看到一个新功能知道该怎么设计用例”，往往需要做一两年才能练出来。</p>
+<span id="more"></span>
 
+<h2 id="这个专栏讲什么"><a href="#这个专栏讲什么" class="headerlink" title="这个专栏讲什么"></a>这个专栏讲什么</h2><table>
+<thead>
+<tr>
+<th>方向</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>面试实战</strong></td>
+<td>游戏测试面试的高频题，答题框架 + 真实案例</td>
+</tr>
+<tr>
+<td><strong>用例设计</strong></td>
+<td>等价类、边界值、因果图、场景法、白盒覆盖分级</td>
+</tr>
+<tr>
+<td><strong>BUG 管理</strong></td>
+<td>等级划分、报告写法、偶现问题处理</td>
+</tr>
+<tr>
+<td><strong>专项测试</strong></td>
+<td>性能、兼容性、安全、网络、支付</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三个最值得先掌握的点"><a href="#三个最值得先掌握的点" class="headerlink" title="三个最值得先掌握的点"></a>三个最值得先掌握的点</h2><h3 id="①-用例设计方法不是用来背的"><a href="#①-用例设计方法不是用来背的" class="headerlink" title="① 用例设计方法不是用来背的"></a>① 用例设计方法不是用来背的</h3><p>很多人的”用例设计”其实是”凭经验想到哪测到哪”。这样做的后果是：</p>
 <ul>
-<li><strong>测试类型</strong>：黑盒&#x2F;白盒&#x2F;灰盒、功能&#x2F;性能&#x2F;安全&#x2F;兼容性</li>
-<li><strong>测试方法</strong>：等价类、边界值、场景法、判定表、正交实验</li>
-<li><strong>测试流程</strong>：需求分析 → 用例设计 → 执行 → 缺陷管理 → 回归</li>
-<li><strong>BUG 生命周期</strong>：新建→确认→修复→验证→关闭</li>
-<li><strong>敏捷测试</strong>：Scrum 中的测试角色、Sprint 测试节奏</li>
-<li><strong>游戏测试专题</strong>：帧率&#x2F;发热&#x2F;兼容性&#x2F;体验维度</li>
+<li>说不清<strong>测完了没有</strong>（覆盖度不可控）</li>
+<li>说不清<strong>该优先测什么</strong>（没有依据）</li>
+<li>别人<strong>没法评审</strong>你的用例（因为他也不知道你漏没漏）</li>
 </ul>
+<p><strong>方法的价值就在于让这三件事变得可回答。</strong></p>
+<p>其中<strong>边界值分析</strong>的投入产出比最高。因为我实测遇到过一个真实的边界缺陷：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 规则：10 级可以领礼包</span></span><br><span class="line"><span class="keyword">if</span> u[<span class="string">&quot;level&quot;</span>] &lt;= cfg[<span class="string">&quot;need_level&quot;</span>]:   <span class="comment"># ← 少了一个等号</span></span><br><span class="line">    <span class="keyword">return</span> err(<span class="number">50002</span>, <span class="string">&quot;王者礼包需要 10 级，你当前 10 级&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>结果 10 级玩家收到的报错是”需要 10 级，你当前 10 级”——<strong>报错本身就自相矛盾</strong>。</p>
+<p>手动测试的自然路径是”试 5 级不行、试 20 级可以”，然后觉得没问题了。**”正好 10 级”这个点得特意去构造才会碰到。**</p>
+<blockquote>
+<p><strong>边界上的人最少，出的事最多。</strong></p>
+</blockquote>
+<h3 id="②-HTTP-200-≠-用例通过"><a href="#②-HTTP-200-≠-用例通过" class="headerlink" title="② HTTP 200 ≠ 用例通过"></a>② HTTP 200 ≠ 用例通过</h3><p>这条听起来简单，但踩过的人非常多。</p>
+<p>很多游戏网关的 <strong>HTTP 状态码永远是 200</strong>，真实成败藏在响应体里：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// HTTP 200，但业务失败了</span></span><br><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="number">50002</span><span class="punctuation">,</span> <span class="attr">&quot;msg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;等级不足&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>所以：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> r.status_code == <span class="number">200</span>        <span class="comment"># ❌ 自欺欺人</span></span><br><span class="line"><span class="keyword">assert</span> r.json()[<span class="string">&quot;code&quot;</span>] == <span class="number">0</span>       <span class="comment"># ✅ 有效断言</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>完整校验应该分四层</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>验什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>协议层</td>
+<td>HTTP 状态码</td>
+</tr>
+<tr>
+<td>业务层</td>
+<td>响应体业务码</td>
+</tr>
+<tr>
+<td>数据层</td>
+<td>字段值与格式</td>
+</tr>
+<tr>
+<td><strong>副作用层</strong></td>
+<td><strong>数据库&#x2F;下游真的变了</strong></td>
+</tr>
+</tbody></table>
+<p><strong>第四层最容易被跳过</strong> —— 接口返回成功但数据没落库，是最典型的”看着没问题其实是事故”。</p>
+<h3 id="③-重试逻辑必须建立在”已证明是瞬时抖动”之上"><a href="#③-重试逻辑必须建立在”已证明是瞬时抖动”之上" class="headerlink" title="③ 重试逻辑必须建立在”已证明是瞬时抖动”之上"></a>③ 重试逻辑必须建立在”已证明是瞬时抖动”之上</h3><p>这条是踩坑换来的，写在别处很少有人讲：</p>
+<p>我写过一个”聪明”的重试逻辑，把 <strong>499 也当成限流</strong>去退避重试。结果某个用例判定随机飘，查了半天。</p>
+<p>真相是：<strong>499 是协议层的确定性响应，跟频率完全无关。</strong></p>
+<p>证据：</p>
+<ul>
+<li>同一伪造 token，间隔 1.5s 连打 8 次 → <strong>8 次全是 499</strong></li>
+<li>反向验证：40 次错误密码、30 次高频正确登录 → <strong>一次限流都没触发</strong></li>
+</ul>
+<p><strong>教训</strong>：看到错误码就重试，等于<strong>用一个错误假设掩盖了真实的协议行为</strong>。只对 502&#x2F;503&#x2F;504（真正的服务端故障）重试才安全。</p>
+<blockquote>
+<p><strong>通用原则</strong>：任何重试逻辑的前提，是先证明”这是瞬时抖动”。验证方法就是<strong>固定输入 + 拉大间隔重复打</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="专栏目录"><a href="#专栏目录" class="headerlink" title="专栏目录"></a>专栏目录</h2><table>
+<thead>
+<tr>
+<th>篇目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>面试题实战 · 系列总览</strong></td>
+<td>答题三层结构、准备方法、高频必问六题</td>
+</tr>
+<tr>
+<td><strong>面试题实战 · 基础概念与 BUG 管理</strong></td>
+<td>游戏测试 vs 软件测试、BUG 等级、报告写法、偶现问题</td>
+</tr>
+<tr>
+<td><strong>面试题实战 · 专项测试与场景分析</strong></td>
+<td>TCP&#x2F;UDP、性能排查、数据不一致、排行榜专项</td>
+</tr>
+<tr>
+<td><strong>用例设计方法论</strong></td>
+<td>等价类、边界值、因果图、错误推测、场景法、白盒覆盖</td>
+</tr>
+</tbody></table>
 <hr>
 <blockquote>
-<p>适合人群：准备面试、想夯实基础的测试工程师</p>
+<p><strong>适合人群</strong>：准备面试、想夯实基础的测试工程师。</p>
+<p><strong>阅读建议</strong>：不用从第一篇顺着读。<strong>遇到具体问题再按目录找对应篇章，效率最高。</strong></p>
 </blockquote>
 
     </div>
@@ -283,6 +418,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/BUG%E7%AE%A1%E7%90%86/" rel="tag"># BUG管理</a>
+              <a href="/tags/%E7%94%A8%E4%BE%8B%E8%AE%BE%E8%AE%A1/" rel="tag"># 用例设计</a>
               <a href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag"># 面试</a>
               <a href="/tags/%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80/" rel="tag"># 测试基础</a>
               <a href="/tags/%E7%90%86%E8%AE%BA/" rel="tag"># 理论</a>
@@ -292,10 +429,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2026/06/12/airtest-chapter1-core-concepts/" rel="prev" title="Airtest 第1章 - 核心概念与恐龙岛实战">
+                  <i class="fa fa-angle-left"></i> Airtest 第1章 - 核心概念与恐龙岛实战
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/06/12/testing-basics-chapter3-interview-qa/" rel="next" title="测试基础 第3章 - 游戏测试面试题实战">
-                  测试基础 第3章 - 游戏测试面试题实战 <i class="fa fa-angle-right"></i>
+                <a href="/2026/06/12/mysql-intro/" rel="next" title="MySQL 数据库学习">
+                  MySQL 数据库学习 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
