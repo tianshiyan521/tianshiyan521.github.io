@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#3b82f6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#60a5fa" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#3b82f6">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"tianshiyan521.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"always","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="第 2 章讲 BUG 管理时，末尾只留了一行流程： 1需求分析 → 用例设计 → 用例评审 → 执行测试 → 提交BUG → 回归验证 → 关闭BUG  这行流程看着简单，但被追问细节时很多人会卡住：  缺陷被拒绝了怎么办？ 谁有权关闭一个缺陷？ 开发说修好了，但我复测还是有问题，这算新缺陷还是原缺陷？ 那些确认是 BUG 但这版本不修的，去哪了？  这篇把这条线单独展开。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="测试基础 第5章 - 缺陷生命周期详解">
+<meta property="og:url" content="https://tianshiyan521.github.io/2026/10/12/testing-basics-chapter5-defect-lifecycle/index.html">
+<meta property="og:site_name" content="涂伟富的博客">
+<meta property="og:description" content="第 2 章讲 BUG 管理时，末尾只留了一行流程： 1需求分析 → 用例设计 → 用例评审 → 执行测试 → 提交BUG → 回归验证 → 关闭BUG  这行流程看着简单，但被追问细节时很多人会卡住：  缺陷被拒绝了怎么办？ 谁有权关闭一个缺陷？ 开发说修好了，但我复测还是有问题，这算新缺陷还是原缺陷？ 那些确认是 BUG 但这版本不修的，去哪了？  这篇把这条线单独展开。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-10-12T12:00:00.000Z">
+<meta property="article:modified_time" content="2026-10-12T11:47:30.762Z">
+<meta property="article:author" content="涂伟富">
+<meta property="article:tag" content="面试题">
+<meta property="article:tag" content="缺陷跟踪">
+<meta property="article:tag" content="缺陷管理">
+<meta property="article:tag" content="缺陷生命周期">
+<meta property="article:tag" content="流程规范">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://tianshiyan521.github.io/2026/10/12/testing-basics-chapter5-defect-lifecycle/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://tianshiyan521.github.io/2026/10/12/testing-basics-chapter5-defect-lifecycle/","path":"2026/10/12/testing-basics-chapter5-defect-lifecycle/","title":"测试基础 第5章 - 缺陷生命周期详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>测试基础 第5章 - 缺陷生命周期详解 | 涂伟富的博客</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="涂伟富的博客" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">涂伟富的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">游戏测试 · 自动化 · 学习笔记</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-学习路径"><a href="/path/" rel="section"><i class="fa fa-road fa-fw"></i>学习路径</a></li><li class="menu-item menu-item-自动化测试"><a href="/categories/automation/" rel="section"><i class="fa fa-robot fa-fw"></i>自动化测试</a></li><li class="menu-item menu-item-数据库学习"><a href="/categories/database/" rel="section"><i class="fa fa-database fa-fw"></i>数据库学习</a></li><li class="menu-item menu-item-其他"><a href="/categories/other/" rel="section"><i class="fa fa-folder fa-fw"></i>其他</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A0%87%E5%87%86%E5%85%AD%E6%80%81%E6%B5%81%E8%BD%AC"><span class="nav-number">1.</span> <span class="nav-text">一、标准六态流转</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%99%E9%87%8C%E6%9C%89%E4%B8%89%E6%9D%A1%E5%AE%B9%E6%98%93%E8%A2%AB%E5%BF%BD%E7%95%A5%E7%9A%84%E8%A7%84%E5%88%99"><span class="nav-number">1.1.</span> <span class="nav-text">这里有三条容易被忽略的规则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E4%B8%89%E4%B8%AA%E5%88%86%E6%94%AF%E7%BB%88%E6%80%81"><span class="nav-number">2.</span> <span class="nav-text">二、三个分支终态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%80%8C%E6%97%A0%E6%B3%95%E5%A4%8D%E7%8E%B0%E3%80%8D%E4%B8%8D%E6%98%AF%E6%8B%92%E7%BB%9D%E7%90%86%E7%94%B1"><span class="nav-number">2.1.</span> <span class="nav-text">「无法复现」不是拒绝理由</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%B8%A5%E9%87%8D%E7%A8%8B%E5%BA%A6-%E2%89%A0-%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-number">3.</span> <span class="nav-text">三、严重程度 ≠ 优先级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%B8%B8%E6%88%8F%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%9A%84%E6%B5%81%E7%A8%8B%E5%8F%98%E5%BD%A2"><span class="nav-number">4.</span> <span class="nav-text">四、游戏项目里的流程变形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B7%A5%E5%85%B7%E8%90%BD%E5%9C%B0%EF%BC%9A%E7%8A%B6%E6%80%81%E5%90%8D%E5%AF%B9%E7%85%A7"><span class="nav-number">5.</span> <span class="nav-text">五、工具落地：状态名对照</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E8%BF%9B%E9%98%B6%EF%BC%9A%E4%B8%A4%E4%B8%AA%E8%83%BD%E4%BD%93%E7%8E%B0%E6%B0%B4%E5%B9%B3%E7%9A%84%E6%8C%87%E6%A0%87"><span class="nav-number">6.</span> <span class="nav-text">六、进阶：两个能体现水平的指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E9%9D%A2%E8%AF%95%E6%80%8E%E4%B9%88%E7%AD%94%EF%BC%88%E4%B8%89%E5%B1%82%E7%BB%93%E6%9E%84%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">七、面试怎么答（三层结构）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">8.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">涂伟富</p>
+  <div class="site-description" itemprop="description">记录游戏测试、Python自动化、学习成长之路</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">119</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/tianshiyan521" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;tianshiyan521" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1808575283@qq.com" title="E-Mail → mailto:1808575283@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://tianshiyan521.github.io/2026/10/12/testing-basics-chapter5-defect-lifecycle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="涂伟富">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="涂伟富的博客">
+      <meta itemprop="description" content="记录游戏测试、Python自动化、学习成长之路">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="测试基础 第5章 - 缺陷生命周期详解 | 涂伟富的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          测试基础 第5章 - 缺陷生命周期详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-10-12 20:00:00 / 修改时间：19:47:30" itemprop="dateCreated datePublished" datetime="2026-10-12T20:00:00+08:00">2026-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/testing-basics/" itemprop="url" rel="index"><span itemprop="name">测试基础</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>第 2 章讲 BUG 管理时，末尾只留了一行流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">需求分析 → 用例设计 → 用例评审 → 执行测试 → 提交BUG → 回归验证 → 关闭BUG</span><br></pre></td></tr></table></figure>
+
+<p>这行流程看着简单，但被追问细节时很多人会卡住：</p>
+<ul>
+<li>缺陷被<strong>拒绝</strong>了怎么办？</li>
+<li><strong>谁有权关闭</strong>一个缺陷？</li>
+<li>开发说修好了，但我复测还是有问题，这算<strong>新缺陷</strong>还是<strong>原缺陷</strong>？</li>
+<li>那些确认是 BUG 但<strong>这版本不修</strong>的，去哪了？</li>
+</ul>
+<p>这篇把这条线单独展开。</p>
+<span id="more"></span>
+
+<h2 id="一、标准六态流转"><a href="#一、标准六态流转" class="headerlink" title="一、标准六态流转"></a>一、标准六态流转</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">新建 → 已分配 → 处理中 → 已修复 → 待验证 → 已关闭</span><br><span class="line">                    ↑                    │</span><br><span class="line">                    └──── Reopen ────────┘</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>英文</th>
+<th>谁在操作</th>
+<th>这个阶段要做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>新建</strong></td>
+<td>New</td>
+<td>测试</td>
+<td>提单：复现步骤、期望&#x2F;实际结果、版本号、日志录屏</td>
+</tr>
+<tr>
+<td><strong>已分配</strong></td>
+<td>Assigned</td>
+<td>测试组长 &#x2F; 开发负责人</td>
+<td>定性（是不是缺陷）+ 指派给具体开发</td>
+</tr>
+<tr>
+<td><strong>处理中</strong></td>
+<td>Open</td>
+<td>开发</td>
+<td>定位根因 + 修复；需要信息时找测试补</td>
+</tr>
+<tr>
+<td><strong>已修复</strong></td>
+<td>Fixed</td>
+<td>开发</td>
+<td>代码提交，等待版本出包</td>
+</tr>
+<tr>
+<td><strong>待验证</strong></td>
+<td>Pending Retest</td>
+<td>测试</td>
+<td>复测原路径 + <strong>回归关联功能</strong></td>
+</tr>
+<tr>
+<td><strong>已关闭</strong></td>
+<td>Closed</td>
+<td>测试</td>
+<td>复测通过后关闭</td>
+</tr>
+</tbody></table>
+<h3 id="这里有三条容易被忽略的规则"><a href="#这里有三条容易被忽略的规则" class="headerlink" title="这里有三条容易被忽略的规则"></a>这里有三条容易被忽略的规则</h3><p><strong>① 只有测试有权关闭缺陷</strong></p>
+<p>开发最多把状态推到「已修复」。代码提交 ≠ 问题解决——他可能只改了表象，也可能引入了新问题。<strong>关闭这个动作必须由验证方做</strong>。</p>
+<p>如果你的团队是开发自己关单，那这个流程已经失效了。</p>
+<p><strong>② 状态不能跳</strong></p>
+<p>从「新建」直接跳到「已关闭」，意味着<strong>没有任何人验证过</strong>。这种情况在赶版本时特别容易发生，也是上线后漏 BUG 的主要来源。</p>
+<p><strong>③ Reopen 不是失败，是流程正常运转</strong></p>
+<p>回退箭头是这条链路上最关键的一环。判断该不该 Reopen，看这三条：</p>
+<table>
+<thead>
+<tr>
+<th>判据</th>
+<th>具体表现</th>
+<th>数据化表达</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>修得不彻底</strong></td>
+<td>原 10 次触发 5 次，改完 10 次触发 1 次</td>
+<td>给出修复前后的触发率对比</td>
+</tr>
+<tr>
+<td><strong>引发新问题</strong></td>
+<td>原功能好了，旁边功能挂了</td>
+<td>附上回归时发现的新现象</td>
+</tr>
+<tr>
+<td><strong>只修了表象</strong></td>
+<td>界面数字对了，库里存的还是错的</td>
+<td>附上查库结果</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ 第一条最容易扯皮。开发会说”这是偶现，不是没修好”。<strong>你手上要有前后对比的数据</strong>——“修复前 100 次触发 47 次，修复后 100 次触发 9 次”，这种数据一贴出来，就没有讨论空间了。</p>
+</blockquote>
+<hr>
+<h2 id="二、三个分支终态"><a href="#二、三个分支终态" class="headerlink" title="二、三个分支终态"></a>二、三个分支终态</h2><p>主线之外，缺陷还有三个去处。面试问到要能完整说出来：</p>
+<table>
+<thead>
+<tr>
+<th>分支状态</th>
+<th>触发场景</th>
+<th>谁有权定</th>
+<th>测试该做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>拒绝 Rejected</strong></td>
+<td>不是缺陷 &#x2F; 设计如此 &#x2F; 无法复现</td>
+<td>策划或开发</td>
+<td>写申诉理由 + 附证据；测试有<strong>申诉权</strong></td>
+</tr>
+<tr>
+<td><strong>延期 Deferred</strong></td>
+<td>确认是缺陷，但本版本不修</td>
+<td>策划 + 项目负责人</td>
+<td>记进遗留清单，跟进到下个版本</td>
+</tr>
+<tr>
+<td><strong>重复 Duplicate</strong></td>
+<td>已有人提过同类问题</td>
+<td>测试自己合并</td>
+<td>合并到原单，补充自己发现的新复现条件</td>
+</tr>
+</tbody></table>
+<h3 id="「无法复现」不是拒绝理由"><a href="#「无法复现」不是拒绝理由" class="headerlink" title="「无法复现」不是拒绝理由"></a>「无法复现」不是拒绝理由</h3><p>游戏项目里最常被卡的就是这一条。玩家反馈的偶现问题，开发一句”我这边复现不了”就想关掉。</p>
+<p><strong>正确做法是挂起观察，而不是拒绝</strong>：</p>
+<ol>
+<li>补齐三件套 —— <strong>客户端版本号 + 完整日志 + 录屏</strong></li>
+<li>摸出<strong>触发概率</strong> —— 10 次操作触发几次，这是最有力的证据</li>
+<li>缩小<strong>触发条件</strong> —— 特定机型？特定网络？特定玩法组合？打完一场之后？</li>
+<li>标记为”偶现”挂起，等下次出现时补证据</li>
+</ol>
+<p>只有当你<strong>能稳定证明它是设计如此</strong>时，才走拒绝。</p>
+<hr>
+<h2 id="三、严重程度-≠-优先级"><a href="#三、严重程度-≠-优先级" class="headerlink" title="三、严重程度 ≠ 优先级"></a>三、严重程度 ≠ 优先级</h2><p>这是缺陷管理里最容易被追问的一点，也是最能体现判断力的地方。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>严重程度 Severity</th>
+<th>优先级 Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>衡量什么</td>
+<td>缺陷本身的破坏力</td>
+<td>修复的紧迫度</td>
+</tr>
+<tr>
+<td>谁说了算</td>
+<td><strong>测试</strong>（客观）</td>
+<td><strong>策划 &#x2F; 项目负责人</strong>（主观）</td>
+</tr>
+<tr>
+<td>依据</td>
+<td>影响范围、可玩性、数据安全</td>
+<td>版本节奏、玩家感知、修复成本</td>
+</tr>
+</tbody></table>
+<p><strong>两者不成正比</strong>，这是核心结论。用四个象限看：</p>
+<table>
+<thead>
+<tr>
+<th>象限</th>
+<th>典型场景</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>高严重 + 高优先</td>
+<td>崩溃、卡死、充值扣钱但道具未到账</td>
+<td><strong>立即修复</strong></td>
+</tr>
+<tr>
+<td>低严重 + 高优先</td>
+<td>新手指引文案写错、首屏错别字</td>
+<td><strong>本版本必修</strong></td>
+</tr>
+<tr>
+<td>高严重 + 低优先</td>
+<td>隐藏副本必崩、特定冷门机型闪退</td>
+<td><strong>排期修复</strong></td>
+</tr>
+<tr>
+<td>低严重 + 低优先</td>
+<td>边缘文案、异常分辨率下轻微错位</td>
+<td><strong>延期 &#x2F; 挂起</strong></td>
+</tr>
+</tbody></table>
+<p>举个真实感的例子：</p>
+<blockquote>
+<p>某个隐藏副本里，Boss 二阶段必定触发闪退——这是<strong>严重程度高</strong>的问题。但那个副本只有 0.1% 的玩家会进，改它要动战斗核心逻辑，风险比收益大。所以它的<strong>优先级低</strong>，排到下个版本修。</p>
+<p>而新手指引里”攻击”按钮的文案被写成了别的词——<strong>严重程度低</strong>（只是个错别字），但每个新玩家第一眼看到的就是它，直接影响首日留存。所以它<strong>优先级高</strong>，当天就改。</p>
+</blockquote>
+<p><strong>面试时如果只答”严重的先修”，就掉坑里了。</strong> 要主动说出”这两个字段是分开的，各自由谁定”。</p>
+<hr>
+<h2 id="四、游戏项目里的流程变形"><a href="#四、游戏项目里的流程变形" class="headerlink" title="四、游戏项目里的流程变形"></a>四、游戏项目里的流程变形</h2><p>标准流程是规范，但游戏研发的实际节奏会让它发生变形。能说清楚这些变形，说明你不是在背书。</p>
+<p><strong>① 封版裁决</strong></p>
+<p>版本封版时，所有未关闭的缺陷会被逐条裁决：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">阻塞发布（Blocker） → 必须修完才能出包</span><br><span class="line">本版本必修          → 排进封版前的最后一批</span><br><span class="line">顺延下版本          → 状态改为「延期」，记入遗留清单</span><br><span class="line">长期挂起            → 影响极小或修复成本过高</span><br></pre></td></tr></table></figure>
+
+<p>这也是为什么会有那么多「延期」状态的缺陷——<strong>不是没人管，是被裁决过</strong>。</p>
+<p><strong>② 热修跳级</strong></p>
+<p>线上出阻塞性问题时，会走热修流程，跳过完整的「开发 → 出包 → 回归」链路。但这种情况下，<strong>后补缺陷单留痕的动作不能省</strong>——否则下次出问题，没有历史记录可查。</p>
+<p><strong>③ 偶现问题挂起观察</strong></p>
+<p>前面说过，不直接拒绝，而是挂起 + 持续监控。</p>
+<p><strong>④ 缺陷的”寿命”通常只有一个版本周期</strong></p>
+<p>版本节奏快的项目（双周版、周版），一个缺陷从 New 到 Closed 通常在 1-2 个版本内解决。超过 3 个版本还挂着的，基本可以认为<strong>它不会被修了</strong>，要主动从遗留清单里清出去。</p>
+<hr>
+<h2 id="五、工具落地：状态名对照"><a href="#五、工具落地：状态名对照" class="headerlink" title="五、工具落地：状态名对照"></a>五、工具落地：状态名对照</h2><p>不同缺陷管理平台的状态名不一样，但语义是通的。面试时能对照着说，会显得你真用过：</p>
+<table>
+<thead>
+<tr>
+<th>标准状态</th>
+<th>常见工具里的叫法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>New</td>
+<td>新建 &#x2F; 待确认</td>
+</tr>
+<tr>
+<td>Assigned</td>
+<td>已分配 &#x2F; 待处理</td>
+</tr>
+<tr>
+<td>Open</td>
+<td>处理中 &#x2F; 开发已确认</td>
+</tr>
+<tr>
+<td>Fixed</td>
+<td>已解决 &#x2F; 已修复</td>
+</tr>
+<tr>
+<td>Pending Retest</td>
+<td>待验证 &#x2F; 待回归</td>
+</tr>
+<tr>
+<td>Closed</td>
+<td>已关闭 &#x2F; 已验证</td>
+</tr>
+<tr>
+<td>Rejected</td>
+<td>已拒绝 &#x2F; 非缺陷 &#x2F; 不予处理</td>
+</tr>
+<tr>
+<td>Deferred</td>
+<td>已延期 &#x2F; 挂起 &#x2F; 暂不修复</td>
+</tr>
+</tbody></table>
+<p><strong>每个缺陷单必须能被单独检索和统计</strong>，否则谈不上管理。常用的几个字段：</p>
+<ul>
+<li><strong>状态</strong> —— 流转到哪了</li>
+<li><strong>处理人</strong> —— 现在卡在谁手上（这个字段空白最危险）</li>
+<li><strong>严重等级 + 优先级</strong> —— 决定修复顺序</li>
+<li><strong>关联需求 &#x2F; 关联用例</strong> —— 反查影响范围</li>
+<li><strong>发现版本 + 修复版本</strong> —— 用来算缺陷寿命</li>
+</ul>
+<hr>
+<h2 id="六、进阶：两个能体现水平的指标"><a href="#六、进阶：两个能体现水平的指标" class="headerlink" title="六、进阶：两个能体现水平的指标"></a>六、进阶：两个能体现水平的指标</h2><p><strong>缺陷生命周期时长（Cycle Time）</strong></p>
+<p>从「新建」到「已关闭」的平均耗时。这个指标卡在<strong>「已分配 → 处理中」</strong>这段最容易失控——缺陷提了没人认领，就在那里”躺尸”。</p>
+<p>所以作为测试，要主动盯这个环节：<strong>提完单不等于交出去</strong>，要确认有人接手、有人认领。</p>
+<p><strong>缺陷逃逸率（Defect Escape Rate）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">缺陷逃逸率 = 上线后发现的问题数 / (测试阶段发现 + 上线后发现的 总问题数)</span><br></pre></td></tr></table></figure>
+
+<p>这个指标衡量的是<strong>测试有没有拦住问题</strong>，而不是”测试提了多少 BUG”。</p>
+<blockquote>
+<p>顺带说一句：<strong>提 BUG 数量从来不是考核指标</strong>。同一类问题提 20 个单，和提 1 个单 + 一个可复用的检查点，后者价值高得多。</p>
+</blockquote>
+<hr>
+<h2 id="七、面试怎么答（三层结构）"><a href="#七、面试怎么答（三层结构）" class="headerlink" title="七、面试怎么答（三层结构）"></a>七、面试怎么答（三层结构）</h2><p><strong>框架层</strong> —— 先给完整链路：</p>
+<blockquote>
+<p>新建 → 已分配 → 处理中 → 已修复 → 待验证 → 已关闭，中间有 Reopen 回退，旁路有拒绝 &#x2F; 延期 &#x2F; 重复三个分支。</p>
+</blockquote>
+<p><strong>项目层</strong> —— 落到自己做的事：</p>
+<blockquote>
+<p>我最关注两个卡点：一是「已分配」到「处理中」这段最容易躺尸，我会主动盯处理人字段有没有空；二是「待验证」环节必须做回归，不能只验原路径——只验原路径最容易漏掉”修复引发新问题”。</p>
+</blockquote>
+<p><strong>局限层</strong> —— 主动说流程的变形：</p>
+<blockquote>
+<p>标准流程在实际项目里是有变形的。版本节奏快，封版时会有一次裁决，确认的缺陷可能被强制定为延期；线上阻塞性问题走热修，会跳过完整流程，但补单留痕不能省。所以流程是规范，执行要看版本阶段。</p>
+</blockquote>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>缺陷生命周期表面是”状态怎么流转”，实际考的是三件事：</p>
+<ol>
+<li><strong>职责边界</strong> —— 谁能关单、谁能拒绝、测试有申诉权吗</li>
+<li><strong>证据意识</strong> —— 说”没修好”要拿前后数据，说”无法复现”要拿版本日志录屏</li>
+<li><strong>判断力</strong> —— 严重程度和优先级分开看，不是”严重的先修”</li>
+</ol>
+<p>流程本身不难，**难的是每个环节你都能说清楚”凭什么”**。</p>
+<hr>
+<p><strong>系列索引</strong>：<a href="/2026/06/12/testing-basics-intro/">测试基础 · 导读</a> ｜ <a href="/2026/06/12/testing-basics-chapter2-bug-management/">第2章 BUG 管理与测试用例</a> ｜ <a href="/2026/06/15/testing-basics-chapter4-case-design/">第4章 用例设计方法</a> ｜ <a href="/path/">学习路径总览</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div id="giscus-container" class="giscus-wrapper" style="display:none;">
+  <div class="giscus-title">💬 评论</div>
+  <div class="giscus-loading">评论加载中……</div>
+</div>
+<script>
+(function () {
+  // ---- giscus 配置 ----
+  // 取自 https://giscus.app/zh-CN
+  var GISCUS_REPO_ID = 'R_kgDOUyOKyw';
+  var GISCUS_CATEGORY_ID = 'DIC_kwDOUyOKy84DGsqd';
+  // -----------------------------------------
+
+  // 只在实际文章页显示（URL 形如 /2026/09/30/文章名/）
+  if (!/\/\d{4}\/\d{2}\/\d{2}\/.+/.test(location.pathname)) return;
+
+  var container = document.getElementById('giscus-container');
+  if (!container) return;
+
+  // 配置未就绪时不显示，避免出现空评论区
+  if (!GISCUS_REPO_ID || !GISCUS_CATEGORY_ID) return;
+
+  container.style.display = '';
+
+  var script = document.createElement('script');
+  script.src = 'https://giscus.app/client.js';
+  script.setAttribute('data-repo', 'tianshiyan521/myblog');
+  script.setAttribute('data-repo-id', GISCUS_REPO_ID);
+  script.setAttribute('data-category', 'Announcements');
+  script.setAttribute('data-category-id', GISCUS_CATEGORY_ID);
+  script.setAttribute('data-mapping', 'pathname');
+  script.setAttribute('data-strict', '0');
+  script.setAttribute('data-reactions-enabled', '1');
+  script.setAttribute('data-emit-metadata', '0');
+  script.setAttribute('data-input-position', 'bottom');
+  script.setAttribute('data-theme', 'preferred_color_scheme');
+  script.setAttribute('data-lang', 'zh-CN');
+  script.setAttribute('data-loading', 'lazy');
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+
+  script.onload = function () {
+    var tip = container.querySelector('.giscus-loading');
+    if (tip && container.querySelector('iframe')) tip.remove();
+  };
+  script.onerror = function () {
+    var tip = container.querySelector('.giscus-loading');
+    if (tip) tip.textContent = '评论加载失败，请检查网络后刷新。';
+  };
+
+  container.appendChild(script);
+})();
+</script>
+
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/" rel="tag"># 面试题</a>
+              <a href="/tags/%E7%BC%BA%E9%99%B7%E8%B7%9F%E8%B8%AA/" rel="tag"># 缺陷跟踪</a>
+              <a href="/tags/%E7%BC%BA%E9%99%B7%E7%AE%A1%E7%90%86/" rel="tag"># 缺陷管理</a>
+              <a href="/tags/%E7%BC%BA%E9%99%B7%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" rel="tag"># 缺陷生命周期</a>
+              <a href="/tags/%E6%B5%81%E7%A8%8B%E8%A7%84%E8%8C%83/" rel="tag"># 流程规范</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/09/28/api-testing-chapter3-protocol-reverse/" rel="prev" title="接口测试实战 · 第3课：从客户端日志逆推私有协议">
+                  <i class="fa fa-angle-left"></i> 接口测试实战 · 第3课：从客户端日志逆推私有协议
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">涂伟富</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
